@@ -1,7 +1,7 @@
 // components/Hero.js
 "use client";
 import { useEffect, useRef } from "react";
-import { ArrowRight, Users, Calendar, Trophy, Sparkles } from "lucide-react";
+import { ArrowRight, Users, Calendar, Trophy, Sparkles, Flag, } from "lucide-react";
 
 const Hero2 = () => {
   const heroRef = useRef(null);
@@ -106,7 +106,7 @@ const Hero2 = () => {
                 Become a Member
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-emerald-50 to-cyan-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute inset-0 bg-linear-to-r from-emerald-50 to-cyan-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </button>
             <button className="px-8 py-3.5 bg-transparent border-2 border-white/30 text-white rounded-full font-semibold text-lg hover:bg-white/10 hover:border-white/50 transition-all duration-300 hover:scale-105 backdrop-blur-sm">
               Explore Events
@@ -114,7 +114,7 @@ const Hero2 = () => {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-3xl mx-auto mt-20 pt-8 border-t border-white/20 animate-fade-up animation-delay-600">
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-8 max-w-3xl mx-auto mt-15 pt-8 border-t border-white/20 animate-fade-up animation-delay-600">
             <div className="flex flex-col items-center group cursor-pointer">
               <Users className="w-8 h-8 text-emerald-300 mb-2 group-hover:scale-110 transition-transform" />
               <div className="text-3xl font-bold text-white">2,500+</div>
@@ -122,8 +122,13 @@ const Hero2 = () => {
             </div>
             <div className="flex flex-col items-center group cursor-pointer">
               <Calendar className="w-8 h-8 text-emerald-300 mb-2 group-hover:scale-110 transition-transform" />
-              <div className="text-3xl font-bold text-white">120+</div>
+              <div className="text-3xl font-bold text-white">60+</div>
               <div className="text-white/70 text-sm">Annual Events</div>
+            </div>
+            <div className="flex flex-col items-center group cursor-pointer">
+             <Flag className="w-8 h-8 text-emerald-300 mb-2 group-hover:scale-110 transition-transform" />
+              <div className="text-3xl font-bold text-white">24+</div>
+              <div className="text-white/70 text-sm">Community Awards</div>
             </div>
             <div className="flex flex-col items-center group cursor-pointer">
               <Trophy className="w-8 h-8 text-emerald-300 mb-2 group-hover:scale-110 transition-transform" />
@@ -134,12 +139,7 @@ const Hero2 = () => {
         </div>
       </div>
 
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce z-20">
-        <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
-          <div className="w-1 h-3 bg-white/50 rounded-full mt-2 animate-scroll-dot"></div>
-        </div>
-      </div>
+     
     </section>
   );
 };

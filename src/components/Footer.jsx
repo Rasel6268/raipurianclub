@@ -47,7 +47,7 @@ export default function Footer() {
                 <span className="text-white font-bold text-xl">RC</span>
               </div>
               <span className="font-bold text-xl bg-gradient-to-r from-green-600 to-orange-500 bg-clip-text text-transparent">
-                Raipurian Club
+                Raipur Club
               </span>
             </div>
             <p className="text-gray-600 leading-relaxed">

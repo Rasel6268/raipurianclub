@@ -2,7 +2,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu, X, Users, Calendar, Heart, Home } from "lucide-react";
+import { Menu, X, Users, Calendar, Heart, Home, Image, } from "lucide-react";
 
 const Navbar2 = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -20,6 +20,7 @@ const Navbar2 = () => {
     { name: "Home", href: "#", icon: Home },
     { name: "Members", href: "#", icon: Users },
     { name: "Events", href: "#", icon: Calendar },
+    { name: "Gallery", href: "#", icon:  Image},
     { name: "Projects", href: "#", icon: Heart },
   ];
 
@@ -37,8 +38,8 @@ const Navbar2 = () => {
             {/* Logo */}
             <Link href="/" className="group flex items-center space-x-2">
               <div className="relative">
-                <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-full blur opacity-40 group-hover:opacity-70 transition duration-300"></div>
-                <div className="relative bg-gradient-to-br from-emerald-600 to-cyan-600 rounded-full p-1.5">
+                <div className="absolute -inset-1 bg-linear-to-r from-emerald-500 to-cyan-500 rounded-full blur opacity-40 group-hover:opacity-70 transition duration-300"></div>
+                <div className="relative bg-linear-to-br from-emerald-600 to-cyan-600 rounded-full p-1.5">
                   <span className="text-white font-bold text-xl">RC</span>
                 </div>
               </div>
@@ -47,7 +48,7 @@ const Navbar2 = () => {
                   isScrolled ? "text-slate-800" : "text-white"
                 }`}
               >
-                Raipurian <span className="text-emerald-500">Club</span>
+                Raipur <span className="text-emerald-500">Club</span>
               </span>
             </Link>
 
@@ -69,7 +70,7 @@ const Navbar2 = () => {
               <button
                 className={`ml-4 px-5 py-2 rounded-full font-semibold transition-all duration-300 shadow-md hover:shadow-xl hover:scale-105 ${
                   isScrolled
-                    ? "bg-gradient-to-r from-emerald-600 to-cyan-600 text-white"
+                    ? "bg-linear-to-r from-emerald-600 to-cyan-600 text-white"
                     : "bg-white text-emerald-600"
                 }`}
               >
@@ -111,7 +112,7 @@ const Navbar2 = () => {
               {link.name}
             </Link>
           ))}
-          <button className="mt-4 px-8 py-3 bg-gradient-to-r from-emerald-600 to-cyan-600 text-white rounded-full font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
+          <button className="mt-4 px-8 py-3 bg-linear-to-r from-emerald-600 to-cyan-600 text-white rounded-full font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
             Join Now
           </button>
         </div>
