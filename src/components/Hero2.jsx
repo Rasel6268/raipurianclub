@@ -40,7 +40,7 @@ const Hero2 = () => {
       {/* Background Image with Overlay */}
       <div className="absolute inset-0">
         {/* Dark overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/70 z-10"></div>
+        <div className="absolute inset-0 bg-linear-to-r from-black/70 via-black/50 to-black/70 z-10"></div>
         
         {/* Community Image */}
         <img 
@@ -67,7 +67,7 @@ const Hero2 = () => {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md rounded-full px-4 py-1.5 mb-8 border border-white/20 animate-fade-down">
             <Sparkles className="w-4 h-4 text-emerald-300" />
-            <span className="text-sm font-medium text-white/90">Community First Since 2010</span>
+            <span className="text-sm font-medium text-white/90">Community First Since 2026</span>
           </div>
 
           {/* Main Heading */}
