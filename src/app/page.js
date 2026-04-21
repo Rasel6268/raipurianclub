@@ -5,6 +5,7 @@ import Footer from '@/components/Footer';
 import Hero2 from '@/components/Hero2';
 import Navbar from '@/components/Navbar';
 import Navbar2 from '@/components/Navbar2';
+
 import { useEffect, useRef } from 'react';
 
 
@@ -33,9 +34,9 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-black">
-      {/* <Navbar /> */}
-      <Navbar2/>
+      
     <Hero2/>
+   
       
  
 

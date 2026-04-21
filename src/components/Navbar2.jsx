@@ -17,7 +17,7 @@ const Navbar2 = () => {
   }, []);
 
   const navLinks = [
-    { name: "Home", href: "#", icon: Home },
+    { name: "Home", href: "/", icon: Home },
     { name: "Members", href: "#", icon: Users },
     { name: "Events", href: "#", icon: Calendar },
     { name: "Gallery", href: "#", icon:  Image},
@@ -67,7 +67,8 @@ const Navbar2 = () => {
                   {link.name}
                 </Link>
               ))}
-              <button
+              <Link
+                href="/register"
                 className={`ml-4 px-5 py-2 rounded-full font-semibold transition-all duration-300 shadow-md hover:shadow-xl hover:scale-105 ${
                   isScrolled
                     ? "bg-linear-to-r from-emerald-600 to-cyan-600 text-white"
@@ -75,7 +76,7 @@ const Navbar2 = () => {
                 }`}
               >
                 Join Now
-              </button>
+              </Link>
             </nav>
 
             {/* Mobile Menu Button */}
@@ -112,9 +113,13 @@ const Navbar2 = () => {
               {link.name}
             </Link>
           ))}
-          <button className="mt-4 px-8 py-3 bg-linear-to-r from-emerald-600 to-cyan-600 text-white rounded-full font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
+           <Link
+            href="/register"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="mt-4 bg-linear-to-r from-green-500 to-orange-500 text-white px-8 py-3 rounded-full font-semibold w-full max-w-[200px] hover:shadow-xl transition-all duration-300"
+          >
             Join Now
-          </button>
+          </Link>
         </div>
       </div>
     </>

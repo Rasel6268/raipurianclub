@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Menu, X, Users, Calendar, Heart, Briefcase, Home } from 'lucide-react';
 
+
 const navLinks = [
   { name: 'Home', href: '/', icon: Home },
   { name: 'Members', href: '/members', icon: Users },
@@ -16,13 +17,23 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  const isRegisterPage = pathname === "/register";
+  console.log("Current Path:", pathname);
+  
+
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  if (isRegisterPage) {
+    setIsScrolled(true);
+    return;
+  }
+
+  const handleScroll = () => {
+    setIsScrolled(window.scrollY > 50);
+  };
+
+  window.addEventListener('scroll', handleScroll);
+  return () => window.removeEventListener('scroll', handleScroll);
+}, [isRegisterPage]);
 
   return (
     <>
@@ -93,9 +104,13 @@ export default function Navbar() {
               <span>{link.name}</span>
             </Link>
           ))}
-          <button className="mt-4 bg-gradient-to-r from-green-500 to-orange-500 text-white px-8 py-3 rounded-full font-semibold w-full max-w-[200px] hover:shadow-xl transition-all duration-300">
+          <Link
+            href="/register"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="mt-4 bg-linear-to-r from-green-500 to-orange-500 text-white px-8 py-3 rounded-full font-semibold w-full max-w-[200px] hover:shadow-xl transition-all duration-300"
+          >
             Join Now
-          </button>
+          </Link>
         </nav>
       </div>
     </>

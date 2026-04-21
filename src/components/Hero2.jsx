@@ -36,6 +36,7 @@ const Hero2 = () => {
   }, []);
 
   return (
+    <>
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0">
@@ -138,9 +139,23 @@ const Hero2 = () => {
           </div>
         </div>
       </div>
-
-     
     </section>
+     <div>
+        <div className="bg-gray-100 flex items-center justify-center p-4 font-sans">
+      <div className="w-7/12 mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+        
+    
+
+        {/* Timer Section */}
+        <div className="pt-8 pb-4 px-6 bg-white">
+         
+        </div>
+
+        
+      </div>
+    </div>
+     </div>
+    </>
   );
 };
 
