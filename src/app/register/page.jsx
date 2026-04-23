@@ -110,12 +110,12 @@ export default function RegisterPage() {
   const CurrentStepComponent = steps[step - 1].component;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50">
+    <div className="min-h-screen bg-linear-to-br from-emerald-50 via-teal-50 to-cyan-50">
       {/* Small Hero Section */}
       <section className="relative overflow-hidden">
         {/* Background Image with Overlay */}
         <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/70 via-teal-900/50 to-cyan-900/70 z-10"></div>
+          <div className="absolute inset-0 bg-linear-to-r from-emerald-900/70 via-teal-900/50 to-cyan-900/70 z-10"></div>
           <img 
             src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop"
             alt="Community gathering"
