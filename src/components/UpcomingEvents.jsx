@@ -122,7 +122,7 @@ const UpcomingEvents = () => {
           <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-4">
             Upcoming{" "}
             <span className="relative inline-block">
-              <span className="relative z-10 bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">
+              <span className="relative z-10 bg-linear-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">
                 Events
               </span>
               <svg
@@ -148,11 +148,11 @@ const UpcomingEvents = () => {
         {/* Featured Event Card - Hero Style */}
         <div className="mb-16 group">
           <div className="relative rounded-2xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-500">
-            <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/30 z-10"></div>
+            <div className="absolute inset-0 bg-linear-to-r from-black/70 to-black/30 z-10"></div>
             <img
               src={featuredEvent.image}
               alt={featuredEvent.title}
-              className="w-full h-80 sm:h-96 md:h-[450px] object-cover transition-transform duration-700 group-hover:scale-105"
+              className="w-full h-80 sm:h-96 md:h-112.5 object-cover transition-transform duration-700 group-hover:scale-105"
             />
             <div className="absolute inset-0 z-20 flex flex-col justify-end p-6 sm:p-8 md:p-10">
               <div className="inline-flex items-center gap-2 bg-emerald-500 text-white text-xs font-semibold px-3 py-1 rounded-full w-fit mb-3">

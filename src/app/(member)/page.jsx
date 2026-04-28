@@ -38,7 +38,6 @@ export default function Home() {
       <Hero2 />
       <UpcomingEvents />
       <MissionVision />
-      <Footer />
     </main>
   );
 }
