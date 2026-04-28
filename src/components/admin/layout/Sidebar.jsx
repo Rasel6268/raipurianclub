@@ -23,7 +23,9 @@ import {
   ChevronDown,
   ChevronUp,
   Clock,
-  CheckCircle
+  CheckCircle,
+  DollarSign,
+  Heart
 } from "lucide-react";
 
 const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
@@ -64,9 +66,9 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
       color: "text-blue-500",
       isSingle: false,
       children: [
-        { name: "Add Event", icon: CalendarPlus, href: "/admin/events/add", color: "text-blue-400" },
-        { name: "All Events", icon: CalendarDays, href: "/admin/events/all", color: "text-indigo-400", badge: 8 },
-        { name: "Event Requests", icon: UserPlus, href: "/admin/events/requests", color: "text-purple-400", badge: 3 }
+        { name: "Add Event", icon: CalendarPlus, href: "/events/add", color: "text-blue-400" },
+        { name: "All Events", icon: CalendarDays, href: "/events/all", color: "text-indigo-400", badge: 8 },
+        { name: "Event Requests", icon: UserPlus, href: "/events/requests", color: "text-purple-400", badge: 3 }
       ]
     },
     {
@@ -100,6 +102,29 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
       children: [
         { name: "Add Photo", icon: ImagePlus, href: "/admin/gallery/add", color: "text-pink-400" },
         { name: "All Photos", icon: Images, href: "/admin/gallery/all", color: "text-rose-400", badge: 245 }
+      ]
+    },
+    {
+      id: "donation",
+      name: "Donation",
+      icon: Heart,
+      color: "text-rose-500",
+      isSingle: false,
+      children: [
+        { name: "All Donations", icon: Heart, href: "/admin/donation/all", color: "text-rose-400", badge: 24 },
+        { name: "Pending Donations", icon: Clock, href: "/admin/donation/pending", color: "text-yellow-400", badge: 6 },
+        { name: "Completed Donations", icon: CheckCircle, href: "/admin/donation/completed", color: "text-green-400", badge: 18 }
+      ]
+    },
+    {
+      id: "member_fee",
+      name: "Member Fee",
+      icon: DollarSign,
+      color: "text-emerald-500",
+      isSingle: false,
+      children: [
+        { name: "All Member Fees", icon: DollarSign, href: "/member-fee", color: "text-emerald-400", badge: 43 },
+        { name: "Make member Fee", icon: DollarSign, href: "/admin/member-fee/all", color: "text-emerald-400", badge: 43 },
       ]
     },
     {
@@ -186,7 +211,7 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
     
     return (
       <div
-        className="fixed z-[100] px-3 py-1.5 bg-gray-900 text-white text-xs rounded-md shadow-lg whitespace-nowrap pointer-events-none animate-fade-in"
+        className="fixed z-100 px-3 py-1.5 bg-gray-900 text-white text-xs rounded-md shadow-lg whitespace-nowrap pointer-events-none animate-fade-in"
         style={{
           left: tooltipPosition.x,
           top: tooltipPosition.y,
@@ -209,20 +234,20 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
     <>
       <GlobalTooltip />
       
-      {/* Desktop Sidebar */}
+      {/* Desktop Sidebar - Remove scrollbar styling */}
       <aside
-        className={`fixed top-0 left-0 h-full bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 shadow-2xl z-40 transition-all duration-300 overflow-y-auto overflow-x-hidden hidden lg:block
+        className={`fixed top-0 left-0 h-full bg-linear-to-b from-gray-900 via-gray-800 to-gray-900 shadow-2xl z-40 transition-all duration-300 overflow-y-auto overflow-x-hidden hidden lg:block sidebar-no-scrollbar
           ${isOpen ? "w-72" : "w-20"}
         `}
       >
         {/* Logo Section */}
         <div className={`flex items-center justify-between p-5 border-b border-white/10 ${!isOpen && "justify-center"}`}>
           <Link href="/admin/dashboard" className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-orange-500 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/20 flex-shrink-0">
+            <div className="w-10 h-10 bg-linear-to-br from-green-500 to-orange-500 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/20 flex-shrink-0">
               <span className="text-white font-bold text-xl">RC</span>
             </div>
             {isOpen && (
-              <span className="font-bold text-xl bg-gradient-to-r from-green-400 to-orange-400 bg-clip-text text-transparent whitespace-nowrap">
+              <span className="font-bold text-xl bg-linear-to-r from-green-400 to-orange-400 bg-clip-text text-transparent whitespace-nowrap">
                 Raipur Admin
               </span>
             )}
@@ -263,7 +288,7 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
                     href={section.href}
                     className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group
                       ${isActive 
-                        ? "bg-gradient-to-r from-green-500/20 to-orange-500/20 text-white shadow-lg" 
+                        ? "bg-linear-to-r from-green-500/20 to-orange-500/20 text-white shadow-lg" 
                         : "text-gray-400 hover:text-white hover:bg-white/10"
                       }
                     `}
@@ -291,7 +316,7 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
                     `}
                   >
                     <div className="flex items-center gap-3 w-full">
-                      <Icon size={20} className={`${section.color} flex-shrink-0`} />
+                      <Icon size={20} className={`${section.color} shrink-0`} />
                       {isOpen && (
                         <>
                           <span className="text-sm font-medium text-gray-300 flex-1 whitespace-nowrap">{section.name}</span>
@@ -308,7 +333,7 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
                 
                 {/* Children Items */}
                 {isOpen && isExpanded && (
-                  <div className="ml-6 pl-2 space-y-1 border-l border-white/10">
+                  <div className="ml-6 pl-2 space-y-1">
                     {section.children.map((child, idx) => {
                       const ChildIcon = child.icon;
                       const isActive = pathname === child.href;
@@ -318,15 +343,15 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
                           href={child.href}
                           className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 group
                             ${isActive 
-                              ? "bg-gradient-to-r from-green-500/15 to-orange-500/15 text-white" 
+                              ? "bg-linear-to-r from-green-500/15 to-orange-500/15 text-white" 
                               : "text-gray-500 hover:text-white hover:bg-white/5"
                             }
                           `}
                         >
-                          <ChildIcon size={16} className={`${isActive ? child.color : "group-hover:text-white"} flex-shrink-0`} />
+                          <ChildIcon size={16} className={`${isActive ? child.color : "group-hover:text-white"} shrink-0`} />
                           <span className="text-xs font-medium flex-1 whitespace-nowrap">{child.name}</span>
                           {child.badge && (
-                            <span className="bg-red-500/80 text-white text-[10px] px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
+                            <span className="bg-red-500/80 text-white text-[10px] px-1.5 py-0.5 rounded-full min-w-4.5 text-center">
                               {child.badge}
                             </span>
                           )}
@@ -349,48 +374,22 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
           })}
         </nav>
 
-        {/* Bottom Section - Settings & Logout */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-white/10 bg-gray-900/50 backdrop-blur-sm">
-          <div
-            onMouseEnter={(e) => handleTooltipShow(e, "Settings")}
-            onMouseLeave={handleTooltipHide}
-          >
-            <Link
-              href="/admin/settings"
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-400 hover:text-white hover:bg-white/10 transition mb-1"
-            >
-              <Settings size={20} className="flex-shrink-0" />
-              {isOpen && <span className="text-sm font-medium whitespace-nowrap">Settings</span>}
-            </Link>
-          </div>
-          <div
-            onMouseEnter={(e) => handleTooltipShow(e, "Logout")}
-            onMouseLeave={handleTooltipHide}
-          >
-            <Link
-              href="/login"
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-400 hover:text-red-400 hover:bg-red-500/10 transition"
-            >
-              <LogOut size={20} className="flex-shrink-0" />
-              {isOpen && <span className="text-sm font-medium whitespace-nowrap">Logout</span>}
-            </Link>
-          </div>
-        </div>
+       
       </aside>
 
-      {/* Mobile Sidebar - Same structure but without tooltips on mobile */}
+      {/* Mobile Sidebar */}
       <aside
-        className={`fixed top-0 left-0 h-full bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 shadow-2xl z-50 transition-transform duration-300 overflow-y-auto overflow-x-hidden w-72 lg:hidden
+        className={`fixed top-0 left-0 h-full bg-linear-to-b from-gray-900 via-gray-800 to-gray-900 shadow-2xl z-50 transition-transform duration-300 overflow-y-auto overflow-x-hidden w-72 lg:hidden sidebar-no-scrollbar
           ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >
         {/* Logo Section for Mobile */}
         <div className="flex items-center justify-between p-5 border-b border-white/10">
           <Link href="/admin/dashboard" className="flex items-center gap-3" onClick={onMobileClose}>
-            <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-orange-500 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/20 flex-shrink-0">
+            <div className="w-10 h-10 bg-linear-to-br from-green-500 to-orange-500 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/20 shrink-0">
               <span className="text-white font-bold text-xl">RC</span>
             </div>
-            <span className="font-bold text-xl bg-gradient-to-r from-green-400 to-orange-400 bg-clip-text text-transparent whitespace-nowrap">
+            <span className="font-bold text-xl bg-linear-to-r from-green-400 to-orange-400 bg-clip-text text-transparent whitespace-nowrap">
               Raipur Admin
             </span>
           </Link>
@@ -402,11 +401,29 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
           </button>
         </div>
 
-        {/* Mobile Navigation - Same as desktop but without tooltips */}
+        {/* Mobile Navigation */}
         <nav className="p-4 space-y-3">
           {menuSections.map((section) => {
             const Icon = section.icon;
-            const [isExpandedMobile, setIsExpandedMobile] = useState(true);
+            // Use a state per section for mobile - defined inside map with useState hook properly
+            // To avoid hooks inside map, we'll use a different approach with an object state
+            const [mobileExpandedState, setMobileExpandedState] = useState(() => {
+              // Initialize all sections as expanded
+              const initialState = {};
+              menuSections.forEach(s => {
+                if (!s.isSingle) initialState[s.id] = true;
+              });
+              return initialState;
+            });
+            
+            // Use the specific state for this section
+            const isExpandedMobile = mobileExpandedState[section.id] !== false;
+            const toggleMobileSection = () => {
+              setMobileExpandedState(prev => ({
+                ...prev,
+                [section.id]: !prev[section.id]
+              }));
+            };
             
             if (section.isSingle) {
               const isActive = pathname === section.href;
@@ -417,12 +434,12 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
                   onClick={onMobileClose}
                   className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group
                     ${isActive 
-                      ? "bg-gradient-to-r from-green-500/20 to-orange-500/20 text-white shadow-lg" 
+                      ? "bg-linear-to-r from-green-500/20 to-orange-500/20 text-white shadow-lg" 
                       : "text-gray-400 hover:text-white hover:bg-white/10"
                     }
                   `}
                 >
-                  <Icon size={20} className={`${isActive ? section.color : "group-hover:text-white"} flex-shrink-0`} />
+                  <Icon size={20} className={`${isActive ? section.color : "group-hover:text-white"} shrink-0`} />
                   <span className="text-sm font-medium flex-1 whitespace-nowrap">{section.name}</span>
                 </Link>
               );
@@ -431,10 +448,10 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
             return (
               <div key={section.id} className="space-y-1">
                 <div
-                  onClick={() => setIsExpandedMobile(!isExpandedMobile)}
+                  onClick={toggleMobileSection}
                   className="flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-200 cursor-pointer hover:bg-white/10"
                 >
-                  <Icon size={20} className={`${section.color} flex-shrink-0`} />
+                  <Icon size={20} className={`${section.color} shrink-0`} />
                   <span className="text-sm font-medium text-gray-300 flex-1 whitespace-nowrap">{section.name}</span>
                   {isExpandedMobile ? (
                     <ChevronUp size={16} className="text-gray-500" />
@@ -443,8 +460,9 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
                   )}
                 </div>
                 
+                {/* Mobile Children Items */}
                 {isExpandedMobile && (
-                  <div className="ml-6 pl-2 space-y-1 border-l border-white/10">
+                  <div className="ml-6 pl-2 space-y-1">
                     {section.children.map((child, idx) => {
                       const ChildIcon = child.icon;
                       const isActive = pathname === child.href;
@@ -455,15 +473,15 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
                           onClick={onMobileClose}
                           className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 group
                             ${isActive 
-                              ? "bg-gradient-to-r from-green-500/15 to-orange-500/15 text-white" 
+                              ? "bg-linear-to-r from-green-500/15 to-orange-500/15 text-white" 
                               : "text-gray-500 hover:text-white hover:bg-white/5"
                             }
                           `}
                         >
-                          <ChildIcon size={16} className={`${isActive ? child.color : "group-hover:text-white"} flex-shrink-0`} />
+                          <ChildIcon size={16} className={`${isActive ? child.color : "group-hover:text-white"} shrink-0`} />
                           <span className="text-xs font-medium flex-1 whitespace-nowrap">{child.name}</span>
                           {child.badge && (
-                            <span className="bg-red-500/80 text-white text-[10px] px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
+                            <span className="bg-red-500/80 text-white text-[10px] px-1.5 py-0.5 rounded-full min-w-4.5 text-center">
                               {child.badge}
                             </span>
                           )}
@@ -484,7 +502,7 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
             onClick={onMobileClose}
             className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-400 hover:text-white hover:bg-white/10 transition mb-1"
           >
-            <Settings size={20} className="flex-shrink-0" />
+            <Settings size={20} className="shrink-0" />
             <span className="text-sm font-medium whitespace-nowrap">Settings</span>
           </Link>
           <Link
@@ -492,13 +510,22 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
             onClick={onMobileClose}
             className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-400 hover:text-red-400 hover:bg-red-500/10 transition"
           >
-            <LogOut size={20} className="flex-shrink-0" />
+            <LogOut size={20} className="shrink-0" />
             <span className="text-sm font-medium whitespace-nowrap">Logout</span>
           </Link>
         </div>
       </aside>
 
-      <style jsx>{`
+      {/* Global styles for hiding scrollbars */}
+      <style jsx global>{`
+        .sidebar-no-scrollbar {
+          scrollbar-width: none; /* Firefox */
+          -ms-overflow-style: none; /* IE and Edge */
+        }
+        .sidebar-no-scrollbar::-webkit-scrollbar {
+          display: none; /* Chrome, Safari, Opera */
+        }
+        
         @keyframes fadeIn {
           from {
             opacity: 0;
