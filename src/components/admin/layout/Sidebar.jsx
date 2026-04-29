@@ -25,7 +25,7 @@ import {
   Clock,
   CheckCircle,
   DollarSign,
-  Heart
+  Heart,
 } from "lucide-react";
 
 const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
@@ -36,7 +36,7 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
     projects: true,
     gallery: true,
     permissions: true,
-    tickets: true
+    tickets: true,
   });
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const [activeTooltip, setActiveTooltip] = useState(null);
@@ -44,9 +44,9 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
 
   const toggleSection = (section) => {
     if (!isOpen) return;
-    setExpandedSections(prev => ({
+    setExpandedSections((prev) => ({
       ...prev,
-      [section]: !prev[section]
+      [section]: !prev[section],
     }));
   };
 
@@ -55,9 +55,9 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
       id: "dashboard",
       name: "Dashboard",
       icon: LayoutDashboard,
-      href: "/admin/dashboard",
+      href: "/dashboard",
       color: "text-emerald-500",
-      isSingle: true
+      isSingle: true,
     },
     {
       id: "events",
@@ -66,10 +66,27 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
       color: "text-blue-500",
       isSingle: false,
       children: [
-        { name: "Add Event", icon: CalendarPlus, href: "/events/add", color: "text-blue-400" },
-        { name: "All Events", icon: CalendarDays, href: "/events/all", color: "text-indigo-400", badge: 8 },
-        { name: "Event Requests", icon: UserPlus, href: "/events/requests", color: "text-purple-400", badge: 3 }
-      ]
+        {
+          name: "Add Event",
+          icon: CalendarPlus,
+          href: "/events/add",
+          color: "text-blue-400",
+        },
+        {
+          name: "All Events",
+          icon: CalendarDays,
+          href: "/events/all",
+          color: "text-indigo-400",
+          badge: 8,
+        },
+        {
+          name: "Event Requests",
+          icon: UserPlus,
+          href: "/events/requests",
+          color: "text-purple-400",
+          badge: 3,
+        },
+      ],
     },
     {
       id: "members",
@@ -78,9 +95,28 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
       color: "text-cyan-500",
       isSingle: false,
       children: [
-        { name: "All Members", icon: Users, href: "/admin/members/all", color: "text-cyan-400", badge: 156 },
-        { name: "Interest to Join", icon: UserCheck, href: "/admin/members/requests", color: "text-orange-400", badge: 5 }
-      ]
+        {
+          name: "All Members",
+          icon: Users,
+          href: "/member/all",
+          color: "text-cyan-400",
+          badge: 156,
+        },
+        {
+          name: "Interest to Join",
+          icon: UserCheck,
+          href: "/member/interestTo",
+          color: "text-orange-400",
+          badge: 5,
+        },
+        {
+          name: "Application",
+          icon: UserCheck,
+          href: "/members/application",
+          color: "text-orange-400",
+          badge: 5,
+        },
+      ],
     },
     {
       id: "projects",
@@ -89,9 +125,20 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
       color: "text-amber-500",
       isSingle: false,
       children: [
-        { name: "Add Project", icon: FolderPlus, href: "/admin/projects/add", color: "text-amber-400" },
-        { name: "All Projects", icon: FolderKanban, href: "/admin/projects/all", color: "text-yellow-400", badge: 12 }
-      ]
+        {
+          name: "Add Project",
+          icon: FolderPlus,
+          href: "/admin/projects/add",
+          color: "text-amber-400",
+        },
+        {
+          name: "All Projects",
+          icon: FolderKanban,
+          href: "/admin/projects/all",
+          color: "text-yellow-400",
+          badge: 12,
+        },
+      ],
     },
     {
       id: "gallery",
@@ -100,9 +147,20 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
       color: "text-pink-500",
       isSingle: false,
       children: [
-        { name: "Add Photo", icon: ImagePlus, href: "/admin/gallery/add", color: "text-pink-400" },
-        { name: "All Photos", icon: Images, href: "/admin/gallery/all", color: "text-rose-400", badge: 245 }
-      ]
+        {
+          name: "Add Photo",
+          icon: ImagePlus,
+          href: "/admin/gallery/add",
+          color: "text-pink-400",
+        },
+        {
+          name: "All Photos",
+          icon: Images,
+          href: "/admin/gallery/all",
+          color: "text-rose-400",
+          badge: 245,
+        },
+      ],
     },
     {
       id: "donation",
@@ -111,10 +169,28 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
       color: "text-rose-500",
       isSingle: false,
       children: [
-        { name: "All Donations", icon: Heart, href: "/admin/donation/all", color: "text-rose-400", badge: 24 },
-        { name: "Pending Donations", icon: Clock, href: "/admin/donation/pending", color: "text-yellow-400", badge: 6 },
-        { name: "Completed Donations", icon: CheckCircle, href: "/admin/donation/completed", color: "text-green-400", badge: 18 }
-      ]
+        {
+          name: "All Donations",
+          icon: Heart,
+          href: "/admin/donation/all",
+          color: "text-rose-400",
+          badge: 24,
+        },
+        {
+          name: "Pending Donations",
+          icon: Clock,
+          href: "/admin/donation/pending",
+          color: "text-yellow-400",
+          badge: 6,
+        },
+        {
+          name: "Completed Donations",
+          icon: CheckCircle,
+          href: "/admin/donation/completed",
+          color: "text-green-400",
+          badge: 18,
+        },
+      ],
     },
     {
       id: "member_fee",
@@ -123,9 +199,21 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
       color: "text-emerald-500",
       isSingle: false,
       children: [
-        { name: "All Member Fees", icon: DollarSign, href: "/member-fee", color: "text-emerald-400", badge: 43 },
-        { name: "Make member Fee", icon: DollarSign, href: "/admin/member-fee/all", color: "text-emerald-400", badge: 43 },
-      ]
+        {
+          name: "All Member Fees",
+          icon: DollarSign,
+          href: "/member-fee",
+          color: "text-emerald-400",
+          badge: 43,
+        },
+        {
+          name: "Make member Fee",
+          icon: DollarSign,
+          href: "/admin/member-fee/all",
+          color: "text-emerald-400",
+          badge: 43,
+        },
+      ],
     },
     {
       id: "permissions",
@@ -134,9 +222,19 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
       color: "text-red-500",
       isSingle: false,
       children: [
-        { name: "Manage Roles", icon: Shield, href: "/admin/permissions/roles", color: "text-red-400" },
-        { name: "User Permissions", icon: Shield, href: "/admin/permissions/users", color: "text-red-400" }
-      ]
+        {
+          name: "Manage Roles",
+          icon: Shield,
+          href: "/admin/permissions/roles",
+          color: "text-red-400",
+        },
+        {
+          name: "User Permissions",
+          icon: Shield,
+          href: "/admin/permissions/users",
+          color: "text-red-400",
+        },
+      ],
     },
     {
       id: "tickets",
@@ -145,40 +243,58 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
       color: "text-green-500",
       isSingle: false,
       children: [
-        { name: "All Tickets", icon: Ticket, href: "/admin/tickets/all", color: "text-green-400", badge: 24 },
-        { name: "Pending Tickets", icon: Clock, href: "/admin/tickets/pending", color: "text-yellow-400", badge: 6 },
-        { name: "Sold Tickets", icon: CheckCircle, href: "/admin/tickets/sold", color: "text-green-400", badge: 18 }
-      ]
-    }
+        {
+          name: "All Tickets",
+          icon: Ticket,
+          href: "/admin/tickets/all",
+          color: "text-green-400",
+          badge: 24,
+        },
+        {
+          name: "Pending Tickets",
+          icon: Clock,
+          href: "/admin/tickets/pending",
+          color: "text-yellow-400",
+          badge: 6,
+        },
+        {
+          name: "Sold Tickets",
+          icon: CheckCircle,
+          href: "/admin/tickets/sold",
+          color: "text-green-400",
+          badge: 18,
+        },
+      ],
+    },
   ];
 
   // Handle tooltip show with position calculation
   const handleTooltipShow = (e, text) => {
     if (isOpen) return;
-    
+
     // Clear any existing timeout
     if (tooltipTimeoutRef.current) {
       clearTimeout(tooltipTimeoutRef.current);
     }
-    
+
     const rect = e.currentTarget.getBoundingClientRect();
     const tooltipWidth = 120; // Approximate width of tooltip
     const viewportWidth = window.innerWidth;
-    
+
     // Calculate position - ensure tooltip stays within viewport
     let leftPosition = rect.right + 8;
     let shouldShowRight = true;
-    
+
     // If tooltip would go off screen on the right, show it on the left
     if (leftPosition + tooltipWidth > viewportWidth - 10) {
       leftPosition = rect.left - tooltipWidth - 8;
       shouldShowRight = false;
     }
-    
+
     setTooltipPosition({
       x: leftPosition,
       y: rect.top + rect.height / 2,
-      direction: shouldShowRight ? 'right' : 'left'
+      direction: shouldShowRight ? "right" : "left",
     });
     setActiveTooltip(text);
   };
@@ -208,22 +324,22 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
   // Tooltip component that renders at body level
   const GlobalTooltip = () => {
     if (!activeTooltip) return null;
-    
+
     return (
       <div
         className="fixed z-100 px-3 py-1.5 bg-gray-900 text-white text-xs rounded-md shadow-lg whitespace-nowrap pointer-events-none animate-fade-in"
         style={{
           left: tooltipPosition.x,
           top: tooltipPosition.y,
-          transform: 'translateY(-50%)',
+          transform: "translateY(-50%)",
         }}
       >
         {activeTooltip}
-        <div 
+        <div
           className={`absolute top-1/2 -translate-y-1/2 w-0 h-0 border-t-4 border-b-4 border-transparent ${
-            tooltipPosition.direction === 'right' 
-              ? 'border-r-4 border-r-gray-900 -left-1' 
-              : 'border-l-4 border-l-gray-900 -right-1'
+            tooltipPosition.direction === "right"
+              ? "border-r-4 border-r-gray-900 -left-1"
+              : "border-l-4 border-l-gray-900 -right-1"
           }`}
         />
       </div>
@@ -233,7 +349,7 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
   return (
     <>
       <GlobalTooltip />
-      
+
       {/* Desktop Sidebar - Remove scrollbar styling */}
       <aside
         className={`fixed top-0 left-0 h-full bg-linear-to-b from-gray-900 via-gray-800 to-gray-900 shadow-2xl z-40 transition-all duration-300 overflow-y-auto overflow-x-hidden hidden lg:block sidebar-no-scrollbar
@@ -241,7 +357,9 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
         `}
       >
         {/* Logo Section */}
-        <div className={`flex items-center justify-between p-5 border-b border-white/10 ${!isOpen && "justify-center"}`}>
+        <div
+          className={`flex items-center justify-between p-5 border-b border-white/10 ${!isOpen && "justify-center"}`}
+        >
           <Link href="/admin/dashboard" className="flex items-center gap-3">
             <div className="w-10 h-10 bg-linear-to-br from-green-500 to-orange-500 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/20 flex-shrink-0">
               <span className="text-white font-bold text-xl">RC</span>
@@ -275,7 +393,7 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
           {menuSections.map((section) => {
             const Icon = section.icon;
             const isExpanded = expandedSections[section.id];
-            
+
             if (section.isSingle) {
               const isActive = pathname === section.href;
               return (
@@ -287,26 +405,34 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
                   <Link
                     href={section.href}
                     className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group
-                      ${isActive 
-                        ? "bg-linear-to-r from-green-500/20 to-orange-500/20 text-white shadow-lg" 
-                        : "text-gray-400 hover:text-white hover:bg-white/10"
+                      ${
+                        isActive
+                          ? "bg-linear-to-r from-green-500/20 to-orange-500/20 text-white shadow-lg"
+                          : "text-gray-400 hover:text-white hover:bg-white/10"
                       }
                     `}
                   >
-                    <Icon size={20} className={`${isActive ? section.color : "group-hover:text-white"} flex-shrink-0`} />
+                    <Icon
+                      size={20}
+                      className={`${isActive ? section.color : "group-hover:text-white"} flex-shrink-0`}
+                    />
                     {isOpen && (
-                      <span className="text-sm font-medium flex-1 whitespace-nowrap">{section.name}</span>
+                      <span className="text-sm font-medium flex-1 whitespace-nowrap">
+                        {section.name}
+                      </span>
                     )}
                   </Link>
                 </div>
               );
             }
-            
+
             return (
               <div key={section.id} className="space-y-1">
                 {/* Section Header */}
                 <div
-                  onMouseEnter={(e) => !isOpen && handleTooltipShow(e, section.name)}
+                  onMouseEnter={(e) =>
+                    !isOpen && handleTooltipShow(e, section.name)
+                  }
                   onMouseLeave={handleTooltipHide}
                 >
                   <div
@@ -319,7 +445,9 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
                       <Icon size={20} className={`${section.color} shrink-0`} />
                       {isOpen && (
                         <>
-                          <span className="text-sm font-medium text-gray-300 flex-1 whitespace-nowrap">{section.name}</span>
+                          <span className="text-sm font-medium text-gray-300 flex-1 whitespace-nowrap">
+                            {section.name}
+                          </span>
                           {isExpanded ? (
                             <ChevronUp size={16} className="text-gray-500" />
                           ) : (
@@ -330,7 +458,7 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Children Items */}
                 {isOpen && isExpanded && (
                   <div className="ml-6 pl-2 space-y-1">
@@ -342,14 +470,20 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
                           key={idx}
                           href={child.href}
                           className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 group
-                            ${isActive 
-                              ? "bg-linear-to-r from-green-500/15 to-orange-500/15 text-white" 
-                              : "text-gray-500 hover:text-white hover:bg-white/5"
+                            ${
+                              isActive
+                                ? "bg-linear-to-r from-green-500/15 to-orange-500/15 text-white"
+                                : "text-gray-500 hover:text-white hover:bg-white/5"
                             }
                           `}
                         >
-                          <ChildIcon size={16} className={`${isActive ? child.color : "group-hover:text-white"} shrink-0`} />
-                          <span className="text-xs font-medium flex-1 whitespace-nowrap">{child.name}</span>
+                          <ChildIcon
+                            size={16}
+                            className={`${isActive ? child.color : "group-hover:text-white"} shrink-0`}
+                          />
+                          <span className="text-xs font-medium flex-1 whitespace-nowrap">
+                            {child.name}
+                          </span>
                           {child.badge && (
                             <span className="bg-red-500/80 text-white text-[10px] px-1.5 py-0.5 rounded-full min-w-4.5 text-center">
                               {child.badge}
@@ -360,7 +494,7 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
                     })}
                   </div>
                 )}
-                
+
                 {/* Child count badge for collapsed mode */}
                 {!isOpen && (
                   <div className="text-center mt-1">
@@ -373,8 +507,6 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
             );
           })}
         </nav>
-
-       
       </aside>
 
       {/* Mobile Sidebar */}
@@ -385,7 +517,11 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
       >
         {/* Logo Section for Mobile */}
         <div className="flex items-center justify-between p-5 border-b border-white/10">
-          <Link href="/admin/dashboard" className="flex items-center gap-3" onClick={onMobileClose}>
+          <Link
+            href="/admin/dashboard"
+            className="flex items-center gap-3"
+            onClick={onMobileClose}
+          >
             <div className="w-10 h-10 bg-linear-to-br from-green-500 to-orange-500 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/20 shrink-0">
               <span className="text-white font-bold text-xl">RC</span>
             </div>
@@ -407,24 +543,26 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
             const Icon = section.icon;
             // Use a state per section for mobile - defined inside map with useState hook properly
             // To avoid hooks inside map, we'll use a different approach with an object state
-            const [mobileExpandedState, setMobileExpandedState] = useState(() => {
-              // Initialize all sections as expanded
-              const initialState = {};
-              menuSections.forEach(s => {
-                if (!s.isSingle) initialState[s.id] = true;
-              });
-              return initialState;
-            });
-            
+            const [mobileExpandedState, setMobileExpandedState] = useState(
+              () => {
+                // Initialize all sections as expanded
+                const initialState = {};
+                menuSections.forEach((s) => {
+                  if (!s.isSingle) initialState[s.id] = true;
+                });
+                return initialState;
+              },
+            );
+
             // Use the specific state for this section
             const isExpandedMobile = mobileExpandedState[section.id] !== false;
             const toggleMobileSection = () => {
-              setMobileExpandedState(prev => ({
+              setMobileExpandedState((prev) => ({
                 ...prev,
-                [section.id]: !prev[section.id]
+                [section.id]: !prev[section.id],
               }));
             };
-            
+
             if (section.isSingle) {
               const isActive = pathname === section.href;
               return (
@@ -433,18 +571,24 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
                   href={section.href}
                   onClick={onMobileClose}
                   className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group
-                    ${isActive 
-                      ? "bg-linear-to-r from-green-500/20 to-orange-500/20 text-white shadow-lg" 
-                      : "text-gray-400 hover:text-white hover:bg-white/10"
+                    ${
+                      isActive
+                        ? "bg-linear-to-r from-green-500/20 to-orange-500/20 text-white shadow-lg"
+                        : "text-gray-400 hover:text-white hover:bg-white/10"
                     }
                   `}
                 >
-                  <Icon size={20} className={`${isActive ? section.color : "group-hover:text-white"} shrink-0`} />
-                  <span className="text-sm font-medium flex-1 whitespace-nowrap">{section.name}</span>
+                  <Icon
+                    size={20}
+                    className={`${isActive ? section.color : "group-hover:text-white"} shrink-0`}
+                  />
+                  <span className="text-sm font-medium flex-1 whitespace-nowrap">
+                    {section.name}
+                  </span>
                 </Link>
               );
             }
-            
+
             return (
               <div key={section.id} className="space-y-1">
                 <div
@@ -452,14 +596,16 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
                   className="flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-200 cursor-pointer hover:bg-white/10"
                 >
                   <Icon size={20} className={`${section.color} shrink-0`} />
-                  <span className="text-sm font-medium text-gray-300 flex-1 whitespace-nowrap">{section.name}</span>
+                  <span className="text-sm font-medium text-gray-300 flex-1 whitespace-nowrap">
+                    {section.name}
+                  </span>
                   {isExpandedMobile ? (
                     <ChevronUp size={16} className="text-gray-500" />
                   ) : (
                     <ChevronDown size={16} className="text-gray-500" />
                   )}
                 </div>
-                
+
                 {/* Mobile Children Items */}
                 {isExpandedMobile && (
                   <div className="ml-6 pl-2 space-y-1">
@@ -472,14 +618,20 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
                           href={child.href}
                           onClick={onMobileClose}
                           className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 group
-                            ${isActive 
-                              ? "bg-linear-to-r from-green-500/15 to-orange-500/15 text-white" 
-                              : "text-gray-500 hover:text-white hover:bg-white/5"
+                            ${
+                              isActive
+                                ? "bg-linear-to-r from-green-500/15 to-orange-500/15 text-white"
+                                : "text-gray-500 hover:text-white hover:bg-white/5"
                             }
                           `}
                         >
-                          <ChildIcon size={16} className={`${isActive ? child.color : "group-hover:text-white"} shrink-0`} />
-                          <span className="text-xs font-medium flex-1 whitespace-nowrap">{child.name}</span>
+                          <ChildIcon
+                            size={16}
+                            className={`${isActive ? child.color : "group-hover:text-white"} shrink-0`}
+                          />
+                          <span className="text-xs font-medium flex-1 whitespace-nowrap">
+                            {child.name}
+                          </span>
                           {child.badge && (
                             <span className="bg-red-500/80 text-white text-[10px] px-1.5 py-0.5 rounded-full min-w-4.5 text-center">
                               {child.badge}
@@ -503,7 +655,9 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
             className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-400 hover:text-white hover:bg-white/10 transition mb-1"
           >
             <Settings size={20} className="shrink-0" />
-            <span className="text-sm font-medium whitespace-nowrap">Settings</span>
+            <span className="text-sm font-medium whitespace-nowrap">
+              Settings
+            </span>
           </Link>
           <Link
             href="/login"
@@ -511,7 +665,9 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
             className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-400 hover:text-red-400 hover:bg-red-500/10 transition"
           >
             <LogOut size={20} className="shrink-0" />
-            <span className="text-sm font-medium whitespace-nowrap">Logout</span>
+            <span className="text-sm font-medium whitespace-nowrap">
+              Logout
+            </span>
           </Link>
         </div>
       </aside>
@@ -525,7 +681,7 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
         .sidebar-no-scrollbar::-webkit-scrollbar {
           display: none; /* Chrome, Safari, Opera */
         }
-        
+
         @keyframes fadeIn {
           from {
             opacity: 0;
