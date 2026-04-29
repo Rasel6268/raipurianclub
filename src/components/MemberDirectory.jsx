@@ -86,18 +86,18 @@ const MemberDirectory = () => {
   const generalMembers = [
     {
       id: 101,
-      name: "Amit Kumar Patel",
+      name: "Md Zabed Hossain",
       memberId: "RPM-2024-001",
-      email: "amit.patel@example.com",
-      phone: "+91 9988776655",
-      location: "Shankar Nagar, Raipur",
-      company: "TechSolutions Pvt Ltd",
-      profession: "Software Engineer",
+      email: "example@gmail.com",
+      phone: "+88 016XXXXXXXX",
+      location: "Raipur",
+      company: "Raipur Club Ltd",
+      profession: "",
       joinedDate: "2023",
       interests: ["Tech", "Sports", "Volunteering"],
       contributions: ["Event Organizer", "Tech Committee Lead"],
       bio: "Passionate technologist who loves building community tech solutions.",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=2070&auto=format&fit=crop",
+      image: "https://res.cloudinary.com/doumlnejx/image/upload/v1777464001/WhatsApp_Image_2026-04-29_at_5.44.28_PM_cvmbsf.jpg",
       social: { linkedin: "#", github: "#" },
     },
     {
@@ -238,7 +238,7 @@ const MemberDirectory = () => {
   if (!mounted) return null;
 
   return (
-    <section className="relative py-16 min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+    <section className="relative py-16 min-h-screen bg-linear-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
       {/* Background Decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-72 h-72 bg-emerald-300 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-float-slow"></div>
@@ -375,6 +375,35 @@ const MemberDirectory = () => {
         {(selectedCategory === "all" || selectedCategory === "general") && filteredGeneralMembers.length > 0 && (
           <div>
             <div className="flex items-center gap-3 mb-8">
+              <div className="w-12 h-12 bg-linear-to-br from-emerald-500 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg">
+                <Users className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+                  Funding Members
+                </h2>
+                <p className="text-gray-500 dark:text-gray-400">
+                  {filteredGeneralMembers.length} active members
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredGeneralMembers.map((member) => (
+                <MemberCard
+                  key={member.id}
+                  member={member}
+                  isManaging={false}
+                  expanded={expandedMember === member.id}
+                  onToggle={() => toggleMemberExpand(member.id)}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+        {/* {(selectedCategory === "all" || selectedCategory === "general") && filteredGeneralMembers.length > 0 && (
+          <div>
+            <div className="flex items-center gap-3 mb-8">
               <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg">
                 <Users className="w-6 h-6 text-white" />
               </div>
@@ -400,7 +429,7 @@ const MemberDirectory = () => {
               ))}
             </div>
           </div>
-        )}
+        )} */}
 
         {/* No Results */}
         {filteredManagingBody.length === 0 && filteredGeneralMembers.length === 0 && (
