@@ -55,6 +55,9 @@ import {
   Crown,
   Gift,
   Globe,
+  Cake,
+  IceCream,
+  Sandwich,
 } from 'lucide-react';
 
 // Register GSAP plugins
@@ -74,6 +77,7 @@ const AmenitiesPage = () => {
   const housingSectionRef = useRef(null);
   const poolSectionRef = useRef(null);
   const gymSectionRef = useRef(null);
+  const cafeSectionRef = useRef(null);
   const ctaRef = useRef(null);
   const leftContentRef = useRef(null);
   const rightContentRef = useRef(null);
@@ -171,10 +175,44 @@ const AmenitiesPage = () => {
       hours: "6:00 AM - 8:00 PM Daily",
       location: "Central Park Area",
       capacity: "75 children at a time",
-      image: "https://images.unsplash.com/photo-1593073749546-b2be80a6d1c0?w=800&h=500&fit=crop",
+      image: "https://res.cloudinary.com/doumlnejx/image/upload/v1777548868/PW_Inclusive-Web-Page-Images_05-min-1-e1772120526461_ulhnzs.webp",
       color: "from-amber-500 to-orange-500",
       gradient: "from-amber-600 to-orange-600",
       stats: { users: "1.2k+", rating: "4.6", year: "2024" }
+    },
+    {
+      id: 5,
+      title: "Cafe Shop",
+      category: "Dining",
+      icon: Coffee,
+      description: "Cozy and modern cafe serving freshly brewed coffee, artisanal pastries, healthy smoothies, and delicious light meals. Perfect for casual meetings or relaxing breaks.",
+      features: [
+        "Freshly roasted specialty coffee beans",
+        "Artisanal pastries & baked goods",
+        "Healthy smoothies & fresh juices",
+        "Gourmet sandwiches & salads",
+        "Free high-speed WiFi",
+        "Indoor & outdoor seating",
+        "Takeaway & delivery options",
+        "Loyalty rewards program",
+        "Monthly specials & seasonal drinks",
+        "Quiet study/work area",
+      ],
+      hours: "7:00 AM - 11:00 PM Daily",
+      location: "Building A, Ground Floor (Near Lobby)",
+      capacity: "60 seats (including outdoor)",
+      image: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800&h=500&fit=crop",
+      color: "from-amber-500 to-orange-500",
+      gradient: "from-amber-600 to-orange-600",
+      stats: { users: "3.2k+", rating: "4.9", year: "2024" },
+      menuItems: [
+        "Espresso, Latte, Cappuccino",
+        "Fresh Croissants & Muffins",
+        "Signature Cold Brew",
+        "Avocado Toast",
+        "Acai Bowls",
+        "Protein Smoothies",
+      ]
     },
   ];
 
@@ -197,6 +235,14 @@ const AmenitiesPage = () => {
     "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&h=500&fit=crop",
     "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=800&h=500&fit=crop",
     "https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=800&h=500&fit=crop",
+  ];
+
+  const cafeImages = [
+    "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800&h=500&fit=crop",
+    "https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=800&h=500&fit=crop",
+    "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&h=500&fit=crop",
+    "https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=800&h=500&fit=crop",
+    "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800&h=500&fit=crop",
   ];
 
   // Initialize GSAP animations
@@ -249,6 +295,7 @@ const AmenitiesPage = () => {
       { left: leftContentRef.current, right: rightContentRef.current, trigger: housingSectionRef.current },
       { left: poolSectionRef.current, right: null, trigger: poolSectionRef.current },
       { left: gymSectionRef.current, right: null, trigger: gymSectionRef.current },
+      { left: null, right: cafeSectionRef.current, trigger: cafeSectionRef.current },
     ];
 
     sections.forEach((section, idx) => {
@@ -364,7 +411,7 @@ const AmenitiesPage = () => {
             </div>
             <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
               <Clock className="w-3 h-3" />
-              <span>24/7</span>
+              <span>7AM-11PM</span>
             </div>
             <div className="group-hover:translate-x-1 transition-transform duration-300">
               <ArrowRight className="w-4 h-4 text-emerald-500" />
@@ -376,8 +423,6 @@ const AmenitiesPage = () => {
   };
 
   const AmenityModal = ({ amenity, onClose }) => {
-    if (!amenity) return null;
-
     useEffect(() => {
       document.body.style.overflow = 'hidden';
       gsap.fromTo(".modal-content",
@@ -462,9 +507,25 @@ const AmenitiesPage = () => {
               </div>
             </div>
 
+            {amenity.menuItems && (
+              <div className="mb-6">
+                <h3 className="font-semibold text-gray-800 dark:text-white mb-3 flex items-center gap-2">
+                  <Coffee className="w-5 h-5 text-amber-500" />
+                  Popular Menu Items
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {amenity.menuItems.map((item, idx) => (
+                    <span key={idx} className="px-3 py-1 bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 text-sm rounded-full">
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div className="flex gap-3 pt-4">
               <button className={`flex-1 bg-linear-to-r ${amenity.gradient} text-white font-semibold py-3 rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105`}>
-                Book a Tour
+                Book a Visit
               </button>
               <button className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition">
                 Contact Us
@@ -668,7 +729,7 @@ const AmenitiesPage = () => {
         <div className="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20 rounded-2xl p-8 md:p-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left Content - Image Gallery */}
-            <div ref={leftContentRef} className="grid grid-cols-2 gap-3 order-2 lg:order-1">
+            <div className="grid grid-cols-2 gap-3 order-2 lg:order-1">
               {poolImages.map((img, idx) => (
                 <div
                   key={idx}
@@ -691,7 +752,7 @@ const AmenitiesPage = () => {
             </div>
 
             {/* Right Content - Text and Features */}
-            <div ref={rightContentRef} className="space-y-6 order-1 lg:order-2">
+            <div className="space-y-6 order-1 lg:order-2">
               <div>
                 <div className="inline-flex items-center gap-2 bg-blue-100 dark:bg-blue-900/40 rounded-full px-4 py-1.5 mb-4">
                   <Droplets className="w-4 h-4 text-blue-600" />
@@ -735,7 +796,7 @@ const AmenitiesPage = () => {
       <div ref={gymSectionRef} className="relative z-10 max-w-7xl mx-auto px-4 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left Content - Text and Features */}
-          <div ref={leftContentRef} className="space-y-6">
+          <div className="space-y-6">
             <div>
               <div className="inline-flex items-center gap-2 bg-purple-100 dark:bg-purple-900/40 rounded-full px-4 py-1.5 mb-4">
                 <Dumbbell className="w-4 h-4 text-purple-600" />
@@ -775,7 +836,7 @@ const AmenitiesPage = () => {
           </div>
 
           {/* Right Content - Image Gallery */}
-          <div ref={rightContentRef} className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-3">
             {gymImages.map((img, idx) => (
               <div
                 key={idx}
@@ -799,11 +860,87 @@ const AmenitiesPage = () => {
         </div>
       </div>
 
+      {/* Cafe Shop Section */}
+      <div ref={cafeSectionRef} className="relative z-10 max-w-7xl mx-auto px-4 py-16">
+        <div className="bg-linear-to-r from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20 rounded-2xl p-8 md:p-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left Content - Image Gallery */}
+            <div className="grid grid-cols-2 gap-3">
+              {cafeImages.slice(0, 4).map((img, idx) => (
+                <div
+                  key={idx}
+                  onClick={() => {
+                    setSelectedImage(cafeImages);
+                    setShowImageModal(true);
+                  }}
+                  className={`relative overflow-hidden rounded-xl cursor-pointer group/image ${idx === 0 ? 'col-span-2 row-span-2 aspect-square' : 'aspect-square'}`}
+                >
+                  <img
+                    src={img}
+                    alt={`Cafe ${idx + 1}`}
+                    className="w-full h-full object-cover group-hover/image:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-black/0 group-hover/image:bg-black/40 transition-all duration-300 flex items-center justify-center">
+                    <ZoomIn className="w-8 h-8 text-white opacity-0 group-hover/image:opacity-100 transition-all duration-300" />
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Right Content - Text and Features */}
+            <div ref={rightContentRef} className="space-y-6">
+              <div>
+                <div className="inline-flex items-center gap-2 bg-amber-100 dark:bg-amber-900/40 rounded-full px-4 py-1.5 mb-4">
+                  <Coffee className="w-4 h-4 text-amber-600" />
+                  <span className="text-sm font-medium text-amber-700">Dining & Social</span>
+                </div>
+                <h3 className="text-3xl font-bold text-gray-800 dark:text-white mb-3">
+                  Cozy{" "}
+                  <span className="bg-linear-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
+                    Cafe Shop
+                  </span>
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300">
+                  Start your day with freshly brewed coffee, enjoy healthy snacks, and connect with friends in our warm, inviting cafe space with free WiFi.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  { icon: Coffee, text: "Specialty Coffee" },
+                  { icon: Cake, text: "Fresh Pastries" },
+                  { icon: Wifi, text: "Free High-Speed WiFi" },
+                  { icon: Clock, text: "7AM - 11PM Daily" },
+                  { icon: Sandwich, text: "Healthy Meals" },
+                  { icon: IceCream, text: "Desserts & Treats" },
+                ].map((feature, idx) => (
+                  <div key={idx} className="flex items-center gap-2 p-2 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 hover:translate-x-1">
+                    <feature.icon className="w-4 h-4 text-amber-500" />
+                    <span className="text-sm text-gray-600 dark:text-gray-300">{feature.text}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex flex-wrap gap-3">
+                <button className="group inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-amber-600 to-orange-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-300 hover:scale-105">
+                  View Menu
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </button>
+                <button className="group inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-gray-800 text-amber-600 border border-amber-200 dark:border-amber-700 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 hover:scale-105">
+                  Order Online
+                  <Coffee className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* CTA Section with Parallax */}
       <div ref={ctaRef} className="relative z-10 max-w-4xl mx-auto px-4 py-16">
-        <div className="bg-gradient-to-r from-emerald-600 to-cyan-600 rounded-2xl p-8 text-center text-white relative overflow-hidden group">
+        <div className="bg-linear-to-r from-emerald-600 to-cyan-600 rounded-2xl p-8 text-center text-white relative overflow-hidden group">
           <div className="absolute inset-0 bg-black/20"></div>
-          <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500 to-cyan-500 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div className="absolute -inset-1 bg-linear-to-r from-emerald-500 to-cyan-500 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           <div className="relative z-10">
             <Crown className="w-16 h-16 mx-auto mb-4 opacity-80" />
             <h3 className="text-3xl font-bold mb-2">Ready to Experience Luxury?</h3>

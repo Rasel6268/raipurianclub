@@ -9,6 +9,7 @@ import {
   Sparkles,
   Flag,
 } from "lucide-react";
+import CountUp from "react-countup";
 
 const Hero2 = () => {
   const heroRef = useRef(null);
@@ -48,21 +49,25 @@ const Hero2 = () => {
     <>
       <div className="relative">
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-          {/* Background Image with Overlay */}
+          {/* Background Image with Dark Overlay for better text visibility */}
           <div className="absolute inset-0">
-            {/* Community Image */}
+            {/* Image */}
             <img
-              src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop"
+              src="https://res.cloudinary.com/doumlnejx/image/upload/v1777551701/WhatsApp_Image_2026-04-30_at_6.19.55_PM_2_ko7yie.jpg"
               alt="Raipurian Community gathering"
               className="w-full h-full object-cover"
             />
+            {/* Gradient Overlay - Dark overlay from bottom to ensure text readability */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/30"></div>
+            {/* Additional Radial Overlay - Darkens edges and focuses on center */}
+            <div className="absolute inset-0 bg-radial-gradient from-transparent via-black/20 to-black/60"></div>
           </div>
 
           {/* Floating Elements for visual interest */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none z-10">
-            <div className="absolute top-20 left-10 w-72 h-72 bg-emerald-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float-slow"></div>
-            <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float-reverse"></div>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-teal-400 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse-slow"></div>
+            <div className="absolute top-20 left-10 w-72 h-72 bg-emerald-400 rounded-full mix-blend-overlay filter blur-3xl opacity-30 animate-float-slow"></div>
+            <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-400 rounded-full mix-blend-overlay filter blur-3xl opacity-30 animate-float-reverse"></div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-teal-400 rounded-full mix-blend-overlay filter blur-3xl opacity-20 animate-pulse-slow"></div>
           </div>
 
           {/* Hero Content */}
@@ -73,22 +78,22 @@ const Hero2 = () => {
               style={{ transformStyle: "preserve-3d" }}
             >
               {/* Badge */}
-              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md rounded-full px-4 py-1.5 mb-8 border border-white/20 animate-fade-down">
+              <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md rounded-full px-4 py-1.5 mb-8 border border-white/30 animate-fade-down">
                 <Sparkles className="w-4 h-4 text-emerald-300" />
-                <span className="text-sm font-medium text-white/90">
+                <span className="text-sm font-medium text-white/95">
                   Community First Since 2026
                 </span>
               </div>
 
-              {/* Main Heading */}
-              <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-6 leading-tight tracking-tight">
+              {/* Main Heading - Brighter text for better contrast */}
+              <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-6 leading-tight tracking-tight drop-shadow-lg">
                 Where{" "}
                 <span className="relative inline-block">
-                  <span className="relative z-10 bg-linear-to-r from-emerald-300 to-cyan-300 bg-clip-text text-transparent">
+                  <span className="relative z-10 bg-gradient-to-r from-emerald-300 to-cyan-300 bg-clip-text text-transparent">
                     Raipur
                   </span>
                   <svg
-                    className="absolute -bottom-2 left-0 w-full h-3 text-emerald-400/30"
+                    className="absolute -bottom-2 left-0 w-full h-3 text-emerald-400/50"
                     viewBox="0 0 100 10"
                     preserveAspectRatio="none"
                   >
@@ -104,7 +109,8 @@ const Hero2 = () => {
                 Meets Progress
               </h1>
 
-              <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto mb-10 leading-relaxed animate-fade-up animation-delay-200">
+              {/* Description - Brighter text with subtle shadow */}
+              <p className="text-xl md:text-2xl text-white/95 max-w-3xl mx-auto mb-10 leading-relaxed drop-shadow-md animate-fade-up animation-delay-200">
                 Join the premier community hub for Raipur's finest — where
                 connections flourish, events inspire, and collective action
                 drives meaningful change.
@@ -117,34 +123,47 @@ const Hero2 = () => {
                     Become a Member
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </span>
-                  <div className="absolute inset-0 bg-linear-to-r from-emerald-50 to-cyan-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-emerald-50 to-cyan-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </button>
-                <button className="px-8 py-3.5 bg-transparent border-2 border-white/30 text-white rounded-full font-semibold text-lg hover:bg-white/10 hover:border-white/50 transition-all duration-300 hover:scale-105 backdrop-blur-sm">
+                <button className="px-8 py-3.5 bg-white/10 backdrop-blur-md border border-white/40 text-white rounded-full font-semibold text-lg hover:bg-white/20 hover:border-white/60 transition-all duration-300 hover:scale-105">
                   Explore Events
                 </button>
               </div>
 
-              {/* Stats */}
+              {/* Stats - Enhanced visibility */}
               <div className="grid grid-cols-1 sm:grid-cols-4 gap-8 max-w-3xl mx-auto mt-15 pt-8 border-t border-white/20 animate-fade-up animation-delay-600">
                 <div className="flex flex-col items-center group cursor-pointer">
-                  <Users className="w-8 h-8 text-emerald-300 mb-2 group-hover:scale-110 transition-transform" />
-                  <div className="text-3xl font-bold text-white">2,500+</div>
-                  <div className="text-white/70 text-sm">Active Members</div>
+                  <Users className="w-8 h-8 text-emerald-300 mb-2 group-hover:scale-110 transition-transform drop-shadow" />
+                  <div className="text-3xl font-bold text-white drop-shadow">
+                    <CountUp end={500} duration={4.5} suffix="+" />
+                  </div>
+                  <div className="text-white/80 text-sm">Active Members</div>
                 </div>
+
                 <div className="flex flex-col items-center group cursor-pointer">
-                  <Calendar className="w-8 h-8 text-emerald-300 mb-2 group-hover:scale-110 transition-transform" />
-                  <div className="text-3xl font-bold text-white">60+</div>
-                  <div className="text-white/70 text-sm">Annual Events</div>
+                  <Calendar className="w-8 h-8 text-emerald-300 mb-2 group-hover:scale-110 transition-transform drop-shadow" />
+                  <div className="text-3xl font-bold text-white drop-shadow">
+                    <CountUp end={60} duration={4.5} suffix="+" />
+                  </div>
+                  <div className="text-white/80 text-sm">Annual Events</div>
                 </div>
+
                 <div className="flex flex-col items-center group cursor-pointer">
-                  <Flag className="w-8 h-8 text-emerald-300 mb-2 group-hover:scale-110 transition-transform" />
-                  <div className="text-3xl font-bold text-white">24+</div>
-                  <div className="text-white/70 text-sm">Community Awards</div>
+                  <Flag className="w-8 h-8 text-emerald-300 mb-2 group-hover:scale-110 transition-transform drop-shadow" />
+                  <div className="text-3xl font-bold text-white drop-shadow">
+                    <CountUp end={24} duration={4.5} suffix="+" />
+                  </div>
+                  <div className="text-white/80 text-sm">Community Awards</div>
                 </div>
+
                 <div className="flex flex-col items-center group cursor-pointer">
-                  <Trophy className="w-8 h-8 text-emerald-300 mb-2 group-hover:scale-110 transition-transform" />
-                  <div className="text-3xl font-bold text-white">15+</div>
-                  <div className="text-white/70 text-sm">Community Awards</div>
+                  <Trophy className="w-8 h-8 text-emerald-300 mb-2 group-hover:scale-110 transition-transform drop-shadow" />
+                  <div className="text-3xl font-bold text-white drop-shadow">
+                    <CountUp end={15} duration={4.5} suffix="+" />
+                  </div>
+                  <div className="text-white/80 text-sm">
+                    Years of Excellence
+                  </div>
                 </div>
               </div>
             </div>
