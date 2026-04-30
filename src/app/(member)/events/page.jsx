@@ -1,5 +1,5 @@
-'use client';
-import React, { useState, useEffect, useRef } from 'react';
+"use client";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Calendar,
   MapPin,
@@ -22,7 +22,8 @@ import {
   Mountain,
   Microscope,
   Palette,
-} from 'lucide-react';
+} from "lucide-react";
+import HeroProp from "@/components/HeroProp";
 
 const EventsPage = () => {
   // Demo events data
@@ -32,7 +33,8 @@ const EventsPage = () => {
       title: "Summer Music Festival",
       date: "July 15, 2025",
       targetDate: new Date(2025, 6, 15),
-      description: "Join us for an unforgettable night of music, food, and fun under the stars! Featuring top artists and amazing performances.",
+      description:
+        "Join us for an unforgettable night of music, food, and fun under the stars! Featuring top artists and amazing performances.",
       location: "Central Park, New York",
       icon: Music,
       color: "from-rose-500 to-pink-500",
@@ -44,7 +46,8 @@ const EventsPage = () => {
       title: "Tech Conference 2025",
       date: "August 5, 2025",
       targetDate: new Date(2025, 7, 5),
-      description: "The biggest tech event of the year! Network with industry leaders, attend workshops, and discover the latest innovations.",
+      description:
+        "The biggest tech event of the year! Network with industry leaders, attend workshops, and discover the latest innovations.",
       location: "Convention Center, San Francisco",
       icon: Laptop,
       color: "from-blue-500 to-cyan-500",
@@ -56,7 +59,8 @@ const EventsPage = () => {
       title: "Wellness Retreat",
       date: "September 20, 2025",
       targetDate: new Date(2025, 8, 20),
-      description: "Escape the chaos and rejuvenate your mind, body, and soul. Yoga, meditation, and healing sessions included.",
+      description:
+        "Escape the chaos and rejuvenate your mind, body, and soul. Yoga, meditation, and healing sessions included.",
       location: "Mountain Resort, Colorado",
       icon: Heart,
       color: "from-emerald-500 to-teal-500",
@@ -68,7 +72,8 @@ const EventsPage = () => {
       title: "Food & Wine Expo",
       date: "October 10, 2025",
       targetDate: new Date(2025, 9, 10),
-      description: "Savor exquisite cuisines from world-renowned chefs and taste premium wines from top vineyards.",
+      description:
+        "Savor exquisite cuisines from world-renowned chefs and taste premium wines from top vineyards.",
       location: "Grand Plaza, Chicago",
       icon: Wine,
       color: "from-amber-500 to-orange-500",
@@ -80,7 +85,8 @@ const EventsPage = () => {
       title: "Charity Gala Night",
       date: "November 25, 2025",
       targetDate: new Date(2025, 10, 25),
-      description: "An elegant evening supporting children's education. Live music, auctions, and inspiring stories await.",
+      description:
+        "An elegant evening supporting children's education. Live music, auctions, and inspiring stories await.",
       location: "Royal Ballroom, Boston",
       icon: Gift,
       color: "from-purple-500 to-violet-500",
@@ -92,7 +98,8 @@ const EventsPage = () => {
       title: "New Year's Eve Bash",
       date: "December 31, 2025",
       targetDate: new Date(2025, 11, 31),
-      description: "Ring in the New Year with a spectacular celebration! Fireworks, champagne, and live DJ performances.",
+      description:
+        "Ring in the New Year with a spectacular celebration! Fireworks, champagne, and live DJ performances.",
       location: "Harbor City, Miami",
       icon: PartyPopper,
       color: "from-indigo-500 to-purple-500",
@@ -111,7 +118,9 @@ const EventsPage = () => {
     }
 
     const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const hours = Math.floor(
+      (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+    );
     const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
@@ -120,7 +129,9 @@ const EventsPage = () => {
 
   // Event Card Component with live timer
   const EventCard = ({ event }) => {
-    const [timeLeft, setTimeLeft] = useState(() => calculateTimeLeft(event.targetDate));
+    const [timeLeft, setTimeLeft] = useState(() =>
+      calculateTimeLeft(event.targetDate),
+    );
     const cardRef = useRef(null);
 
     useEffect(() => {
@@ -136,19 +147,20 @@ const EventsPage = () => {
         (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
-              entry.target.classList.add('animate-fade-in-up');
-              entry.target.style.opacity = '1';
-              entry.target.style.transform = 'translateY(0)';
+              entry.target.classList.add("animate-fade-in-up");
+              entry.target.style.opacity = "1";
+              entry.target.style.transform = "translateY(0)";
             }
           });
         },
-        { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+        { threshold: 0.1, rootMargin: "0px 0px -50px 0px" },
       );
 
       if (cardRef.current) {
-        cardRef.current.style.opacity = '0';
-        cardRef.current.style.transform = 'translateY(30px)';
-        cardRef.current.style.transition = 'all 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1)';
+        cardRef.current.style.opacity = "0";
+        cardRef.current.style.transform = "translateY(30px)";
+        cardRef.current.style.transition =
+          "all 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1)";
         observer.observe(cardRef.current);
       }
 
@@ -157,7 +169,7 @@ const EventsPage = () => {
       };
     }, []);
 
-    const formatNumber = (num) => String(num).padStart(2, '0');
+    const formatNumber = (num) => String(num).padStart(2, "0");
     const IconComponent = event.icon;
 
     return (
@@ -166,13 +178,17 @@ const EventsPage = () => {
         className="group relative bg-white dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2"
       >
         {/* Background gradient overlay */}
-        <div className={`absolute inset-0 bg-linear-to-br ${event.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500`}></div>
-        
+        <div
+          className={`absolute inset-0 bg-linear-to-br ${event.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500`}
+        ></div>
+
         {/* Decorative blur elements */}
         <div className="absolute top-0 right-0 w-40 h-40 bg-linear-to-br from-emerald-400/20 to-cyan-400/20 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
-        
+
         {/* Event Header with Icon */}
-        <div className={`relative px-6 pt-8 pb-6 bg-linear-to-r ${event.color}`}>
+        <div
+          className={`relative px-6 pt-8 pb-6 bg-linear-to-r ${event.color}`}
+        >
           <div className="flex items-center justify-between">
             <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
               <IconComponent className="w-7 h-7 text-white" />
@@ -232,7 +248,9 @@ const EventsPage = () => {
           <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-4">
             {event.description}
           </p>
-          <button className={`w-full bg-linear-to-r ${event.color} text-white font-semibold py-2.5 rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-[1.02] text-sm flex items-center justify-center gap-2 group/btn`}>
+          <button
+            className={`w-full bg-linear-to-r ${event.color} text-white font-semibold py-2.5 rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-[1.02] text-sm flex items-center justify-center gap-2 group/btn`}
+          >
             <Ticket className="w-4 h-4" />
             {event.buttonText}
             <ArrowRight className="w-4 h-4 opacity-0 group-hover/btn:opacity-100 group-hover/btn:translate-x-0.5 transition-all -translate-x-1" />
@@ -244,11 +262,36 @@ const EventsPage = () => {
 
   // Category filters
   const categories = [
-    { name: "All Events", icon: Sparkles, active: true, color: "from-emerald-500 to-cyan-500" },
-    { name: "Music", icon: Music, active: false, color: "from-rose-500 to-pink-500" },
-    { name: "Tech", icon: Laptop, active: false, color: "from-blue-500 to-cyan-500" },
-    { name: "Wellness", icon: Heart, active: false, color: "from-emerald-500 to-teal-500" },
-    { name: "Food & Drink", icon: Coffee, active: false, color: "from-amber-500 to-orange-500" },
+    {
+      name: "All Events",
+      icon: Sparkles,
+      active: true,
+      color: "from-emerald-500 to-cyan-500",
+    },
+    {
+      name: "Music",
+      icon: Music,
+      active: false,
+      color: "from-rose-500 to-pink-500",
+    },
+    {
+      name: "Tech",
+      icon: Laptop,
+      active: false,
+      color: "from-blue-500 to-cyan-500",
+    },
+    {
+      name: "Wellness",
+      icon: Heart,
+      active: false,
+      color: "from-emerald-500 to-teal-500",
+    },
+    {
+      name: "Food & Drink",
+      icon: Coffee,
+      active: false,
+      color: "from-amber-500 to-orange-500",
+    },
   ];
 
   return (
@@ -260,58 +303,13 @@ const EventsPage = () => {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-125 h-125 bg-teal-300 rounded-full mix-blend-multiply filter blur-3xl opacity-5 animate-pulse-slow"></div>
       </div>
 
-      {/* Hero Section */}
-      <div className="relative overflow-hidden bg-linear-to-r from-emerald-700 via-teal-700 to-cyan-800 text-white py-20 px-4">
-        <div className="absolute inset-0 bg-black/20"></div>
-        <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-black/10 rounded-full blur-3xl"></div>
-        
-        <div className="relative z-10 max-w-7xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-1.5 mb-6">
-            <Sparkles className="w-4 h-4" />
-            <span className="text-sm font-medium">Discover Amazing Experiences</span>
-          </div>
-          <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold mb-4 animate-fade-in-up">
-            Upcoming{" "}
-            <span className="relative inline-block">
-              <span className="relative z-10">Events</span>
-              <svg
-                className="absolute -bottom-3 left-0 w-full h-4 text-white/30"
-                viewBox="0 0 100 8"
-                preserveAspectRatio="none"
-              >
-                <path
-                  d="M0 4 L100 4"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  fill="none"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </span>
-          </h1>
-          <p className="text-xl text-emerald-100 max-w-2xl mx-auto">
-            Discover amazing experiences, connect with people, and create unforgettable memories
-          </p>
-          
-          {/* Category Filters */}
-          <div className="mt-10 flex gap-3 justify-center flex-wrap">
-            {categories.map((cat, idx) => (
-              <button
-                key={idx}
-                className={`group flex items-center gap-2 px-5 py-2.5 rounded-full font-medium transition-all duration-300 ${
-                  cat.active
-                    ? `bg-white text-emerald-700 shadow-lg`
-                    : `bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm`
-                }`}
-              >
-                <cat.icon className="w-4 h-4" />
-                {cat.name}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
+      <HeroProp
+        title={"Discover Amazing Experiences"}
+        heading1={"Upcoming"}
+        heading2={"Events"}
+        content={`Discover amazing experiences, connect with people, and create unforgettable memories`}
+        Icon={Sparkles}
+      />
 
       {/* Events Grid */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 py-16">
@@ -353,13 +351,15 @@ const EventsPage = () => {
           <div className="absolute inset-0 bg-black/20"></div>
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-black/10 rounded-full blur-3xl"></div>
-          
+
           <div className="relative z-10 text-center">
             <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-1.5 mb-4">
               <Bell className="w-4 h-4" />
               <span className="text-sm font-medium">Never Miss Out</span>
             </div>
-            <h3 className="text-2xl md:text-3xl font-bold mb-2">Stay Updated</h3>
+            <h3 className="text-2xl md:text-3xl font-bold mb-2">
+              Stay Updated
+            </h3>
             <p className="text-white/80 max-w-md mx-auto mb-6">
               Subscribe to get notified about new events and special offers
             </p>
@@ -381,10 +381,18 @@ const EventsPage = () => {
       <footer className="relative z-10 bg-gray-900 text-gray-400 py-12 mt-8">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <div className="flex justify-center gap-6 mb-6">
-            <a href="#" className="hover:text-white transition-colors">About</a>
-            <a href="#" className="hover:text-white transition-colors">Events</a>
-            <a href="#" className="hover:text-white transition-colors">Contact</a>
-            <a href="#" className="hover:text-white transition-colors">Privacy</a>
+            <a href="#" className="hover:text-white transition-colors">
+              About
+            </a>
+            <a href="#" className="hover:text-white transition-colors">
+              Events
+            </a>
+            <a href="#" className="hover:text-white transition-colors">
+              Contact
+            </a>
+            <a href="#" className="hover:text-white transition-colors">
+              Privacy
+            </a>
           </div>
           <p>&copy; 2025 Events Hub. All rights reserved.</p>
           <p className="text-sm mt-2">Making every moment memorable</p>
@@ -394,16 +402,33 @@ const EventsPage = () => {
       {/* Animation Styles */}
       <style jsx>{`
         @keyframes float-slow {
-          0%, 100% { transform: translateY(0px) translateX(0px); }
-          50% { transform: translateY(-20px) translateX(10px); }
+          0%,
+          100% {
+            transform: translateY(0px) translateX(0px);
+          }
+          50% {
+            transform: translateY(-20px) translateX(10px);
+          }
         }
         @keyframes float-reverse {
-          0%, 100% { transform: translateY(0px) translateX(0px); }
-          50% { transform: translateY(20px) translateX(-10px); }
+          0%,
+          100% {
+            transform: translateY(0px) translateX(0px);
+          }
+          50% {
+            transform: translateY(20px) translateX(-10px);
+          }
         }
         @keyframes pulse-slow {
-          0%, 100% { opacity: 0.05; transform: scale(1); }
-          50% { opacity: 0.1; transform: scale(1.05); }
+          0%,
+          100% {
+            opacity: 0.05;
+            transform: scale(1);
+          }
+          50% {
+            opacity: 0.1;
+            transform: scale(1.05);
+          }
         }
         @keyframes fadeInUp {
           from {

@@ -2,7 +2,16 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu, X, Users, Calendar, Heart, Home, Image, } from "lucide-react";
+import {
+  Menu,
+  X,
+  Users,
+  Calendar,
+  Heart,
+  Home,
+  Image,
+  icons,
+} from "lucide-react";
 
 const Navbar2 = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -19,8 +28,11 @@ const Navbar2 = () => {
   const navLinks = [
     { name: "Home", href: "/", icon: Home },
     { name: "Members", href: "/members", icon: Users },
+    { name: "Amenities", href: "/amenities", icon: "" },
     { name: "Events", href: "/events", icon: Calendar },
-    { name: "Gallery", href: "/gallery", icon:  Image},
+    { name: "Gallery", href: "/gallery", icon: Image },
+    { name: "Beauty of Raipur", href: "/beauty", icon: Image },
+
     { name: "Projects", href: "/projects", icon: Heart },
   ];
 
@@ -113,7 +125,7 @@ const Navbar2 = () => {
               {link.name}
             </Link>
           ))}
-           <Link
+          <Link
             href="/register"
             onClick={() => setIsMobileMenuOpen(false)}
             className="mt-4 bg-linear-to-r from-green-500 to-orange-500 text-white px-8 py-3 rounded-full font-semibold w-full max-w-[200px] hover:shadow-xl transition-all duration-300"

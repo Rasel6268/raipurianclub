@@ -11,6 +11,9 @@ const navLinks = [
   { name: 'Events', href: '/events', icon: Calendar },
   { name: 'Donations', href: '/donations', icon: Heart },
   { name: 'Projects', href: '/projects', icon: Briefcase },
+  { name: 'Amenities', href: '/amenities', icon: Briefcase },
+
+
 ];
 
 export default function Navbar() {

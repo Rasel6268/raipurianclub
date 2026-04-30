@@ -3,6 +3,7 @@
 
 import Footer from "@/components/Footer";
 import Hero2 from "@/components/Hero2";
+import LifetimeMembership from "@/components/LifetimeMembership";
 import MissionVision from "@/components/MissionVision";
 import Navbar from "@/components/Navbar";
 import Navbar2 from "@/components/Navbar2";
@@ -38,6 +39,7 @@ export default function Home() {
       <Hero2 />
       <UpcomingEvents />
       <MissionVision />
+      <LifetimeMembership/>
     </main>
   );
 }

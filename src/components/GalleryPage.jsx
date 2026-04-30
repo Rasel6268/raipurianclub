@@ -19,6 +19,7 @@ import {
   Users,
   Image as ImageIcon,
 } from "lucide-react";
+import HeroProp from "./HeroProp";
 
 const GalleryMasonry = () => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -473,7 +474,7 @@ const GalleryMasonry = () => {
 
   return (
     <>
-      <section className="relative py-16 min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-hidden">
+      <section className="relative py-16 min-h-screen bg-linear-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-hidden">
         {/* Animated Background */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-20 left-10 w-72 h-72 bg-emerald-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 dark:opacity-10 animate-float-slow"></div>
@@ -484,8 +485,7 @@ const GalleryMasonry = () => {
           <div className="absolute bottom-[25%] left-[20%] w-2 h-2 bg-teal-400 rounded-full animate-pulse-slow"></div>
         </div>
 
-        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Header */}
+        <div className="relative  px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 bg-emerald-100 dark:bg-emerald-900/40 backdrop-blur-sm rounded-full px-4 py-1.5 mb-4 animate-fade-down">
               <Camera className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
