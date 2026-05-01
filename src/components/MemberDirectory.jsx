@@ -1121,6 +1121,22 @@ const MemberDirectory = () => {
         "https://res.cloudinary.com/doumlnejx/image/upload/v1777625940/WhatsApp_Image_2026-05-01_at_2.13.08_PM_cqdhfh.jpg",
       bio: "Founding member passionate about community service.",
     },
+    {
+      id: 163,
+      name: "Abdullah Al Mamun Chow",
+      memberType: "Founding Member",
+      memberId: "RPM-FND-063",
+      email: "abdullah@raipurian.com",
+      phone: "+88 017XXXXXXXX",
+      location: "Raipur",
+      profession: "Professional",
+      joinedDate: "2020",
+      image:
+        "https://res.cloudinary.com/doumlnejx/image/upload/v1777653678/WhatsApp_Image_2026-05-01_at_9.11.57_PM_lusp4a.jpg",
+      bio: "Founding member passionate about community service.",
+    },
+
+    //
   ];
 
   // General Members Data
