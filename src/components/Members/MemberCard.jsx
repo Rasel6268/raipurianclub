@@ -31,7 +31,7 @@ const MemberCard = ({ member, isManaging, expanded, onToggle }) => {
               {member.name}
             </h3>
             <p className="text-emerald-600 dark:text-emerald-400 font-medium text-sm">
-              {member.position || member.profession}
+              {member.position || member.memberType}
             </p>
             {member.memberId && (
               <p className="text-xs text-gray-400 mt-1">ID: {member.memberId}</p>
