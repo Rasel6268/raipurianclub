@@ -466,7 +466,7 @@ const MemberDirectory = () => {
     },
     {
       id: 114,
-      name: "Md. Ibrahim (SSC-91)",
+      name: "Md. Ibrahim",
       memberType: "Founding Member",
       memberId: "RPM-FND-014",
       email: "ibrahim@raipurian.com",
@@ -522,7 +522,7 @@ const MemberDirectory = () => {
     },
     {
       id: 118,
-      name: "Jahangir (Inspector)",
+      name: "Jahangir",
       memberType: "Founding Member",
       memberId: "RPM-FND-018",
       email: "jahangir@raipurian.com",
