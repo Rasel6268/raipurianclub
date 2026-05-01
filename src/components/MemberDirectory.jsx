@@ -39,81 +39,190 @@ const MemberDirectory = () => {
       name: "Md Zabed Hossain",
       position: "Convener",
       memberType: "Managing Member",
-      memberId: "RPM-2024-001",
+      memberId: "RPM-M-001",
       email: "zabed@raipurian.com",
-      phone: "+88 01760208702",
-      location: "Raipur",
-      company: "Raipur Club Ltd",
+      phone: "+8801XXXXXXXXX",
+      location: "Raipur, Lakshmipur",
+      company: "Raipurian Club",
       profession: "Tech Entrepreneur",
-      joinedDate: "2020",
-      interests: ["Tech", "Sports", "Volunteering"],
-      contributions: [
-        "Event Organizer",
-        "Tech Committee Lead",
-        "Founding Member",
-      ],
-      achievements: [
-        "Community Builder Award 2023",
-        "Innovation Excellence 2024",
-      ],
-      bio: "Passionate technologist who loves building community tech solutions. One of the founding members who helped establish Raipurian.",
-      image:
-        "https://res.cloudinary.com/doumlnejx/image/upload/v1777464001/WhatsApp_Image_2026-04-29_at_5.44.28_PM_cvmbsf.jpg",
-      social: { linkedin: "#", github: "#" },
+      joinedDate: "2024",
+      interests: ["Leadership", "Tech", "Community"],
+      contributions: ["Core Leadership", "Strategy Planning"],
+      achievements: ["Managing Committee Lead"],
+      bio: "Convener of the managing committee, leading strategic direction and operations.",
+      image: "https://res.cloudinary.com/doumlnejx/image/upload/v1777464001/WhatsApp_Image_2026-04-29_at_5.44.28_PM_cvmbsf.jpg",
+      social: { linkedin: "#", facebook: "#" },
     },
     {
       id: 2,
-      name: "Vikram Singh Rathore",
-      position: "Vice President",
+      name: "Miraj Muktadir",
+      position: "Chief Coordinator",
       memberType: "Managing Member",
-      email: "vikram.rathore@raipurian.com",
-      phone: "+91 99887 66554",
-      location: "Raipur, Chhattisgarh",
-      company: "Rathore Group",
-      profession: "Business Leader",
-      joinedDate: "2021",
-      achievements: [
-        "Business Excellence Award 2024",
-        "Community Builder of the Year",
-      ],
-      bio: "Dynamic business leader passionate about bringing positive change to the community.",
-      image:
-        "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=2070&auto=format&fit=crop",
-      social: { linkedin: "#", twitter: "#", website: "#" },
+      memberId: "RPM-M-002",
+      email: "miraj@raipurian.com",
+      phone: "+8801XXXXXXXXX",
+      location: "Raipur, Lakshmipur",
+      company: "Raipurian Club",
+      profession: "Coordinator",
+      joinedDate: "2024",
+      interests: ["Management", "Events"],
+      contributions: ["Event Management", "Operations"],
+      achievements: ["Outstanding Coordinator"],
+      bio: "Handles coordination of events and internal operations.",
+      image: "https://res.cloudinary.com/doumlnejx/image/upload/v1777554338/WhatsApp_Image_2026-04-30_at_7.03.55_PM_1_k4jj6y.jpg",
+      social: { linkedin: "#", facebook: "#" },
     },
     {
       id: 3,
-      name: "Priya Mehta",
-      position: "Secretary",
+      name: "Emayetullah Bablu",
+      position: "Assistant Chief Coordinator",
       memberType: "Managing Member",
-      email: "priya.mehta@raipurian.com",
-      phone: "+91 87654 32109",
-      location: "Raipur, Chhattisgarh",
-      company: "Mehta Associates",
-      profession: "Corporate Lawyer",
-      joinedDate: "2020",
-      achievements: ["Young Achiever Award 2024", "Women in Leadership 2023"],
-      bio: "Dedicated professional with expertise in legal affairs and community organization.",
-      image:
-        "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=2070&auto=format&fit=crop",
-      social: { linkedin: "#", twitter: "#", website: "#" },
+      memberId: "RPM-M-003",
+      email: "bablu@raipurian.com",
+      phone: "+8801XXXXXXXXX",
+      location: "Raipur, Lakshmipur",
+      company: "Raipurian Club",
+      profession: "Assistant Coordinator",
+      joinedDate: "2024",
+      interests: ["Teamwork", "Planning"],
+      contributions: ["Support Operations"],
+      achievements: ["Active Committee Member"],
+      bio: "Supports coordination and ensures smooth execution of activities.",
+      image: "https://via.placeholder.com/300",
+      social: { linkedin: "#", facebook: "#" },
     },
     {
       id: 4,
-      name: "Rahul Verma",
-      position: "Treasurer",
+      name: "Ariful Alam",
+      position: "Member",
       memberType: "Managing Member",
-      email: "rahul.verma@raipurian.com",
-      phone: "+91 76543 21098",
-      location: "Raipur, Chhattisgarh",
-      company: "Verma Financial Services",
-      profession: "Chartered Accountant",
-      joinedDate: "2021",
-      achievements: ["Financial Excellence Award", "Trustee Recognition 2024"],
-      bio: "Financial expert ensuring transparent and efficient management of community funds.",
-      image:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=2070&auto=format&fit=crop",
-      social: { linkedin: "#", twitter: "#", website: "#" },
+      memberId: "RPM-M-004",
+      email: "ariful@raipurian.com",
+      phone: "+8801XXXXXXXXX",
+      location: "Raipur, Lakshmipur",
+      company: "Raipurian Club",
+      profession: "Member",
+      joinedDate: "2024",
+      interests: ["Community Service"],
+      contributions: ["Committee Support"],
+      achievements: ["Managing Member Recognition"],
+      bio: "Active member of the managing committee contributing to initiatives.",
+      image: "https://res.cloudinary.com/doumlnejx/image/upload/v1777554336/WhatsApp_Image_2026-04-30_at_7.04.24_PM_ixr5wy.jpg",
+      social: { linkedin: "#", facebook: "#" },
+    },
+    {
+      id: 5,
+      name: "Gias Miaji",
+      position: "Member",
+      memberType: "Managing Member",
+      memberId: "RPM-M-005",
+      email: "gias@raipurian.com",
+      phone: "+8801XXXXXXXXX",
+      location: "Raipur, Lakshmipur",
+      company: "Raipurian Club",
+      profession: "Member",
+      joinedDate: "2024",
+      interests: ["Social Work"],
+      contributions: ["Community Activities"],
+      achievements: ["Active Member"],
+      bio: "Supports community-focused programs and initiatives.",
+      image: "https://res.cloudinary.com/doumlnejx/image/upload/v1777554336/WhatsApp_Image_2026-04-30_at_7.04.36_PM_nwuiye.jpg",
+      social: { linkedin: "#", facebook: "#" },
+    },
+    {
+      id: 6,
+      name: "Jahidul Islam Zahid",
+      position: "Member",
+      memberType: "Managing Member",
+      memberId: "RPM-M-006",
+      email: "zahid@raipurian.com",
+      phone: "+8801XXXXXXXXX",
+      location: "Raipur, Lakshmipur",
+      company: "Raipurian Club",
+      profession: "Member",
+      joinedDate: "2024",
+      interests: ["Networking"],
+      contributions: ["Team Collaboration"],
+      achievements: ["Dedicated Member"],
+      bio: "Contributes to team collaboration and club development.",
+      image: "https://via.placeholder.com/300",
+      social: { linkedin: "#", facebook: "#" },
+    },
+    {
+      id: 7,
+      name: "Monoj Roy",
+      position: "Member",
+      memberType: "Managing Member",
+      memberId: "RPM-M-007",
+      email: "monoj@raipurian.com",
+      phone: "+8801XXXXXXXXX",
+      location: "Raipur, Lakshmipur",
+      company: "Raipurian Club",
+      profession: "Member",
+      joinedDate: "2024",
+      interests: ["Culture", "Events"],
+      contributions: ["Event Participation"],
+      achievements: ["Committee Member"],
+      bio: "Actively participates in organizing cultural and social events.",
+      image: "https://res.cloudinary.com/doumlnejx/image/upload/v1777615406/10_oasrak.jpg",
+      social: { linkedin: "#", facebook: "#" },
+    },
+    {
+      id: 8,
+      name: "Rabiul Islam Rubel",
+      position: "Member",
+      memberType: "Managing Member",
+      memberId: "RPM-M-008",
+      email: "rubel@raipurian.com",
+      phone: "+8801XXXXXXXXX",
+      location: "Raipur, Lakshmipur",
+      company: "Raipurian Club",
+      profession: "Member",
+      joinedDate: "2024",
+      interests: ["Community Work"],
+      contributions: ["Support Team"],
+      achievements: ["Active Contributor"],
+      bio: "Supports various managing committee operations.",
+      image: "https://via.placeholder.com/300",
+      social: { linkedin: "#", facebook: "#" },
+    },
+    {
+      id: 9,
+      name: "Jafor Ahammad",
+      position: "Member",
+      memberType: "Managing Member",
+      memberId: "RPM-M-009",
+      email: "jafor@raipurian.com",
+      phone: "+8801XXXXXXXXX",
+      location: "Raipur, Lakshmipur",
+      company: "Raipurian Club",
+      profession: "Member",
+      joinedDate: "2024",
+      interests: ["Volunteer Work"],
+      contributions: ["Community Engagement"],
+      achievements: ["Team Player"],
+      bio: "Engaged in community development and volunteer activities.",
+      image: "https://res.cloudinary.com/doumlnejx/image/upload/v1777554797/WhatsApp_Image_2026-04-30_at_7.12.38_PM_l7ypn7.jpg",
+      social: { linkedin: "#", facebook: "#" },
+    },
+    {
+      id: 10,
+      name: "Azharul Islam",
+      position: "Member",
+      memberType: "Managing Member",
+      memberId: "RPM-M-010",
+      email: "azharul@raipurian.com",
+      phone: "+8801XXXXXXXXX",
+      location: "Raipur, Lakshmipur",
+      company: "Raipurian Club",
+      profession: "Member",
+      joinedDate: "2024",
+      interests: ["Social Impact"],
+      contributions: ["Committee Support"],
+      achievements: ["Active Member"],
+      bio: "Contributes to club success through active involvement.",
+      image: "https://via.placeholder.com/300",
+      social: { linkedin: "#", facebook: "#" },
     },
   ];
 
@@ -121,79 +230,26 @@ const MemberDirectory = () => {
   const patronMembers = [
     {
       id: 301,
-      name: "Dr. Anand Tiwari",
-      memberType: "Patron Member",
+      name: "Lion Md Zahirul Islam",
       title: "Chief Patron",
+      memberType: "Patron Member",
       memberId: "RPM-PAT-001",
-      email: "anand.tiwari@raipurian.com",
-      phone: "+91 9988776655",
-      location: "Civil Lines, Raipur",
-      company: "Tiwari Foundation",
-      profession: "Philanthropist & Educationist",
-      joinedDate: "2020",
-      interests: ["Education", "Healthcare", "Social Welfare"],
-      contributions: [
-        "Major Donor",
-        "Scholarship Program Founder",
-        "Advisory Board Member",
-      ],
+      email: "zahirul@raipurian.com",
+      phone: "+8801XXXXXXXXX",
+      location: "Raipur, Lakshmipur",
+      company: "Raipurian Club",
+      profession: "Philanthropist & Social Leader",
+      joinedDate: "2024",
+      interests: ["Education", "Community Development", "Social Welfare"],
+      contributions: ["Chief Patron", "Major Donor", "Advisory Support"],
       achievements: [
-        "Lifetime Achievement Award",
-        "Education Excellence Award 2023",
+        "Lifetime Contribution Award",
+        "Community Leadership Recognition",
       ],
-      bio: "Renowned philanthropist dedicated to improving education and healthcare access in Chhattisgarh.",
+      bio: "Respected community leader and chief patron of Raipurian Club, supporting social development and youth initiatives.",
       image:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=2070&auto=format&fit=crop",
-      social: { linkedin: "#", website: "#" },
-    },
-    {
-      id: 302,
-      name: "Smt. Meera Aggarwal",
-      memberType: "Patron Member",
-      title: "Patron",
-      memberId: "RPM-PAT-002",
-      email: "meera.aggarwal@raipurian.com",
-      phone: "+91 8877665544",
-      location: "Sadar Bazar, Raipur",
-      company: "Aggarwal Group",
-      profession: "Business Leader",
-      joinedDate: "2021",
-      interests: ["Women Empowerment", "Arts", "Culture"],
-      contributions: ["Women's Wing Founder", "Art Gallery Sponsor"],
-      achievements: [
-        "Women Entrepreneur of the Year 2023",
-        "Cultural Ambassador Award",
-      ],
-      bio: "Business leader passionate about women empowerment and preserving cultural heritage.",
-      image:
-        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=2070&auto=format&fit=crop",
-      social: { linkedin: "#", instagram: "#" },
-    },
-    {
-      id: 303,
-      name: "Col. Rajeshwar Singh (Retd.)",
-      memberType: "Patron Member",
-      title: "Patron",
-      memberId: "RPM-PAT-003",
-      email: "rajeshwar.singh@raipurian.com",
-      phone: "+91 9988223344",
-      location: "Shankar Nagar, Raipur",
-      company: "Retired - Indian Army",
-      profession: "Defense Veteran",
-      joinedDate: "2020",
-      interests: ["Youth Development", "Disaster Management", "Sports"],
-      contributions: [
-        "Youth Leadership Program Director",
-        "Sports Complex Initiative",
-      ],
-      achievements: [
-        "Distinguished Service Medal",
-        "Community Hero Award 2024",
-      ],
-      bio: "Retired army officer dedicated to youth development and disaster preparedness training.",
-      image:
-        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=2070&auto=format&fit=crop",
-      social: { linkedin: "#", twitter: "#" },
+        "https://res.cloudinary.com/doumlnejx/image/upload/v1777624345/WhatsApp_Image_2026-05-01_at_12.51.33_PM_feykab.jpg",
+      social: { linkedin: "#", facebook: "#", website: "#" },
     },
   ];
 
@@ -377,8 +433,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=2070&auto=format&fit=crop",
       bio: "Founding member actively involved in community initiatives.",
     },
     {
@@ -489,8 +544,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=2070&auto=format&fit=crop",
       bio: "Founding member contributing to community initiatives.",
     },
     {
@@ -630,7 +684,7 @@ const MemberDirectory = () => {
       profession: "Professional",
       joinedDate: "2020",
       image:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=2070&auto=format&fit=crop",
+        "https://res.cloudinary.com/doumlnejx/image/upload/v1777625882/WhatsApp_Image_2026-05-01_at_12.42.58_PM_qzx8fd.jpg",
       bio: "Founding member contributing to community development.",
     },
     {
@@ -770,7 +824,7 @@ const MemberDirectory = () => {
       profession: "Navy Officer",
       joinedDate: "2020",
       image:
-        "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=2070&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=2070&auto=format&fit=crop",
       bio: "Founding member serving in Bangladesh Navy.",
     },
     {
@@ -831,7 +885,7 @@ const MemberDirectory = () => {
     },
     {
       id: 144,
-      name: "Jamiul Uddin Choyon (Marine Engr)",
+      name: "Jamiul Uddin Choyon",
       memberType: "Founding Member",
       memberId: "RPM-FND-044",
       email: "choyon@raipurian.com",
@@ -840,7 +894,7 @@ const MemberDirectory = () => {
       profession: "Marine Engineer",
       joinedDate: "2020",
       image:
-        "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=2070&auto=format&fit=crop",
+        "https://res.cloudinary.com/doumlnejx/image/upload/v1777625809/WhatsApp_Image_2026-05-01_at_2.12.47_PM_eu4g0l.jpg",
       bio: "Founding member and marine engineer.",
     },
     {
@@ -938,7 +992,7 @@ const MemberDirectory = () => {
       profession: "Professional",
       joinedDate: "2020",
       image:
-        "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=2070&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=2070&auto=format&fit=crop",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1036,7 +1090,7 @@ const MemberDirectory = () => {
       profession: "Professional",
       joinedDate: "2020",
       image:
-        "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=2070&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=2070&auto=format&fit=crop",
       bio: "Founding member committed to community development.",
     },
     {
@@ -1064,7 +1118,7 @@ const MemberDirectory = () => {
       profession: "Professional",
       joinedDate: "2020",
       image:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=2070&auto=format&fit=crop",
+        "https://res.cloudinary.com/doumlnejx/image/upload/v1777625940/WhatsApp_Image_2026-05-01_at_2.13.08_PM_cqdhfh.jpg",
       bio: "Founding member passionate about community service.",
     },
   ];
@@ -1208,7 +1262,7 @@ const MemberDirectory = () => {
   if (!mounted) return null;
 
   return (
-    <section className="relative py-16 min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+    <section className="relative py-16 min-h-screen bg-linear-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
       {/* Background Decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-72 h-72 bg-emerald-300 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-float-slow"></div>
@@ -1227,7 +1281,7 @@ const MemberDirectory = () => {
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-4">
             Member{" "}
             <span className="relative inline-block">
-              <span className="relative z-10 bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">
+              <span className="relative z-10 bg-linear-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">
                 Directory
               </span>
               <svg
@@ -1309,7 +1363,7 @@ const MemberDirectory = () => {
                       : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
                   }`}
                 >
-                  Donor Members
+                  Donner Members
                 </button>
                 <button
                   onClick={() => setSelectedCategory("founding")}
@@ -1346,67 +1400,72 @@ const MemberDirectory = () => {
           )}
         </div>
 
-        {/* Patron Members Section */}
-        {(selectedCategory === "all" || selectedCategory === "patron") &&
-          filteredPatronMembers.length > 0 && (
-            <div className="mb-16">
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-12 h-12 bg-gradient-to-br from-amber-600 to-yellow-600 rounded-xl flex items-center justify-center shadow-lg">
-                  <Crown className="w-6 h-6 text-white" />
-                </div>
+        <div className="mb-16">
+          {/* Patron & Donor Members - Side by Side */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Patron Members Section */}
+            {(selectedCategory === "all" || selectedCategory === "patron") &&
+              filteredPatronMembers.length > 0 && (
                 <div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
-                    Patron Members
-                  </h2>
-                  <p className="text-gray-500 dark:text-gray-400">
-                    Our esteemed patrons and advisors
-                  </p>
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 bg-linear-to-br from-amber-600 to-yellow-600 rounded-lg flex items-center justify-center shadow-lg">
+                      <Crown className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
+                        Patron Members
+                      </h2>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                        Esteemed patrons & advisors
+                      </p>
+                    </div>
+                  </div>
+                  <div className="space-y-4">
+                    {filteredPatronMembers.map((member) => (
+                      <FundingMemberCard
+                        key={member.id}
+                        member={member}
+                        isManaging={true}
+                        expanded={expandedMember === member.id}
+                        onToggle={() => toggleMemberExpand(member.id)}
+                      />
+                    ))}
+                  </div>
                 </div>
-              </div>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {filteredPatronMembers.map((member) => (
-                  <FundingMemberCard
-                    key={member.id}
-                    member={member}
-                    isManaging={true}
-                    expanded={expandedMember === member.id}
-                    onToggle={() => toggleMemberExpand(member.id)}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
+              )}
 
-        {/* Donor Members Section */}
-        {(selectedCategory === "all" || selectedCategory === "donor") &&
-          filteredDonorMembers.length > 0 && (
-            <div className="mb-16">
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-12 h-12 bg-linear-to-br from-red-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg">
-                  <Heart className="w-6 h-6 text-white" />
-                </div>
+            {/* Donor Members Section */}
+            {(selectedCategory === "all" || selectedCategory === "donor") &&
+              filteredDonorMembers.length > 0 && (
                 <div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
-                    Donor Members
-                  </h2>
-                  <p className="text-gray-500 dark:text-gray-400">
-                    Generous contributors supporting our mission
-                  </p>
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-pink-500 rounded-lg flex items-center justify-center shadow-lg">
+                      <Heart className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
+                        Donor Members
+                      </h2>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                        Generous contributors
+                      </p>
+                    </div>
+                  </div>
+                  <div className="space-y-4">
+                    {filteredDonorMembers.map((member) => (
+                      <FundingMemberCard
+                        key={member.id}
+                        member={member}
+                        isManaging={false}
+                        expanded={expandedMember === member.id}
+                        onToggle={() => toggleMemberExpand(member.id)}
+                      />
+                    ))}
+                  </div>
                 </div>
-              </div>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {filteredDonorMembers.map((member) => (
-                  <FundingMemberCard
-                    key={member.id}
-                    member={member}
-                    isManaging={false}
-                    expanded={expandedMember === member.id}
-                    onToggle={() => toggleMemberExpand(member.id)}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
+              )}
+          </div>
+        </div>
 
         {/* Founding Members Section */}
         {(selectedCategory === "all" || selectedCategory === "founding") &&
