@@ -1048,7 +1048,7 @@ const MemberDirectory = () => {
       profession: "Professional",
       joinedDate: "2020",
       image:
-        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=2070&auto=format&fit=crop",
+        "https://res.cloudinary.com/doumlnejx/image/upload/v1777627023/WhatsApp_Image_2026-05-01_at_12.52.59_PM_j4gaqx.jpg",
       bio: "Founding member dedicated to community service.",
     },
     {
