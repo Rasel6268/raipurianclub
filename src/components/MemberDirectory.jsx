@@ -1123,7 +1123,7 @@ const MemberDirectory = () => {
     },
     {
       id: 163,
-      name: "Abdullah Al Mamun Chow",
+      name: "Abdullah Al Mamun Chow.(HEERA)",
       memberType: "Founding Member",
       memberId: "RPM-FND-063",
       email: "abdullah@raipurian.com",
@@ -1133,6 +1133,34 @@ const MemberDirectory = () => {
       joinedDate: "2020",
       image:
         "https://res.cloudinary.com/doumlnejx/image/upload/v1777653678/WhatsApp_Image_2026-05-01_at_9.11.57_PM_lusp4a.jpg",
+      bio: "Founding member passionate about community service.",
+    },
+    {
+      id: 164,
+      name: "A B M Abu Yousuf Bhuiyan (Rubel)",
+      memberType: "Founding Member",
+      memberId: "RPM-FND-064",
+      email: "bhuiyan@raipurian.com",
+      phone: "+88 017XXXXXXXX",
+      location: "Raipur",
+      profession: "Professional",
+      joinedDate: "2020",
+      image:
+        "https://res.cloudinary.com/doumlnejx/image/upload/v1777709637/WhatsApp_Image_2026-05-02_at_11.13.15_AM_vqyqc2.jpg",
+      bio: "Founding member passionate about community service.",
+    },
+     {
+      id: 165,
+      name: "Daraz Mahmud",
+      memberType: "Founding Member",
+      memberId: "RPM-FND-065",
+      email: "mahmud@raipurian.com",
+      phone: "+88 017XXXXXXXX",
+      location: "Raipur",
+      profession: "Professional",
+      joinedDate: "2020",
+      image:
+        "https://res.cloudinary.com/doumlnejx/image/upload/v1777709636/WhatsApp_Image_2026-05-02_at_11.30.24_AM_1_hjun0f.jpg",
       bio: "Founding member passionate about community service.",
     },
 
