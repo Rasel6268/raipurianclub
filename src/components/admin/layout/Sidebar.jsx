@@ -105,7 +105,7 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
         {
           name: "Interest to Join",
           icon: UserCheck,
-          href: "/member/interestTo",
+          href: "/interest-persons",
           color: "text-orange-400",
           badge: 5,
         },

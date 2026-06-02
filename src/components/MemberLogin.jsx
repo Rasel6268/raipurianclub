@@ -1,6 +1,8 @@
 // components/MemberLogin.js
 "use client";
 import { useState, useEffect } from "react";
+import { useAuth } from "@/context/AuthContext";
+import toast from "react-hot-toast";
 import {
   Mail,
   Lock,
@@ -8,26 +10,23 @@ import {
   Eye,
   EyeOff,
   Sparkles,
-  Users,
   Shield,
-  Fingerprint,
   CheckCircle,
   AlertCircle,
 } from "lucide-react";
 
 const MemberLogin = () => {
+  const { login, loading: authLoading } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    // Check for saved email if remember me was checked
     const savedEmail = localStorage.getItem("rememberedEmail");
     if (savedEmail) {
       setEmail(savedEmail);
@@ -36,46 +35,41 @@ const MemberLogin = () => {
   }, []);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setSuccessMessage("");
-    setIsLoading(true);
+  e.preventDefault();
+  setError("");
 
-    // Simulate API call
-    setTimeout(() => {
-      if (email && password) {
-        if (password.length < 6) {
-          setError("Invalid credentials. Please check your email and password.");
-        } else {
-          setSuccessMessage("Login successful! Redirecting to dashboard...");
-          if (rememberMe) {
-            localStorage.setItem("rememberedEmail", email);
-          } else {
-            localStorage.removeItem("rememberedEmail");
-          }
-          // Simulate redirect
-          setTimeout(() => {
-            // window.location.href = "/dashboard";
-            console.log("Redirecting to dashboard...");
-          }, 1500);
-        }
-      } else {
-        setError("Please enter both email and password.");
-      }
-      setIsLoading(false);
-    }, 1000);
-  };
+  if (!email || !password) {
+    const msg = "Please enter both email and password.";
+    setError(msg);
+    toast.error(msg);
+    return;
+  }
+
+  setIsLoading(true);
+
+  const result = await login(email, password);
+
+  console.log(result);
+
+  if (!result.success) {
+    setError(result.message);
+  }
+
+  setIsLoading(false);
+};
 
   const handleForgotPassword = () => {
-    setError("");
     if (!email) {
       setError("Please enter your email address to reset password.");
+      toast.error("Please enter your email address first.");
     } else {
-      setSuccessMessage(`Password reset link sent to ${email}`);
+      toast.success(`Password reset link sent to ${email}`);
     }
   };
 
   if (!mounted) return null;
+
+  const isLoadingState = isLoading || authLoading;
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-linear-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-20">
@@ -85,7 +79,6 @@ const MemberLogin = () => {
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 dark:opacity-10 animate-float-reverse"></div>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-teal-300 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse-slow"></div>
         
-        {/* Decorative Grid Pattern */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[40px_40px]"></div>
       </div>
 
@@ -128,16 +121,6 @@ const MemberLogin = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
             {/* Login Form Section */}
             <div className="bg-white dark:bg-gray-800/60 backdrop-blur-sm rounded-2xl shadow-2xl p-6 sm:p-8 border border-gray-100 dark:border-gray-700">
-              {/* Success Message */}
-              {successMessage && (
-                <div className="mb-6 p-4 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 rounded-xl flex items-center gap-3 animate-slide-down">
-                  <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
-                  <p className="text-emerald-700 dark:text-emerald-300 text-sm">
-                    {successMessage}
-                  </p>
-                </div>
-              )}
-
               {/* Error Message */}
               {error && (
                 <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-xl flex items-center gap-3 animate-shake">
@@ -163,6 +146,7 @@ const MemberLogin = () => {
                       className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300 text-gray-900 dark:text-white"
                       placeholder="member@raipurian.com"
                       required
+                      disabled={isLoadingState}
                     />
                     <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
                   </div>
@@ -182,6 +166,7 @@ const MemberLogin = () => {
                       className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300 text-gray-900 dark:text-white pr-12"
                       placeholder="••••••••"
                       required
+                      disabled={isLoadingState}
                     />
                     <button
                       type="button"
@@ -201,6 +186,7 @@ const MemberLogin = () => {
                       checked={rememberMe}
                       onChange={(e) => setRememberMe(e.target.checked)}
                       className="w-4 h-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer"
+                      disabled={isLoadingState}
                     />
                     <span className="text-sm text-gray-600 dark:text-gray-400 group-hover:text-gray-800 dark:group-hover:text-gray-200 transition-colors">
                       Remember me
@@ -210,6 +196,7 @@ const MemberLogin = () => {
                     type="button"
                     onClick={handleForgotPassword}
                     className="text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors font-medium"
+                    disabled={isLoadingState}
                   >
                     Forgot password?
                   </button>
@@ -218,10 +205,10 @@ const MemberLogin = () => {
                 {/* Login Button */}
                 <button
                   type="submit"
-                  disabled={isLoading}
+                  disabled={isLoadingState}
                   className="w-full bg-linear-to-r from-emerald-600 to-cyan-600 text-white rounded-xl py-3.5 font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 group"
                 >
-                  {isLoading ? (
+                  {isLoadingState ? (
                     <>
                       <svg
                         className="animate-spin h-5 w-5 text-white"
@@ -254,13 +241,10 @@ const MemberLogin = () => {
                 </button>
               </form>
 
-              
-              
-
               {/* Sign Up Link */}
               <p className="text-center text-gray-600 dark:text-gray-400 mt-6">
                 Not a member yet?{" "}
-                <a href="#" className="text-emerald-600 dark:text-emerald-400 font-semibold hover:underline">
+                <a href="/register" className="text-emerald-600 dark:text-emerald-400 font-semibold hover:underline">
                   Join the community
                 </a>
               </p>
@@ -295,16 +279,11 @@ const MemberLogin = () => {
                   </div>
                 </div>
               </div>
-
-             
-
-              
             </div>
           </div>
         </div>
       </div>
 
-      {/* Animation Styles */}
       <style jsx>{`
         @keyframes float-slow {
           0%, 100% { transform: translateY(0px) translateX(0px); }
@@ -319,48 +298,24 @@ const MemberLogin = () => {
           50% { opacity: 0.2; transform: scale(1.05); }
         }
         @keyframes fadeDown {
-          from {
-            opacity: 0;
-            transform: translateY(-20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+          from { opacity: 0; transform: translateY(-20px); }
+          to { opacity: 1; transform: translateY(0); }
         }
         @keyframes slideDown {
-          from {
-            opacity: 0;
-            transform: translateY(-10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+          from { opacity: 0; transform: translateY(-10px); }
+          to { opacity: 1; transform: translateY(0); }
         }
         @keyframes shake {
           0%, 100% { transform: translateX(0); }
           25% { transform: translateX(-5px); }
           75% { transform: translateX(5px); }
         }
-        .animate-float-slow {
-          animation: float-slow 8s ease-in-out infinite;
-        }
-        .animate-float-reverse {
-          animation: float-reverse 10s ease-in-out infinite;
-        }
-        .animate-pulse-slow {
-          animation: pulse-slow 6s ease-in-out infinite;
-        }
-        .animate-fade-down {
-          animation: fadeDown 0.6s ease-out forwards;
-        }
-        .animate-slide-down {
-          animation: slideDown 0.4s ease-out forwards;
-        }
-        .animate-shake {
-          animation: shake 0.4s ease-in-out;
-        }
+        .animate-float-slow { animation: float-slow 8s ease-in-out infinite; }
+        .animate-float-reverse { animation: float-reverse 10s ease-in-out infinite; }
+        .animate-pulse-slow { animation: pulse-slow 6s ease-in-out infinite; }
+        .animate-fade-down { animation: fadeDown 0.6s ease-out forwards; }
+        .animate-slide-down { animation: slideDown 0.4s ease-out forwards; }
+        .animate-shake { animation: shake 0.4s ease-in-out; }
       `}</style>
     </section>
   );

@@ -36,7 +36,7 @@ const AdminNavbar = ({ onMenuClick, sidebarOpen }) => {
             <Menu size={22} />
           </button>
           <div className="hidden lg:flex items-center gap-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-orange-500 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-linear-to-br from-green-500 to-orange-500 rounded-lg flex items-center justify-center">
               <Sparkles size={16} className="text-white" />
             </div>
             <span className="text-sm font-medium text-gray-600">
