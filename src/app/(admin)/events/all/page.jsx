@@ -1,4 +1,4 @@
-// app/admin/events/all/page.jsx
+// app/admin/events/page.jsx
 "use client";
 import React, { useState, useEffect } from 'react';
 import {
@@ -8,758 +8,713 @@ import {
   Laptop,
   Heart,
   Coffee,
-  Sparkles,
-  Ticket,
-  Clock,
+  Gift,
+  PartyPopper,
+  Palette,
+  Mountain,
   Eye,
   Edit,
   Trash2,
-  MoreVertical,
+  Plus,
   Search,
   Filter,
-  ChevronLeft,
-  ChevronRight,
-  CheckCircle,
-  XCircle,
+  X,
+  Save,
   AlertCircle,
-  PlayCircle,
-  StopCircle,
-  Calendar as CalendarIcon,
-  TrendingUp,
+  CheckCircle,
+  Clock,
   Users,
-  DollarSign,
-  Download,
-  RefreshCw
+  Ticket,
+  Tag,
+  Star,
+  Image as ImageIcon,
+  Loader,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
+import api from '@/config/api';
+import { toast } from 'react-hot-toast';
+import Image from 'next/image';
+import Link from 'next/link';
 
-const AllEventsPage = () => {
+const ManageEventsPage = () => {
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
-  const [typeFilter, setTypeFilter] = useState('all');
-  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedType, setSelectedType] = useState('all');
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showDetailsModal, setShowDetailsModal] = useState(false);
-  const itemsPerPage = 10;
+  const [editingEvent, setEditingEvent] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
 
-  // Sample events data with live timers
-  const [events, setEvents] = useState([
-    {
-      id: 1,
-      title: "Summer Music Festival",
-      date: "July 15, 2025",
-      targetDate: new Date(2025, 6, 15, 18, 0, 0),
-      endDate: new Date(2025, 6, 15, 23, 59, 0),
-      description: "Join us for an unforgettable night of music, food, and fun under the stars!",
-      location: "Central Park, New York",
-      eventType: "music",
-      bannerImage: "/api/placeholder/400/200",
-      ticketPrice: 49.99,
-      totalTickets: 500,
-      soldTickets: 423,
-      status: "upcoming",
-      buttonText: "GET TICKETS",
-      organizer: "Music Events Inc.",
-      createdAt: "2025-01-10"
-    },
-    {
-      id: 2,
-      title: "Tech Conference 2025",
-      date: "August 5, 2025",
-      targetDate: new Date(2025, 7, 5, 9, 0, 0),
-      endDate: new Date(2025, 7, 7, 18, 0, 0),
-      description: "The biggest tech event of the year! Network with industry leaders.",
-      location: "Convention Center, San Francisco",
-      eventType: "tech",
-      bannerImage: "/api/placeholder/400/200",
-      ticketPrice: 199.99,
-      totalTickets: 1000,
-      soldTickets: 678,
-      status: "upcoming",
-      buttonText: "REGISTER NOW",
-      organizer: "Tech Events Co.",
-      createdAt: "2025-01-15"
-    },
-    {
-      id: 3,
-      title: "Wellness Retreat",
-      date: "September 20, 2025",
-      targetDate: new Date(2025, 8, 20, 10, 0, 0),
-      endDate: new Date(2025, 8, 22, 16, 0, 0),
-      description: "Escape the chaos and rejuvenate your mind, body, and soul.",
-      location: "Mountain Resort, Colorado",
-      eventType: "wellness",
-      bannerImage: "/api/placeholder/400/200",
-      ticketPrice: 299.99,
-      totalTickets: 200,
-      soldTickets: 145,
-      status: "upcoming",
-      buttonText: "JOIN RETREAT",
-      organizer: "Wellness World",
-      createdAt: "2025-01-20"
-    },
-    {
-      id: 4,
-      title: "Food & Wine Expo",
-      date: "October 10, 2025",
-      targetDate: new Date(2025, 9, 10, 12, 0, 0),
-      endDate: new Date(2025, 9, 12, 22, 0, 0),
-      description: "Savor exquisite cuisines from world-renowned chefs.",
-      location: "Grand Plaza, Chicago",
-      eventType: "food",
-      bannerImage: "/api/placeholder/400/200",
-      ticketPrice: 89.99,
-      totalTickets: 800,
-      soldTickets: 534,
-      status: "upcoming",
-      buttonText: "BUY PASS",
-      organizer: "Food Festivals LLC",
-      createdAt: "2025-01-25"
-    },
-    {
-      id: 5,
-      title: "Charity Gala Night",
-      date: "November 25, 2025",
-      targetDate: new Date(2025, 10, 25, 19, 0, 0),
-      endDate: new Date(2025, 10, 26, 1, 0, 0),
-      description: "An elegant evening supporting children's education.",
-      location: "Royal Ballroom, Boston",
-      eventType: "charity",
-      bannerImage: "/api/placeholder/400/200",
-      ticketPrice: 149.99,
-      totalTickets: 300,
-      soldTickets: 267,
-      status: "upcoming",
-      buttonText: "DONATE & JOIN",
-      organizer: "Charity Foundation",
-      createdAt: "2025-02-01"
-    },
-    {
-      id: 6,
-      title: "New Year's Eve Bash",
-      date: "December 31, 2025",
-      targetDate: new Date(2025, 11, 31, 20, 0, 0),
-      endDate: new Date(2026, 0, 1, 2, 0, 0),
-      description: "Ring in the New Year with a spectacular celebration!",
-      location: "Harbor City, Miami",
-      eventType: "party",
-      bannerImage: "/api/placeholder/400/200",
-      ticketPrice: 79.99,
-      totalTickets: 1000,
-      soldTickets: 892,
-      status: "upcoming",
-      buttonText: "CELEBRATE",
-      organizer: "Party Planners",
-      createdAt: "2025-02-05"
-    },
-    {
-      id: 7,
-      title: "Spring Music Festival",
-      date: "March 20, 2025",
-      targetDate: new Date(2025, 2, 20, 14, 0, 0),
-      endDate: new Date(2025, 2, 20, 23, 0, 0),
-      description: "Celebrate spring with amazing music and performances.",
-      location: "Central Gardens, Austin",
-      eventType: "music",
-      bannerImage: "/api/placeholder/400/200",
-      ticketPrice: 59.99,
-      totalTickets: 600,
-      soldTickets: 600,
-      status: "ended",
-      buttonText: "SOLD OUT",
-      organizer: "Music Events Inc.",
-      createdAt: "2024-12-15"
-    },
-    {
-      id: 8,
-      title: "Summer Beach Party",
-      date: "June 10, 2025",
-      targetDate: new Date(2025, 5, 10, 16, 0, 0),
-      endDate: new Date(2025, 5, 10, 22, 0, 0),
-      description: "Beach party with live DJs and water sports.",
-      location: "Santa Monica Beach, LA",
-      eventType: "party",
-      bannerImage: "/api/placeholder/400/200",
-      ticketPrice: 45.99,
-      totalTickets: 400,
-      soldTickets: 400,
-      status: "ended",
-      buttonText: "SOLD OUT",
-      organizer: "Beach Events",
-      createdAt: "2024-12-20"
-    },
-    {
-      id: 9,
-      title: "Yoga & Meditation Retreat",
-      date: "April 5, 2025",
-      targetDate: new Date(2025, 3, 5, 8, 0, 0),
-      endDate: new Date(2025, 3, 7, 18, 0, 0),
-      description: "Find inner peace with expert instructors.",
-      location: "Sedona, Arizona",
-      eventType: "wellness",
-      bannerImage: "/api/placeholder/400/200",
-      ticketPrice: 399.99,
-      totalTickets: 100,
-      soldTickets: 100,
-      status: "ended",
-      buttonText: "FULLY BOOKED",
-      organizer: "Wellness World",
-      createdAt: "2025-01-05"
-    },
-    {
-      id: 10,
-      title: "Art Exhibition Opening",
-      date: "May 15, 2025",
-      targetDate: new Date(2025, 4, 15, 18, 0, 0),
-      endDate: new Date(2025, 5, 15, 20, 0, 0),
-      description: "Contemporary art from emerging artists.",
-      location: "Art Gallery, NYC",
-      eventType: "art",
-      bannerImage: "/api/placeholder/400/200",
-      ticketPrice: 25.99,
-      totalTickets: 300,
-      soldTickets: 278,
-      status: "ongoing",
-      buttonText: "GET TICKETS",
-      organizer: "Art Collective",
-      createdAt: "2025-02-10"
-    }
-  ]);
 
   // Event types configuration
-  const eventTypes = {
-    music: { name: "Music", icon: Music, color: "text-rose-500", bgColor: "bg-rose-100 dark:bg-rose-900/20" },
-    tech: { name: "Tech", icon: Laptop, color: "text-blue-500", bgColor: "bg-blue-100 dark:bg-blue-900/20" },
-    wellness: { name: "Wellness", icon: Heart, color: "text-emerald-500", bgColor: "bg-emerald-100 dark:bg-emerald-900/20" },
-    food: { name: "Food", icon: Coffee, color: "text-amber-500", bgColor: "bg-amber-100 dark:bg-amber-900/20" },
-    charity: { name: "Charity", icon: Sparkles, color: "text-purple-500", bgColor: "bg-purple-100 dark:bg-purple-900/20" },
-    party: { name: "Party", icon: Ticket, color: "text-indigo-500", bgColor: "bg-indigo-100 dark:bg-indigo-900/20" },
-    art: { name: "Art", icon: Sparkles, color: "text-pink-500", bgColor: "bg-pink-100 dark:bg-pink-900/20" }
-  };
+  const eventTypes = [
+    { id: 'music', name: 'Music Festival', icon: Music, color: 'from-rose-500 to-pink-500', bgColor: 'bg-rose-100 dark:bg-rose-900/30' },
+    { id: 'tech', name: 'Tech Conference', icon: Laptop, color: 'from-blue-500 to-cyan-500', bgColor: 'bg-blue-100 dark:bg-blue-900/30' },
+    { id: 'wellness', name: 'Wellness Retreat', icon: Heart, color: 'from-emerald-500 to-teal-500', bgColor: 'bg-emerald-100 dark:bg-emerald-900/30' },
+    { id: 'food', name: 'Food & Wine', icon: Coffee, color: 'from-amber-500 to-orange-500', bgColor: 'bg-amber-100 dark:bg-amber-900/30' },
+    { id: 'charity', name: 'Charity Gala', icon: Gift, color: 'from-purple-500 to-violet-500', bgColor: 'bg-purple-100 dark:bg-purple-900/30' },
+    { id: 'party', name: 'Party Bash', icon: PartyPopper, color: 'from-indigo-500 to-purple-500', bgColor: 'bg-indigo-100 dark:bg-indigo-900/30' },
+    { id: 'art', name: 'Art Exhibition', icon: Palette, color: 'from-pink-500 to-rose-500', bgColor: 'bg-pink-100 dark:bg-pink-900/30' },
+    { id: 'nature', name: 'Nature Camp', icon: Mountain, color: 'from-teal-500 to-emerald-500', bgColor: 'bg-teal-100 dark:bg-teal-900/30' }
+  ];
 
-  // Calculate time remaining and update status
-  const updateEventStatus = (event) => {
-    const now = new Date();
-    const targetDate = new Date(event.targetDate);
-    const endDate = new Date(event.endDate);
-
-    if (now > endDate) {
-      return 'ended';
-    } else if (now >= targetDate && now <= endDate) {
-      return 'ongoing';
-    } else {
-      return 'upcoming';
-    }
-  };
-
-  // Calculate time left
-  const calculateTimeLeft = (targetDate) => {
-    const now = new Date();
-    const difference = new Date(targetDate).getTime() - now.getTime();
-
-    if (difference <= 0) {
-      return { days: 0, hours: 0, minutes: 0, seconds: 0, expired: true };
-    }
-
-    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-
-    return { days, hours, minutes, seconds: 0, expired: false };
-  };
-
-  // Update event statuses periodically
+  // Fetch all events
   useEffect(() => {
-    const interval = setInterval(() => {
-      setEvents(prevEvents => 
-        prevEvents.map(event => ({
-          ...event,
-          status: updateEventStatus(event)
-        }))
-      );
-    }, 60000); // Update every minute
-
-    return () => clearInterval(interval);
+    fetchEvents();
   }, []);
 
-  // Get status badge configuration
-  const getStatusConfig = (status) => {
-    switch(status) {
-      case 'ongoing':
-        return { icon: PlayCircle, label: 'Ongoing', color: 'text-green-600', bgColor: 'bg-green-100 dark:bg-green-900/20', borderColor: 'border-green-200' };
-      case 'ended':
-        return { icon: StopCircle, label: 'Ended', color: 'text-red-600', bgColor: 'bg-red-100 dark:bg-red-900/20', borderColor: 'border-red-200' };
-      case 'upcoming':
-        return { icon: CalendarIcon, label: 'Upcoming', color: 'text-blue-600', bgColor: 'bg-blue-100 dark:bg-blue-900/20', borderColor: 'border-blue-200' };
-      default:
-        return { icon: AlertCircle, label: 'Unknown', color: 'text-gray-600', bgColor: 'bg-gray-100 dark:bg-gray-900/20', borderColor: 'border-gray-200' };
+  
+  const fetchEvents = async () => {
+    try {
+      setLoading(true);
+      const response = await api.get('/events');
+      
+      if (response.data.events) {
+        setEvents(response.data.events.data);
+      } else {
+        setEvents([]);
+      }
+    } catch (error) {
+      console.error('Error fetching events:', error);
+      toast.error('Failed to load events');
+      setEvents([]);
+    } finally {
+      setLoading(false);
     }
   };
+  
 
-  // Filter events
+  // Filter events based on search and type
   const filteredEvents = events.filter(event => {
-    const matchesSearch = event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         event.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         event.organizer.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || event.status === statusFilter;
-    const matchesType = typeFilter === 'all' || event.eventType === typeFilter;
-    return matchesSearch && matchesStatus && matchesType;
+    const matchesSearch = event.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          event.location?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          event.description?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesType = selectedType === 'all' || event.eventType === selectedType;
+    return matchesSearch && matchesType;
   });
 
   // Pagination
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentEvents = filteredEvents.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(filteredEvents.length / itemsPerPage);
-  const paginatedEvents = filteredEvents.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
 
-  // Statistics
-  const stats = {
-    total: events.length,
-    upcoming: events.filter(e => e.status === 'upcoming').length,
-    ongoing: events.filter(e => e.status === 'ongoing').length,
-    ended: events.filter(e => e.status === 'ended').length,
-    totalRevenue: events.reduce((sum, e) => sum + (e.soldTickets * e.ticketPrice), 0),
-    totalTicketsSold: events.reduce((sum, e) => sum + e.soldTickets, 0)
+  // Get event type config
+  const getEventTypeConfig = (typeId) => {
+    return eventTypes.find(type => type.id === typeId) || eventTypes[0];
   };
 
-  const handleDeleteEvent = () => {
-    if (selectedEvent) {
-      setEvents(events.filter(event => event.id !== selectedEvent.id));
-      setShowDeleteModal(false);
-      setSelectedEvent(null);
+  // Handle view event
+  const handleViewEvent = (event) => {
+    setSelectedEvent(event);
+    setShowViewModal(true);
+  };
+
+  // Handle edit event
+  const handleEditEvent = (event) => {
+    setEditingEvent({ ...event });
+    setShowEditModal(true);
+  };
+
+  // Handle update event
+  const handleUpdateEvent = async () => {
+    if (!editingEvent) return;
+    
+    try {
+      const response = await api.put(`/events/${editingEvent._id}`, editingEvent);
+      if (response.status === 200) {
+        toast.success('Event updated successfully!');
+        setShowEditModal(false);
+        fetchEvents(); // Refresh the list
+      }
+    } catch (error) {
+      console.error('Error updating event:', error);
+      toast.error('Failed to update event');
     }
   };
 
-  const formatDate = (date) => {
-    return new Date(date).toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric' 
+  // Handle delete event
+  const handleDeleteEvent = async () => {
+    if (!selectedEvent) return;
+    
+    try {
+      const response = await api.delete(`/events/${selectedEvent._id}`);
+      if (response.status === 200) {
+        toast.success('Event deleted successfully!');
+        setShowDeleteModal(false);
+        setSelectedEvent(null);
+        fetchEvents(); // Refresh the list
+      }
+    } catch (error) {
+      console.error('Error deleting event:', error);
+      toast.error('Failed to delete event');
+    }
+  };
+
+  // Format date
+  const formatDate = (dateString) => {
+    if (!dateString) return 'Date not set';
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
     });
   };
 
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
+  // Get ticket availability badge
+  const getTicketBadge = (availability) => {
+    const badges = {
+      available: { color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400', label: 'Available' },
+      limited: { color: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400', label: 'Limited Spots' },
+      sold_out: { color: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400', label: 'Sold Out' },
+      coming_soon: { color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400', label: 'Coming Soon' }
+    };
+    return badges[availability] || badges.available;
   };
 
-  const exportToCSV = () => {
-    const headers = ["ID", "Title", "Date", "Location", "Type", "Status", "Ticket Price", "Sold Tickets", "Total Tickets", "Revenue", "Organizer"];
-    const csvData = filteredEvents.map(event => [
-      event.id,
-      event.title,
-      event.date,
-      event.location,
-      event.eventType,
-      event.status,
-      event.ticketPrice,
-      event.soldTickets,
-      event.totalTickets,
-      event.soldTickets * event.ticketPrice,
-      event.organizer
-    ]);
-    
-    const csvContent = [headers, ...csvData].map(row => row.join(",")).join("\n");
-    const blob = new Blob([csvContent], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `events-${new Date().toISOString().split("T")[0]}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
+  // View Modal Component
+  const ViewModal = () => {
+    if (!selectedEvent) return null;
+    const eventType = getEventTypeConfig(selectedEvent.eventType);
+    const Icon = eventType.icon;
+    const ticketBadge = getTicketBadge(selectedEvent.ticketAvailability);
+
+    return (
+      <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto" onClick={() => setShowViewModal(false)}>
+        <div className="max-w-4xl w-full bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden animate-fade-in-up" onClick={(e) => e.stopPropagation()}>
+          {/* Header */}
+          <div className={`bg-linear-to-r ${eventType.color} p-6 text-white relative`}>
+            <button 
+              onClick={() => setShowViewModal(false)}
+              className="absolute top-4 right-4 p-2 hover:bg-white/10 rounded-lg transition"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <div className="flex items-center gap-3">
+              <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
+                <Icon className="w-7 h-7" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold">{selectedEvent.title}</h2>
+                <p className="text-white/80">{eventType.name}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Banner Image */}
+          {selectedEvent.bannerImage && (
+            <div className="relative h-64 overflow-hidden">
+              <img src={selectedEvent.bannerImage} alt={selectedEvent.title} className="w-full h-full object-cover" />
+            </div>
+          )}
+
+          {/* Content */}
+          <div className="p-6 space-y-6">
+            {/* Date & Location */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                <Calendar className="w-5 h-5 text-emerald-500" />
+                <div>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Event Date</p>
+                  <p className="font-semibold text-gray-900 dark:text-white">{formatDate(selectedEvent.date)}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                <Clock className="w-5 h-5 text-emerald-500" />
+                <div>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Start Time</p>
+                  <p className="font-semibold text-gray-900 dark:text-white">
+                    {selectedEvent.targetDate ? new Date(selectedEvent.targetDate).toLocaleTimeString() : 'Time not set'}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                <MapPin className="w-5 h-5 text-emerald-500" />
+                <div>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Location</p>
+                  <p className="font-semibold text-gray-900 dark:text-white">{selectedEvent.location}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                <Users className="w-5 h-5 text-emerald-500" />
+                <div>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Capacity</p>
+                  <p className="font-semibold text-gray-900 dark:text-white">
+                    {selectedEvent.capacity ? `${selectedEvent.capacity} people` : 'Unlimited'}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Description */}
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Description</h3>
+              <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{selectedEvent.description}</p>
+            </div>
+
+            {/* Ticket Information */}
+            <div className="bg-gradient-to-r from-emerald-50 to-cyan-50 dark:from-emerald-900/20 dark:to-cyan-900/20 p-4 rounded-xl">
+              <div className="flex items-center justify-between flex-wrap gap-4">
+                <div>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Ticket Price</p>
+                  <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
+                    {selectedEvent.ticketPrice > 0 ? `BDT ${selectedEvent.ticketPrice}` : 'FREE'}
+                  </p>
+                </div>
+                <div>
+                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${ticketBadge.color}`}>
+                    {ticketBadge.label}
+                  </span>
+                </div>
+                <button className={`px-6 py-2 bg-linear-to-r ${eventType.color} text-white rounded-lg font-semibold hover:shadow-lg transition`}>
+                  {selectedEvent.buttonText || 'GET TICKETS'}
+                </button>
+              </div>
+            </div>
+
+            {/* Organizer */}
+            {(selectedEvent.organizerName || selectedEvent.organizerEmail) && (
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Organizer</h3>
+                <div className="space-y-1">
+                  {selectedEvent.organizerName && <p className="text-gray-700 dark:text-gray-300">{selectedEvent.organizerName}</p>}
+                  {selectedEvent.organizerEmail && <p className="text-gray-500 dark:text-gray-400">{selectedEvent.organizerEmail}</p>}
+                  {selectedEvent.organizerPhone && <p className="text-gray-500 dark:text-gray-400">{selectedEvent.organizerPhone}</p>}
+                </div>
+              </div>
+            )}
+
+            {/* Tags */}
+            {selectedEvent.tags && selectedEvent.tags.length > 0 && (
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Tags</h3>
+                <div className="flex flex-wrap gap-2">
+                  {selectedEvent.tags.map(tag => (
+                    <span key={tag} className="px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full text-sm">
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // Edit Modal Component
+  const EditModal = () => {
+    if (!editingEvent) return null;
+
+    const handleEditChange = (e) => {
+      const { name, value } = e.target;
+      setEditingEvent(prev => ({ ...prev, [name]: value }));
+    };
+
+    return (
+      <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto" onClick={() => setShowEditModal(false)}>
+        <div className="max-w-2xl w-full bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+          <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 flex justify-between items-center">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white">Edit Event</h2>
+            <button onClick={() => setShowEditModal(false)} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition">
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          <div className="p-6 space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Event Title *</label>
+              <input
+                type="text"
+                name="title"
+                value={editingEvent.title || ''}
+                onChange={handleEditChange}
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Event Date *</label>
+                <input
+                  type="date"
+                  name="date"
+                  value={editingEvent.date?.split('T')[0] || ''}
+                  onChange={handleEditChange}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Start Time</label>
+                <input
+                  type="datetime-local"
+                  name="targetDate"
+                  value={editingEvent.targetDate || ''}
+                  onChange={handleEditChange}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Location *</label>
+              <input
+                type="text"
+                name="location"
+                value={editingEvent.location || ''}
+                onChange={handleEditChange}
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Description *</label>
+              <textarea
+                name="description"
+                rows="4"
+                value={editingEvent.description || ''}
+                onChange={handleEditChange}
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-none"
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Event Type</label>
+                <select
+                  name="eventType"
+                  value={editingEvent.eventType || 'music'}
+                  onChange={handleEditChange}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                >
+                  {eventTypes.map(type => (
+                    <option key={type.id} value={type.id}>{type.name}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Ticket Price (BDT)</label>
+                <input
+                  type="number"
+                  name="ticketPrice"
+                  value={editingEvent.ticketPrice || 0}
+                  onChange={handleEditChange}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Capacity</label>
+                <input
+                  type="number"
+                  name="capacity"
+                  value={editingEvent.capacity || ''}
+                  onChange={handleEditChange}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Ticket Availability</label>
+                <select
+                  name="ticketAvailability"
+                  value={editingEvent.ticketAvailability || 'available'}
+                  onChange={handleEditChange}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                >
+                  <option value="available">Available</option>
+                  <option value="limited">Limited Spots</option>
+                  <option value="sold_out">Sold Out</option>
+                  <option value="coming_soon">Coming Soon</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="flex gap-3 pt-4">
+              <button
+                onClick={() => setShowEditModal(false)}
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleUpdateEvent}
+                className="flex-1 px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition flex items-center justify-center gap-2"
+              >
+                <Save className="w-4 h-4" />
+                Save Changes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // Delete Modal Component
+  const DeleteModal = () => {
+    if (!selectedEvent) return null;
+
+    return (
+      <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setShowDeleteModal(false)}>
+        <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6" onClick={(e) => e.stopPropagation()}>
+          <div className="text-center">
+            <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+              <AlertCircle className="w-8 h-8 text-red-500" />
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Delete Event</h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">
+              Are you sure you want to delete "{selectedEvent.title}"? This action cannot be undone.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteEvent}
+                className="flex-1 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition flex items-center justify-center gap-2"
+              >
+                <Trash2 className="w-4 h-4" />
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // Event Card Component
+  const EventCard = ({ event }) => {
+    const eventType = getEventTypeConfig(event.eventType);
+    const Icon = eventType.icon;
+    const ticketBadge = getTicketBadge(event.ticketAvailability);
+
+    return (
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group">
+        {/* Banner Image */}
+        <div className="relative h-40 overflow-hidden">
+          {event.bannerImage ? (
+            <img src={event.bannerImage} alt={event.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          ) : (
+            <div className={`w-full h-full bg-linear-to-r ${eventType.color} flex items-center justify-center`}>
+              <Icon className="w-12 h-12 text-white/50" />
+            </div>
+          )}
+          <div className="absolute top-3 right-3">
+            <span className={`px-2 py-1 rounded-lg text-xs font-medium ${ticketBadge.color}`}>
+              {ticketBadge.label}
+            </span>
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="p-4">
+          <div className="flex items-start justify-between mb-2">
+            <div>
+              <h3 className="font-semibold text-gray-900 dark:text-white text-lg line-clamp-1">{event.title}</h3>
+              <div className="flex items-center gap-2 mt-1">
+                <div className={`w-6 h-6 ${eventType.bgColor} rounded-lg flex items-center justify-center`}>
+                  <Icon className="w-3 h-3 text-gray-700 dark:text-gray-300" />
+                </div>
+                <span className="text-xs text-gray-500 dark:text-gray-400">{eventType.name}</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-2 mt-3">
+            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+              <Calendar className="w-4 h-4" />
+              <span>{formatDate(event.date)}</span>
+            </div>
+            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+              <MapPin className="w-4 h-4" />
+              <span className="line-clamp-1">{event.location}</span>
+            </div>
+            <div className="flex items-center gap-2 text-sm font-semibold text-emerald-600 dark:text-emerald-400">
+              <Ticket className="w-4 h-4" />
+              <span>{event.ticketPrice > 0 ? `BDT ${event.ticketPrice}` : 'FREE'}</span>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex gap-2 mt-4 pt-3 border-t border-gray-100 dark:border-gray-700">
+            <button
+              onClick={() => handleViewEvent(event)}
+              className="flex-1 flex items-center justify-center gap-1 px-3 py-1.5 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/50 transition text-sm"
+            >
+              <Eye className="w-3.5 h-3.5" />
+              View
+            </button>
+            <button
+              onClick={() => handleEditEvent(event)}
+              className="flex-1 flex items-center justify-center gap-1 px-3 py-1.5 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-lg hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition text-sm"
+            >
+              <Edit className="w-3.5 h-3.5" />
+              Edit
+            </button>
+            <button
+              onClick={() => {
+                setSelectedEvent(event);
+                setShowDeleteModal(true);
+              }}
+              className="flex-1 flex items-center justify-center gap-1 px-3 py-1.5 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/50 transition text-sm"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    );
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <div className="p-6 lg:p-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
-            All Events
-          </h1>
-          <p className="text-gray-500 dark:text-gray-400 mt-1">Manage and monitor all your events</p>
-        </div>
-
-        {/* Stats Cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 border border-gray-100 dark:border-gray-700">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-500 text-xs font-medium">Total Events</p>
-                <p className="text-2xl font-bold text-gray-800 dark:text-white mt-1">{stats.total}</p>
-              </div>
-              <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl flex items-center justify-center">
-                <Calendar className="w-5 h-5 text-emerald-600" />
-              </div>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Manage Events</h1>
+              <p className="text-gray-600 dark:text-gray-400 mt-1">View, edit, and manage all your events</p>
             </div>
-          </div>
-
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 border border-gray-100 dark:border-gray-700">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-500 text-xs font-medium">Upcoming</p>
-                <p className="text-2xl font-bold text-blue-600 mt-1">{stats.upcoming}</p>
-              </div>
-              <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center">
-                <CalendarIcon className="w-5 h-5 text-blue-600" />
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 border border-gray-100 dark:border-gray-700">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-500 text-xs font-medium">Ongoing</p>
-                <p className="text-2xl font-bold text-green-600 mt-1">{stats.ongoing}</p>
-              </div>
-              <div className="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center">
-                <PlayCircle className="w-5 h-5 text-green-600" />
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 border border-gray-100 dark:border-gray-700">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-500 text-xs font-medium">Ended</p>
-                <p className="text-2xl font-bold text-red-600 mt-1">{stats.ended}</p>
-              </div>
-              <div className="w-10 h-10 bg-red-100 dark:bg-red-900/30 rounded-xl flex items-center justify-center">
-                <StopCircle className="w-5 h-5 text-red-600" />
-              </div>
-            </div>
+            <Link href="/admin/events/add">
+              <button className="flex items-center gap-2 px-4 py-2 bg-linear-to-r from-emerald-600 to-cyan-600 text-white rounded-xl font-semibold hover:shadow-lg transition">
+                <Plus className="w-4 h-4" />
+                Add New Event
+              </button>
+            </Link>
           </div>
         </div>
 
         {/* Filters */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 mb-6">
-          <div className="flex flex-col lg:flex-row gap-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 mb-6">
+          <div className="flex flex-col sm:flex-row gap-4">
+            {/* Search */}
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search by title, location or organizer..."
+                placeholder="Search events by title, location..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-900 text-gray-800 dark:text-white"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               />
             </div>
 
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-900 text-gray-800 dark:text-white"
-            >
-              <option value="all">All Status</option>
-              <option value="upcoming">Upcoming</option>
-              <option value="ongoing">Ongoing</option>
-              <option value="ended">Ended</option>
-            </select>
-
-            <select
-              value={typeFilter}
-              onChange={(e) => setTypeFilter(e.target.value)}
-              className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-900 text-gray-800 dark:text-white"
-            >
-              <option value="all">All Types</option>
-              {Object.entries(eventTypes).map(([key, value]) => (
-                <option key={key} value={key}>{value.name}</option>
-              ))}
-            </select>
-
-            <button
-              onClick={exportToCSV}
-              className="flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 transition shadow-sm"
-            >
-              <Download className="w-4 h-4" />
-              Export CSV
-            </button>
+            {/* Type Filter */}
+            <div className="sm:w-64 relative">
+              <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <select
+                value={selectedType}
+                onChange={(e) => setSelectedType(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white appearance-none"
+              >
+                <option value="all">All Types</option>
+                {eventTypes.map(type => (
+                  <option key={type.id} value={type.id}>{type.name}</option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
 
-        {/* Events Table */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
-                <tr>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Event</th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Date & Time</th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Location</th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Time Left</th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Status</th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Tickets Sold</th>
-                  <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
-                {paginatedEvents.map((event) => {
-                  const StatusIcon = getStatusConfig(event.status).icon;
-                  const statusConfig = getStatusConfig(event.status);
-                  const timeLeft = calculateTimeLeft(event.targetDate);
-                  const EventTypeIcon = eventTypes[event.eventType]?.icon || Calendar;
-                  
-                  return (
-                    <tr key={event.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
-                          <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${eventTypes[event.eventType]?.bgColor || 'bg-gray-100'}`}>
-                            <EventTypeIcon className={`w-5 h-5 ${eventTypes[event.eventType]?.color || 'text-gray-500'}`} />
-                          </div>
-                          <div>
-                            <p className="font-medium text-gray-800 dark:text-white">{event.title}</p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">ID: #{event.id}</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <p className="text-sm text-gray-800 dark:text-white">{event.date}</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
-                          {new Date(event.targetDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                        </p>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-1">
-                          <MapPin className="w-3 h-3 text-gray-400" />
-                          <p className="text-sm text-gray-600 dark:text-gray-300">{event.location.split(',')[0]}</p>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        {event.status === 'upcoming' && !timeLeft.expired ? (
-                          <div className="space-y-1">
-                            <div className="flex items-center gap-1 text-sm font-semibold text-gray-800 dark:text-white">
-                              <Clock className="w-3 h-3 text-emerald-500" />
-                              <span>{timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m</span>
-                            </div>
-                            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1">
-                              <div 
-                                className="bg-emerald-500 rounded-full h-1 transition-all duration-500"
-                                style={{ width: `${Math.min(100, ((event.soldTickets / event.totalTickets) * 100))}%` }}
-                              />
-                            </div>
-                          </div>
-                        ) : event.status === 'ongoing' ? (
-                          <span className="text-sm font-medium text-green-600">Happening Now!</span>
-                        ) : (
-                          <span className="text-sm text-gray-500">Event Concluded</span>
-                        )}
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${statusConfig.bgColor} ${statusConfig.color} border ${statusConfig.borderColor}`}>
-                          <StatusIcon className="w-3 h-3" />
-                          {statusConfig.label}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div>
-                          <p className="text-sm font-semibold text-gray-800 dark:text-white">{event.soldTickets} / {event.totalTickets}</p>
-                          <p className="text-xs text-gray-500">{formatCurrency(event.soldTickets * event.ticketPrice)} revenue</p>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center justify-center gap-2">
-                          <button
-                            onClick={() => {
-                              setSelectedEvent(event);
-                              setShowDetailsModal(true);
-                            }}
-                            className="p-2 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 rounded-lg transition"
-                            title="View Details"
-                          >
-                            <Eye className="w-4 h-4" />
-                          </button>
-                          <button
-                            className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition"
-                            title="Edit Event"
-                          >
-                            <Edit className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => {
-                              setSelectedEvent(event);
-                              setShowDeleteModal(true);
-                            }}
-                            className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition"
-                            title="Delete Event"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+        {/* Events Grid */}
+        {loading ? (
+          <div className="flex items-center justify-center py-20">
+            <Loader className="w-8 h-8 text-emerald-500 animate-spin" />
           </div>
+        ) : currentEvents.length === 0 ? (
+          <div className="text-center py-20">
+            <div className="w-20 h-20 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Calendar className="w-10 h-10 text-gray-400" />
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No events found</h3>
+            <p className="text-gray-500 dark:text-gray-400">
+              {searchTerm || selectedType !== 'all' ? 'Try adjusting your filters' : 'Create your first event to get started'}
+            </p>
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {currentEvents.map(event => (
+                <EventCard key={event._id} event={event} />
+              ))}
+            </div>
 
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="px-6 py-4 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between">
-              <p className="text-sm text-gray-500">
-                Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, filteredEvents.length)} of {filteredEvents.length} events
-              </p>
-              <div className="flex items-center gap-2">
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-center gap-2 mt-8">
                 <button
                   onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                   disabled={currentPage === 1}
-                  className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+                  className="p-2 rounded-lg border border-gray-300 dark:border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-700 transition"
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </button>
                 <div className="flex gap-1">
-                  {[...Array(Math.min(5, totalPages))].map((_, i) => {
-                    let pageNum;
-                    if (totalPages <= 5) {
-                      pageNum = i + 1;
-                    } else if (currentPage <= 3) {
-                      pageNum = i + 1;
-                    } else if (currentPage >= totalPages - 2) {
-                      pageNum = totalPages - 4 + i;
-                    } else {
-                      pageNum = currentPage - 2 + i;
-                    }
-                    
-                    return (
-                      <button
-                        key={i}
-                        onClick={() => setCurrentPage(pageNum)}
-                        className={`w-8 h-8 rounded-lg text-sm font-medium transition ${
-                          currentPage === pageNum
-                            ? "bg-emerald-500 text-white"
-                            : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
-                        }`}
-                      >
-                        {pageNum}
-                      </button>
-                    );
-                  })}
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`w-8 h-8 rounded-lg transition ${
+                        currentPage === page
+                          ? 'bg-emerald-500 text-white'
+                          : 'border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  ))}
                 </div>
                 <button
                   onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                   disabled={currentPage === totalPages}
-                  className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+                  className="p-2 rounded-lg border border-gray-300 dark:border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-700 transition"
                 >
                   <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </>
+        )}
       </div>
 
-      {/* Delete Confirmation Modal */}
-      {showDeleteModal && selectedEvent && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setShowDeleteModal(false)}>
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6" onClick={(e) => e.stopPropagation()}>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Trash2 className="w-8 h-8 text-red-600" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-2">Delete Event</h3>
-              <p className="text-gray-600 dark:text-gray-400 mb-6">
-                Are you sure you want to delete "{selectedEvent.title}"? This action cannot be undone.
-              </p>
-              <div className="flex gap-3">
-                <button
-                  onClick={() => setShowDeleteModal(false)}
-                  className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleDeleteEvent}
-                  className="flex-1 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Modals */}
+      {showViewModal && <ViewModal />}
+      {showEditModal && <EditModal />}
+      {showDeleteModal && <DeleteModal />}
 
-      {/* Event Details Modal */}
-      {showDetailsModal && selectedEvent && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto" onClick={() => setShowDetailsModal(false)}>
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-            <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 px-6 py-4 flex items-center justify-between">
-              <h2 className="text-xl font-bold text-gray-800 dark:text-white">Event Details</h2>
-              <button onClick={() => setShowDetailsModal(false)} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition">
-                <XCircle className="w-5 h-5 text-gray-500" />
-              </button>
-            </div>
-            
-            <div className="p-6 space-y-4">
-              <div className="flex items-center gap-4 pb-4 border-b border-gray-100 dark:border-gray-700">
-                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center ${eventTypes[selectedEvent.eventType]?.bgColor || 'bg-gray-100'}`}>
-                  {(() => {
-                    const Icon = eventTypes[selectedEvent.eventType]?.icon || Calendar;
-                    return <Icon className={`w-8 h-8 ${eventTypes[selectedEvent.eventType]?.color || 'text-gray-500'}`} />;
-                  })()}
-                </div>
-                <div>
-                  <h3 className="text-2xl font-bold text-gray-800 dark:text-white">{selectedEvent.title}</h3>
-                  <div className="flex items-center gap-2 mt-1">
-                    <div className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${getStatusConfig(selectedEvent.status).bgColor} ${getStatusConfig(selectedEvent.status).color}`}>
-                      {getStatusConfig(selectedEvent.status).label}
-                    </div>
-                    <span className="text-sm text-gray-500">Event ID: #{selectedEvent.id}</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-3">
-                  <p className="text-xs text-gray-500 mb-1">📅 Date</p>
-                  <p className="text-gray-800 dark:text-white font-medium">{selectedEvent.date}</p>
-                </div>
-                <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-3">
-                  <p className="text-xs text-gray-500 mb-1">📍 Location</p>
-                  <p className="text-gray-800 dark:text-white font-medium">{selectedEvent.location}</p>
-                </div>
-                <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-3">
-                  <p className="text-xs text-gray-500 mb-1">💰 Ticket Price</p>
-                  <p className="text-gray-800 dark:text-white font-medium">{formatCurrency(selectedEvent.ticketPrice)}</p>
-                </div>
-                <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-3">
-                  <p className="text-xs text-gray-500 mb-1">🎟️ Tickets Sold</p>
-                  <p className="text-gray-800 dark:text-white font-medium">{selectedEvent.soldTickets} / {selectedEvent.totalTickets}</p>
-                </div>
-                <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-3">
-                  <p className="text-xs text-gray-500 mb-1">💰 Revenue</p>
-                  <p className="text-gray-800 dark:text-white font-medium">{formatCurrency(selectedEvent.soldTickets * selectedEvent.ticketPrice)}</p>
-                </div>
-                <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-3">
-                  <p className="text-xs text-gray-500 mb-1">👤 Organizer</p>
-                  <p className="text-gray-800 dark:text-white font-medium">{selectedEvent.organizer}</p>
-                </div>
-              </div>
-
-              <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-4">
-                <p className="text-xs text-gray-500 mb-2">📝 Description</p>
-                <p className="text-gray-700 dark:text-gray-300 text-sm">{selectedEvent.description}</p>
-              </div>
-
-              <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-4">
-                <p className="text-xs text-gray-500 mb-2">⏰ Time Left</p>
-                {(() => {
-                  const timeLeft = calculateTimeLeft(selectedEvent.targetDate);
-                  if (selectedEvent.status === 'upcoming') {
-                    return <p className="text-lg font-bold text-emerald-600">{timeLeft.days} days, {timeLeft.hours} hours, {timeLeft.minutes} minutes remaining</p>;
-                  } else if (selectedEvent.status === 'ongoing') {
-                    return <p className="text-lg font-bold text-green-600">Event is currently happening!</p>;
-                  } else {
-                    return <p className="text-lg font-bold text-gray-500">Event has ended</p>;
-                  }
-                })()}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Animation Styles */}
+      <style jsx>{`
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .animate-fade-in-up {
+          animation: fadeInUp 0.3s ease-out forwards;
+        }
+      `}</style>
     </div>
   );
 };
 
-export default AllEventsPage;
+export default ManageEventsPage;

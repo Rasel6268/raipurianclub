@@ -112,7 +112,7 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
         {
           name: "Application",
           icon: UserCheck,
-          href: "/members/application",
+          href: "/application",
           color: "text-orange-400",
           badge: 5,
         },
@@ -128,13 +128,20 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
         {
           name: "Add Project",
           icon: FolderPlus,
-          href: "/admin/projects/add",
+          href: "/projects/add",
           color: "text-amber-400",
         },
         {
           name: "All Projects",
           icon: FolderKanban,
-          href: "/admin/projects/all",
+          href: "/projects/all",
+          color: "text-yellow-400",
+          badge: 12,
+        },
+         {
+          name: "Project Categories",
+          icon: FolderKanban,
+          href: "/projects/categories",
           color: "text-yellow-400",
           badge: 12,
         },

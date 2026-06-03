@@ -1,6 +1,6 @@
 // app/admin/events/add/page.jsx
 "use client";
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   Calendar,
   MapPin,
@@ -33,6 +33,9 @@ import {
   Save,
   Trash2
 } from 'lucide-react';
+import useImageUpload from '@/app/hooks/useImageUpload';
+import api from '@/config/api';
+import { toast } from 'react-hot-toast';
 
 const AddEventPage = () => {
   const [formData, setFormData] = useState({
@@ -65,9 +68,25 @@ const AddEventPage = () => {
   const [tagInput, setTagInput] = useState('');
   const [imagePreview, setImagePreview] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState(null);
   const [showPreview, setShowPreview] = useState(false);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
   const fileInputRef = useRef(null);
+  const { imageHandler, loading: uploadingImage, uploadImages, setImages: setUploadImages } = useImageUpload();
+
+  // Monitor uploadImages for changes and update preview
+  useEffect(() => {
+    if (uploadImages && uploadImages.length > 0) {
+      const latestImage = uploadImages[uploadImages.length - 1];
+      if (latestImage && latestImage.url) {
+        setImagePreview(latestImage.url);
+        setUploadedImageUrl(latestImage.url);
+        setFormData(prev => ({
+          ...prev,
+          bannerImage: latestImage.url
+        }));
+      }
+    }
+  }, [uploadImages]);
 
   // Event types with their configurations
   const eventTypes = [
@@ -108,34 +127,11 @@ const AddEventPage = () => {
     }));
   };
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      // Validate file type
-      if (!file.type.startsWith('image/')) {
-        alert('Please upload a valid image file');
-        return;
-      }
-      
-      // Validate file size (max 5MB)
-      if (file.size > 5 * 1024 * 1024) {
-        alert('Image size should be less than 5MB');
-        return;
-      }
-
-      setFormData(prev => ({ ...prev, bannerImage: file }));
-      
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
   const removeImage = () => {
     setFormData(prev => ({ ...prev, bannerImage: null }));
     setImagePreview(null);
+    setUploadedImageUrl(null);
+    setUploadImages([]); // Clear the uploaded images from hook
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -161,30 +157,35 @@ const AddEventPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setSubmitStatus(null);
-
     // Validate required fields
     if (!formData.title || !formData.date || !formData.targetDate || !formData.description || !formData.location) {
-      setSubmitStatus({ type: 'error', message: 'Please fill in all required fields' });
+      toast.error('Please fill in all required fields');
       setIsSubmitting(false);
       return;
     }
 
-    // Simulate API call
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Here you would make your actual API call
-      console.log('Form Data:', formData);
-      
-      setSubmitStatus({ type: 'success', message: 'Event created successfully!' });
-      
-      // Reset form after successful submission (optional)
-      // setTimeout(() => {
-      //   resetForm();
-      // }, 2000);
+      // Prepare the data for API submission
+      const eventData = {
+        ...formData,
+        bannerImage: uploadedImageUrl || formData.bannerImage,
+        capacity: formData.capacity ? parseInt(formData.capacity) : null,
+        ticketPrice: formData.ticketPrice ? parseFloat(formData.ticketPrice) : 0,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+
+   
+      const response = await api.post('/events/create', eventData);
+       if(response.status === 201) {
+        toast.success('Event created successfully!');
+       }
+       
+      setTimeout(() => {
+        resetForm();
+      }, 2000);
     } catch (error) {
-      setSubmitStatus({ type: 'error', message: 'Failed to create event. Please try again.' });
+      toast.error('Failed to create event. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -218,6 +219,8 @@ const AddEventPage = () => {
       tags: []
     });
     setImagePreview(null);
+    setUploadedImageUrl(null);
+    setUploadImages([]);
     setTagInput('');
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
@@ -325,22 +328,6 @@ const AddEventPage = () => {
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
           <form onSubmit={handleSubmit}>
             <div className="p-6 space-y-8">
-              {/* Status Message */}
-              {submitStatus && (
-                <div className={`flex items-center gap-3 p-4 rounded-xl ${
-                  submitStatus.type === 'success' 
-                    ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-200'
-                    : 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-200'
-                }`}>
-                  {submitStatus.type === 'success' ? (
-                    <CheckCircle className="w-5 h-5" />
-                  ) : (
-                    <AlertCircle className="w-5 h-5" />
-                  )}
-                  <span>{submitStatus.message}</span>
-                </div>
-              )}
-
               {/* Basic Information Section */}
               <div>
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
@@ -489,9 +476,15 @@ const AddEventPage = () => {
                     ref={fileInputRef}
                     type="file"
                     accept="image/*"
-                    onChange={handleImageUpload}
+                    onChange={imageHandler}
                     className="hidden"
                   />
+                  {uploadingImage && (
+                    <div className="mt-3 flex items-center justify-center gap-2 text-emerald-600">
+                      <div className="w-4 h-4 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
+                      <span className="text-sm">Uploading image...</span>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -532,7 +525,7 @@ const AddEventPage = () => {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Ticket Price (INR)
+                      Ticket Price (BDT)
                     </label>
                     <input
                       type="number"
@@ -710,13 +703,13 @@ const AddEventPage = () => {
                 </button>
                 <button
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || uploadingImage}
                   className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-linear-to-r from-emerald-600 to-cyan-600 text-white rounded-xl font-semibold hover:shadow-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isSubmitting ? (
+                  {isSubmitting || uploadingImage ? (
                     <>
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      Creating...
+                      {uploadingImage ? 'Uploading...' : 'Creating...'}
                     </>
                   ) : (
                     <>
