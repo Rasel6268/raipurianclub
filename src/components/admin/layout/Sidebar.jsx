@@ -232,7 +232,7 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
         {
           name: "Manage Roles",
           icon: Shield,
-          href: "/admin/permissions/roles",
+          href: "/permissions/roles",
           color: "text-red-400",
         },
         {

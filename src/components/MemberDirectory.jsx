@@ -572,7 +572,7 @@ const MemberDirectory = () => {
       profession: "Medical Doctor",
       joinedDate: "2020",
       image:
-        "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=2070&auto=format&fit=crop",
+        "https://res.cloudinary.com/doumlnejx/image/upload/v1780516770/WhatsApp_Image_2026-05-11_at_9.17.09_AM_gl3z4o.jpg",
       bio: "Founding member and medical professional.",
     },
     {
@@ -1161,6 +1161,34 @@ const MemberDirectory = () => {
       joinedDate: "2020",
       image:
         "https://res.cloudinary.com/doumlnejx/image/upload/v1777709636/WhatsApp_Image_2026-05-02_at_11.30.24_AM_1_hjun0f.jpg",
+      bio: "Founding member passionate about community service.",
+    },
+      {
+      id: 168,
+      name: "Zahirul Islam",
+      memberType: "Founding Member",
+      memberId: "RPM-FND-068",
+      email: "example@raipurian.com",
+      phone: "+88 017XXXXXXXX",
+      location: "Raipur",
+      profession: "Professional",
+      joinedDate: "2020",
+      image:
+        "",
+      bio: "Founding member passionate about community service.",
+    },
+    {
+      id: 169,
+      name: "Sultan Mahmud",
+      memberType: "Founding Member",
+      memberId: "RPM-FND-069",
+      email: "example@raipurian.com",
+      phone: "+88 017XXXXXXXX",
+      location: "Raipur",
+      profession: "Professional",
+      joinedDate: "2020",
+      image:
+        "",
       bio: "Founding member passionate about community service.",
     },
 
