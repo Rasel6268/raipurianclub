@@ -9,6 +9,7 @@ const RolesPermissionsPage = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [showRoleModal, setShowRoleModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedNewRole, setSelectedNewRole] = useState('');
 
   // Fetch users
   const {
@@ -37,33 +38,66 @@ const RolesPermissionsPage = () => {
   // Update user role mutation
   const updateRoleMutation = useMutation({
     mutationFn: async ({ userId, newRole }) => {
-      const res = await api.put(`/auth/users/${userId}/role`, { role: newRole });
+      const res = await api.put(
+        `/auth/changeRole/${userId}`,
+        { role: newRole }
+      )
+      console.log(res.data);
       return res.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['users'] });
+      queryClient.invalidateQueries({ queryKey: ["users"] });
       setShowRoleModal(false);
       setSelectedUser(null);
+      setSelectedNewRole('');
     },
   });
 
   const handleRoleChange = (user) => {
     setSelectedUser(user);
+    setSelectedNewRole(user.role);
     setShowRoleModal(true);
   };
 
-  const handleToggleRole = () => {
-    if (selectedUser) {
-      const newRole = selectedUser.role === 'admin' ? 'member' : 'admin';
+  const handleRoleUpdate = () => {
+    if (selectedUser && selectedNewRole) {
       updateRoleMutation.mutate({
         userId: selectedUser.id,
-        newRole: newRole,
+        newRole: selectedNewRole,
       });
     }
   };
 
   const clearSearch = () => {
     setSearchTerm('');
+  };
+
+  // Get role badge color
+  const getRoleBadgeColor = (role) => {
+    switch(role) {
+      case 'super_admin':
+        return 'bg-red-100 text-red-800';
+      case 'admin':
+        return 'bg-purple-100 text-purple-800';
+      case 'member':
+        return 'bg-green-100 text-green-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  // Get role display name
+  const getRoleDisplayName = (role) => {
+    switch(role) {
+      case 'super_admin':
+        return 'Super Admin';
+      case 'admin':
+        return 'Admin';
+      case 'member':
+        return 'Member';
+      default:
+        return role;
+    }
   };
 
   if (usersLoading) {
@@ -162,12 +196,8 @@ const RolesPermissionsPage = () => {
                       <div className="text-sm text-gray-500">{user.email}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                        user.role === 'admin' 
-                          ? 'bg-purple-100 text-purple-800' 
-                          : 'bg-green-100 text-green-800'
-                      }`}>
-                        {user.role}
+                      <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getRoleBadgeColor(user.role)}`}>
+                        {getRoleDisplayName(user.role)}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -214,25 +244,33 @@ const RolesPermissionsPage = () => {
                   </p>
                 </div>
                 
-                <p className="text-sm text-gray-600">
-                  Current role: <strong className="capitalize">{selectedUser.role}</strong>
-                </p>
-                <p className="text-sm text-gray-600">
-                  New role: <strong className="capitalize">{selectedUser.role === 'admin' ? 'member' : 'admin'}</strong>
-                </p>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Select New Role
+                  </label>
+                  <select
+                    value={selectedNewRole}
+                    onChange={(e) => setSelectedNewRole(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="member">Member</option>
+                    <option value="admin">Admin</option>
+                    <option value="super_admin">Super Admin</option>
+                  </select>
+                </div>
                 
                 <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
                   <div className="flex">
-                    <div className="flex-shrink-0">
+                    <div className="shrink-0">
                       <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
                         <path fillRule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 6a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 6zm0 8a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
                       </svg>
                     </div>
                     <div className="ml-3">
                       <p className="text-sm text-yellow-700">
-                        {selectedUser.role === 'admin' 
-                          ? 'This will remove admin privileges from this user.' 
-                          : 'This will grant admin privileges to this user.'}
+                        {selectedNewRole === 'super_admin' && 'This will grant full system access to this user.'}
+                        {selectedNewRole === 'admin' && 'This will grant administrative privileges to this user.'}
+                        {selectedNewRole === 'member' && 'This will grant basic user access only.'}
                       </p>
                     </div>
                   </div>
@@ -244,23 +282,26 @@ const RolesPermissionsPage = () => {
                   onClick={() => {
                     setShowRoleModal(false);
                     setSelectedUser(null);
+                    setSelectedNewRole('');
                   }}
                   className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
                 >
                   Cancel
                 </button>
                 <button
-                  onClick={handleToggleRole}
-                  disabled={updateRoleMutation.isPending}
+                  onClick={handleRoleUpdate}
+                  disabled={updateRoleMutation.isPending || selectedNewRole === selectedUser.role}
                   className={`px-4 py-2 rounded-md text-white ${
-                    selectedUser.role === 'admin'
-                      ? 'bg-yellow-600 hover:bg-yellow-700'
-                      : 'bg-purple-600 hover:bg-purple-700'
-                  } disabled:opacity-50`}
+                    selectedNewRole === 'super_admin'
+                      ? 'bg-red-600 hover:bg-red-700'
+                      : selectedNewRole === 'admin'
+                      ? 'bg-purple-600 hover:bg-purple-700'
+                      : 'bg-green-600 hover:bg-green-700'
+                  } disabled:opacity-50 disabled:cursor-not-allowed`}
                 >
                   {updateRoleMutation.isPending 
                     ? 'Updating...' 
-                    : `Change to ${selectedUser.role === 'admin' ? 'Member' : 'Admin'}`
+                    : `Change to ${getRoleDisplayName(selectedNewRole)}`
                   }
                 </button>
               </div>
