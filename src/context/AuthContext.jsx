@@ -62,7 +62,7 @@ const AuthProvider = ({ children }) => {
 
       toast.success(`Welcome back, ${userData.name}!`);
 
-      if (userData.role === "admin") {
+      if (userData.role === "admin" || "super_admin") {
         router.push("/dashboard");
       } else {
         router.push("/profile");

@@ -21,20 +21,15 @@ import {
   X,
   Save,
   AlertCircle,
-  CheckCircle,
   Clock,
   Users,
   Ticket,
-  Tag,
-  Star,
-  Image as ImageIcon,
   Loader,
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';
 import api from '@/config/api';
 import { toast } from 'react-hot-toast';
-import Image from 'next/image';
 import Link from 'next/link';
 
 const ManageEventsPage = () => {
@@ -49,7 +44,6 @@ const ManageEventsPage = () => {
   const [editingEvent, setEditingEvent] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
-
 
   // Event types configuration
   const eventTypes = [
@@ -68,7 +62,6 @@ const ManageEventsPage = () => {
     fetchEvents();
   }, []);
 
-  
   const fetchEvents = async () => {
     try {
       setLoading(true);
@@ -87,7 +80,6 @@ const ManageEventsPage = () => {
       setLoading(false);
     }
   };
-  
 
   // Filter events based on search and type
   const filteredEvents = events.filter(event => {
@@ -117,24 +109,82 @@ const ManageEventsPage = () => {
 
   // Handle edit event
   const handleEditEvent = (event) => {
-    setEditingEvent({ ...event });
+    // Create a deep copy of the event to avoid reference issues
+    const eventCopy = JSON.parse(JSON.stringify(event));
+    setEditingEvent(eventCopy);
     setShowEditModal(true);
   };
 
   // Handle update event
-  const handleUpdateEvent = async () => {
-    if (!editingEvent) return;
+  const handleUpdateEvent = async (formData) => {
+    if (!formData) return;
+    
+    // Validate required fields
+    if (!formData.title || !formData.location || !formData.description || !formData.date) {
+      toast.error('Please fill in all required fields (Title, Location, Description, Date)');
+      return false;
+    }
     
     try {
-      const response = await api.put(`/events/${editingEvent._id}`, editingEvent);
-      if (response.status === 200) {
+      // Prepare the update data
+      const updateData = {
+        title: formData.title,
+        date: formData.date,
+        location: formData.location,
+        description: formData.description,
+        eventType: formData.eventType,
+        ticketPrice: formData.ticketPrice || 0,
+        capacity: formData.capacity,
+        ticketAvailability: formData.ticketAvailability,
+        buttonText: formData.buttonText || 'GET TICKETS',
+        bannerImage: formData.bannerImage,
+        organizerName: formData.organizerName,
+        organizerEmail: formData.organizerEmail,
+        organizerPhone: formData.organizerPhone,
+        tags: formData.tags || [],
+        targetDate: formData.targetDate
+      };
+      
+      // Make sure we're using the correct ID from the form data
+      const eventId = formData._id;
+      
+      console.log('Updating event with ID:', eventId);
+      console.log('Update data:', updateData);
+      
+      // The correct endpoint: /events/:id
+      const response = await api.put(`/events/${eventId}`, updateData);
+      
+      if (response.status === 200 || response.status === 201) {
         toast.success('Event updated successfully!');
         setShowEditModal(false);
         fetchEvents(); // Refresh the list
+        return true;
+      } else {
+        throw new Error('Update failed with status: ' + response.status);
       }
     } catch (error) {
       console.error('Error updating event:', error);
-      toast.error('Failed to update event');
+      
+      // Better error messages based on response
+      if (error.response) {
+        if (error.response.status === 404) {
+          toast.error('Event not found. It may have been deleted.');
+        } else if (error.response.status === 400) {
+          toast.error(error.response.data?.message || 'Invalid event data');
+        } else if (error.response.status === 401) {
+          toast.error('Unauthorized. Please login again.');
+        } else if (error.response.status === 403) {
+          toast.error('You don\'t have permission to update this event');
+        } else {
+          toast.error(error.response.data?.message || 'Failed to update event');
+        }
+      } else if (error.request) {
+        toast.error('Network error. Please check your connection.');
+      } else {
+        toast.error('Error: ' + error.message);
+      }
+      
+      return false;
     }
   };
 
@@ -308,21 +358,62 @@ const ManageEventsPage = () => {
     );
   };
 
-  // Edit Modal Component
+  // Edit Modal Component - FIXED VERSION
   const EditModal = () => {
     if (!editingEvent) return null;
 
+    // Create a local state for form data to prevent re-renders
+    const [formData, setFormData] = useState(editingEvent);
+    const [isSaving, setIsSaving] = useState(false);
+
+    // Update local form data when editingEvent changes
+    useEffect(() => {
+      setFormData(editingEvent);
+    }, [editingEvent]);
+
     const handleEditChange = (e) => {
       const { name, value } = e.target;
-      setEditingEvent(prev => ({ ...prev, [name]: value }));
+      setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    // Save function using formData
+    const handleSave = async () => {
+      setIsSaving(true);
+      const success = await handleUpdateEvent(formData);
+      setIsSaving(false);
+    };
+
+    // Format date for input fields
+    const formatDateForInput = (dateString) => {
+      if (!dateString) return '';
+      try {
+        return new Date(dateString).toISOString().split('T')[0];
+      } catch (error) {
+        console.error('Error formatting date:', error);
+        return '';
+      }
+    };
+
+    const formatDateTimeForInput = (dateTimeString) => {
+      if (!dateTimeString) return '';
+      try {
+        return dateTimeString.slice(0, 16);
+      } catch (error) {
+        console.error('Error formatting datetime:', error);
+        return '';
+      }
     };
 
     return (
-      <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto" onClick={() => setShowEditModal(false)}>
+      <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto" onClick={() => !isSaving && setShowEditModal(false)}>
         <div className="max-w-2xl w-full bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
           <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 flex justify-between items-center">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white">Edit Event</h2>
-            <button onClick={() => setShowEditModal(false)} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition">
+            <button 
+              onClick={() => !isSaving && setShowEditModal(false)} 
+              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition"
+              disabled={isSaving}
+            >
               <X className="w-5 h-5" />
             </button>
           </div>
@@ -333,9 +424,10 @@ const ManageEventsPage = () => {
               <input
                 type="text"
                 name="title"
-                value={editingEvent.title || ''}
+                value={formData.title || ''}
                 onChange={handleEditChange}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                disabled={isSaving}
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:opacity-50"
               />
             </div>
 
@@ -345,9 +437,10 @@ const ManageEventsPage = () => {
                 <input
                   type="date"
                   name="date"
-                  value={editingEvent.date?.split('T')[0] || ''}
+                  value={formatDateForInput(formData.date)}
                   onChange={handleEditChange}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  disabled={isSaving}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:opacity-50"
                 />
               </div>
 
@@ -356,9 +449,10 @@ const ManageEventsPage = () => {
                 <input
                   type="datetime-local"
                   name="targetDate"
-                  value={editingEvent.targetDate || ''}
+                  value={formatDateTimeForInput(formData.targetDate)}
                   onChange={handleEditChange}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  disabled={isSaving}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:opacity-50"
                 />
               </div>
             </div>
@@ -368,9 +462,10 @@ const ManageEventsPage = () => {
               <input
                 type="text"
                 name="location"
-                value={editingEvent.location || ''}
+                value={formData.location || ''}
                 onChange={handleEditChange}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                disabled={isSaving}
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:opacity-50"
               />
             </div>
 
@@ -379,9 +474,10 @@ const ManageEventsPage = () => {
               <textarea
                 name="description"
                 rows="4"
-                value={editingEvent.description || ''}
+                value={formData.description || ''}
                 onChange={handleEditChange}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-none"
+                disabled={isSaving}
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-none disabled:opacity-50"
               />
             </div>
 
@@ -390,9 +486,10 @@ const ManageEventsPage = () => {
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Event Type</label>
                 <select
                   name="eventType"
-                  value={editingEvent.eventType || 'music'}
+                  value={formData.eventType || 'music'}
                   onChange={handleEditChange}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  disabled={isSaving}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:opacity-50"
                 >
                   {eventTypes.map(type => (
                     <option key={type.id} value={type.id}>{type.name}</option>
@@ -405,9 +502,10 @@ const ManageEventsPage = () => {
                 <input
                   type="number"
                   name="ticketPrice"
-                  value={editingEvent.ticketPrice || 0}
+                  value={formData.ticketPrice || 0}
                   onChange={handleEditChange}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  disabled={isSaving}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:opacity-50"
                 />
               </div>
 
@@ -416,9 +514,10 @@ const ManageEventsPage = () => {
                 <input
                   type="number"
                   name="capacity"
-                  value={editingEvent.capacity || ''}
+                  value={formData.capacity || ''}
                   onChange={handleEditChange}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  disabled={isSaving}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:opacity-50"
                 />
               </div>
 
@@ -426,9 +525,10 @@ const ManageEventsPage = () => {
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Ticket Availability</label>
                 <select
                   name="ticketAvailability"
-                  value={editingEvent.ticketAvailability || 'available'}
+                  value={formData.ticketAvailability || 'available'}
                   onChange={handleEditChange}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  disabled={isSaving}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:opacity-50"
                 >
                   <option value="available">Available</option>
                   <option value="limited">Limited Spots</option>
@@ -436,21 +536,115 @@ const ManageEventsPage = () => {
                   <option value="coming_soon">Coming Soon</option>
                 </select>
               </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Button Text</label>
+                <input
+                  type="text"
+                  name="buttonText"
+                  value={formData.buttonText || 'GET TICKETS'}
+                  onChange={handleEditChange}
+                  disabled={isSaving}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:opacity-50"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Banner Image URL</label>
+                <input
+                  type="text"
+                  name="bannerImage"
+                  value={formData.bannerImage || ''}
+                  onChange={handleEditChange}
+                  disabled={isSaving}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:opacity-50"
+                />
+              </div>
+            </div>
+
+            {/* Organizer Information */}
+            <div className="border-t border-gray-200 dark:border-gray-700 pt-4 mt-2">
+              <h3 className="text-md font-semibold text-gray-900 dark:text-white mb-3">Organizer Information</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Organizer Name</label>
+                  <input
+                    type="text"
+                    name="organizerName"
+                    value={formData.organizerName || ''}
+                    onChange={handleEditChange}
+                    disabled={isSaving}
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:opacity-50"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Organizer Email</label>
+                  <input
+                    type="email"
+                    name="organizerEmail"
+                    value={formData.organizerEmail || ''}
+                    onChange={handleEditChange}
+                    disabled={isSaving}
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:opacity-50"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Organizer Phone</label>
+                  <input
+                    type="text"
+                    name="organizerPhone"
+                    value={formData.organizerPhone || ''}
+                    onChange={handleEditChange}
+                    disabled={isSaving}
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:opacity-50"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Tags */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Tags (comma-separated)</label>
+              <input
+                type="text"
+                name="tags"
+                value={formData.tags ? formData.tags.join(', ') : ''}
+                onChange={(e) => {
+                  const tagsArray = e.target.value.split(',').map(tag => tag.trim()).filter(tag => tag);
+                  setFormData(prev => ({ ...prev, tags: tagsArray }));
+                }}
+                disabled={isSaving}
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:opacity-50"
+                placeholder="music, concert, live, etc."
+              />
             </div>
 
             <div className="flex gap-3 pt-4">
               <button
                 onClick={() => setShowEditModal(false)}
-                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+                disabled={isSaving}
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition disabled:opacity-50"
               >
                 Cancel
               </button>
               <button
-                onClick={handleUpdateEvent}
-                className="flex-1 px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition flex items-center justify-center gap-2"
+                onClick={handleSave}
+                disabled={isSaving}
+                className="flex-1 px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition flex items-center justify-center gap-2 disabled:opacity-50"
               >
-                <Save className="w-4 h-4" />
-                Save Changes
+                {isSaving ? (
+                  <>
+                    <Loader className="w-4 h-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-4 h-4" />
+                    Save Changes
+                  </>
+                )}
               </button>
             </div>
           </div>

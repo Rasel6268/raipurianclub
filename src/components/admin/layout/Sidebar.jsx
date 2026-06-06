@@ -236,9 +236,9 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
           color: "text-red-400",
         },
         {
-          name: "User Permissions",
+          name: "Members Mamagement",
           icon: Shield,
-          href: "/admin/permissions/users",
+          href: "/member_manage",
           color: "text-red-400",
         },
       ],
