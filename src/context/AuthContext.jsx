@@ -38,7 +38,7 @@ const AuthProvider = ({ children }) => {
   const checkUser = async () => {
     try {
       const res = await api.get("/auth/me");
-      console.log(res.data)
+      console.log(res.data);
 
       if (res.status === 200) {
         setUser(res.data.user);
@@ -58,13 +58,16 @@ const AuthProvider = ({ children }) => {
       });
 
       const userData = res?.data?.user || res?.data?.data?.user;
+
       setUser(userData);
 
       toast.success(`Welcome back, ${userData.name}!`);
 
-      if (userData.role === "admin" || "super_admin") {
+      const adminRoles = ["admin", "super_admin"];
+
+      if (adminRoles.includes(userData.role)) {
         router.push("/dashboard");
-      } else {
+      } else if (userData.role === "member") {
         router.push("/profile");
       }
 
@@ -113,21 +116,17 @@ const AuthProvider = ({ children }) => {
   const value = {
     user,
     loading,
-    isAuthenticated,  // Add this
-    isAdmin,          // Add this
-    isMember,         // Add this
-    isReviewPending,  // Add this
+    isAuthenticated, // Add this
+    isAdmin, // Add this
+    isMember, // Add this
+    isReviewPending, // Add this
     login,
     logout,
     forgotPassword,
     resetPassword,
   };
 
-  return (
-    <AuthContext value={value}>
-      {children}
-    </AuthContext>
-  );
+  return <AuthContext value={value}>{children}</AuthContext>;
 };
 
 export default AuthProvider;

@@ -30,21 +30,38 @@ const MemberManagementPage = () => {
     }
   });
 
-  // Create member mutation (used for both create and update)
+  // Create member mutation
   const createMemberMutation = useMutation({
-    mutationFn: async ({ memberData }) => {
-      const res = await api.post("/member/create", {
-        ...memberData
-      });
+    mutationFn: async (memberData) => {
+      const res = await api.post("/member", memberData);
       return res.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
-      queryClient.invalidateQueries({ queryKey: ["members"] });
       setShowRoleModal(false);
       setSelectedUser(null);
       resetForm();
     },
+    onError: (error) => {
+      alert(error.response?.data?.message || "Error creating member");
+    }
+  });
+
+  // Update member mutation
+  const updateMemberMutation = useMutation({
+    mutationFn: async ({ id, memberData }) => {
+      const res = await api.put(`/member/${id}`, memberData);
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+      setShowRoleModal(false);
+      setSelectedUser(null);
+      resetForm();
+    },
+    onError: (error) => {
+      alert(error.response?.data?.message || "Error updating member");
+    }
   });
 
   const resetForm = () => {
@@ -110,14 +127,14 @@ const MemberManagementPage = () => {
       return;
     }
 
-    if (formData.memberType === 'founding' && !formData.position) {
-      alert('Please select a position for founding member');
+    // Position validation - ONLY for managing members (YOUR ORIGINAL LOGIC)
+    if (formData.memberType === 'managing' && !formData.position) {
+      alert('Position is required for managing members');
       return;
     }
 
     const memberData = {
       memberType: formData.memberType,
-      position: formData.memberType === 'founding' ? formData.position : undefined,
       serial_num: parseInt(formData.serial_num),
       phone: formData.phone,
       address: {
@@ -129,12 +146,33 @@ const MemberManagementPage = () => {
       email: selectedUser.email,
       image: selectedUser.profileImage || selectedUser.image,
       userId: selectedUser.id,
-      memberId: selectedUser.memberId || `MEM-${Date.now()}` // Generate new memberId if doesn't exist
+      memberId: selectedUser.memberId || `MEM-${Date.now()}`,
     };
 
-    createMemberMutation.mutate({
-      memberData
-    });
+    // Only add position if member is managing (YOUR ORIGINAL LOGIC)
+    if (formData.memberType === 'managing') {
+      memberData.position = formData.position;
+    }
+
+    if (selectedUser._id) {
+      // Update existing member
+      updateMemberMutation.mutate({
+        id: selectedUser._id,
+        memberData
+      });
+    } else {
+      // Create new member
+      createMemberMutation.mutate(memberData);
+    }
+  };
+
+  const getManagingPositions = () => {
+    return [
+      { value: "Convener", label: "Convener" },
+      { value: "Chief Coordinator", label: "Chief Coordinator" },
+      { value: "Assistant Chief Coordinator", label: "Assistant Chief Coordinator" },
+      { value: "Member", label: "Member" }
+    ];
   };
 
   const clearSearch = () => {
@@ -268,7 +306,9 @@ const MemberManagementPage = () => {
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500">{user.position || '-'}</div>
+                      <div className="text-sm text-gray-500">
+                        {user.memberType === 'managing' ? (user.position || '-') : '-'}
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-500">{user.serial_num || '-'}</div>
@@ -336,8 +376,8 @@ const MemberManagementPage = () => {
                     </select>
                   </div>
 
-                  {/* Position (Only for Founding Members) */}
-                  {formData.memberType === 'founding' && (
+                  {/* Position - ONLY for Managing Members (YOUR ORIGINAL LOGIC) */}
+                  {formData.memberType === 'managing' && (
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Position <span className="text-red-500">*</span>
@@ -349,11 +389,13 @@ const MemberManagementPage = () => {
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       >
                         <option value="">Select Position</option>
-                        <option value="Convener">Convener</option>
-                        <option value="Chief Coordinator">Chief Coordinator</option>
-                        <option value="Assistant Chief Coordinator">Assistant Chief Coordinator</option>
-                        <option value="Member">Member</option>
+                        {getManagingPositions().map(pos => (
+                          <option key={pos.value} value={pos.value}>{pos.label}</option>
+                        ))}
                       </select>
+                      <p className="text-xs text-blue-600 mt-1">
+                        Note: Position is only available for managing members
+                      </p>
                     </div>
                   )}
 
@@ -428,20 +470,20 @@ const MemberManagementPage = () => {
                   </div>
                 </div>
 
-                {/* Warning Message */}
-                <div className="mt-4 bg-yellow-50 border-l-4 border-yellow-400 p-4">
+                {/* Information Message */}
+                <div className="mt-4 bg-blue-50 border-l-4 border-blue-400 p-4">
                   <div className="flex">
                     <div className="shrink-0">
-                      <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 6a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 6zm0 8a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+                      <svg className="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                       </svg>
                     </div>
                     <div className="ml-3">
-                      <p className="text-sm text-yellow-700">
-                        {formData.memberType === 'founding' && 'Founding members require a position and will have special privileges.'}
+                      <p className="text-sm text-blue-700">
+                        {formData.memberType === 'managing' && 'Managing members require a position (Convener, Chief Coordinator, Assistant Chief Coordinator, or Member).'}
+                        {formData.memberType === 'founding' && 'Founding members do not require a position.'}
                         {formData.memberType === 'patron' && 'Patrons are distinguished supporters of the club.'}
                         {formData.memberType === 'donor' && 'Donors have contributed financially to the club.'}
-                        {formData.memberType === 'managing' && 'Managing members help run club operations.'}
                         {formData.memberType === 'general' && 'General members have standard club access.'}
                       </p>
                     </div>
@@ -462,7 +504,7 @@ const MemberManagementPage = () => {
                 </button>
                 <button
                   onClick={handleSubmit}
-                  disabled={createMemberMutation.isPending}
+                  disabled={createMemberMutation.isPending || updateMemberMutation.isPending}
                   className={`px-4 py-2 rounded-md text-white ${
                     formData.memberType === 'patron' ? 'bg-purple-600 hover:bg-purple-700' :
                     formData.memberType === 'donor' ? 'bg-green-600 hover:bg-green-700' :
@@ -471,41 +513,13 @@ const MemberManagementPage = () => {
                     'bg-gray-600 hover:bg-gray-700'
                   } disabled:opacity-50`}
                 >
-                  {createMemberMutation.isPending ? 'Assigning...' : (selectedUser.memberType ? 'Update Role' : 'Assign Member Role')}
+                  {createMemberMutation.isPending || updateMemberMutation.isPending 
+                    ? 'Processing...' 
+                    : (selectedUser.memberType ? 'Update Role' : 'Assign Member Role')}
                 </button>
               </div>
             </div>
           </div>
-        </div>
-      )}
-
-      {/* Success Message */}
-      {createMemberMutation.isSuccess && (
-        <div className="fixed bottom-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded shadow-lg">
-          Member role {selectedUser?.memberType ? 'updated' : 'assigned'} successfully!
-          <button 
-            onClick={() => {
-              createMemberMutation.reset();
-            }} 
-            className="ml-4 text-green-700 font-bold"
-          >
-            ×
-          </button>
-        </div>
-      )}
-
-      {/* Error Message */}
-      {createMemberMutation.isError && (
-        <div className="fixed bottom-4 right-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded shadow-lg">
-          Error {selectedUser?.memberType ? 'updating' : 'assigning'} role. Please try again.
-          <button 
-            onClick={() => {
-              createMemberMutation.reset();
-            }} 
-            className="ml-4 text-red-700 font-bold"
-          >
-            ×
-          </button>
         </div>
       )}
     </div>
