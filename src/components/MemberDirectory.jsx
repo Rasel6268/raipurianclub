@@ -801,7 +801,7 @@ const MemberDirectory = () => {
     },
     {
       id: 138,
-      name: "Masud (Milestone)",
+      name: "Mitu Akter",
       memberType: "Founding Member",
       memberId: "RPM-FND-038",
       email: "masud@raipurian.com",
@@ -829,7 +829,7 @@ const MemberDirectory = () => {
     },
     {
       id: 140,
-      name: "Md Shohel Hossen (Portugal)",
+      name: "Md Shohel Hossen",
       memberType: "Founding Member",
       memberId: "RPM-FND-040",
       email: "shohel@raipurian.com",
@@ -983,7 +983,7 @@ const MemberDirectory = () => {
     },
     {
       id: 151,
-      name: "Santa Hossain",
+      name: "Anjuman Ara Begum",
       memberType: "Founding Member",
       memberId: "RPM-FND-051",
       email: "santa@raipurian.com",
@@ -997,7 +997,7 @@ const MemberDirectory = () => {
     },
     {
       id: 152,
-      name: "Iqbal Hossain (Marcentile Bank)",
+      name: "Iqbal Hossain",
       memberType: "Founding Member",
       memberId: "RPM-FND-052",
       email: "iqbal.bank@raipurian.com",
@@ -1053,7 +1053,7 @@ const MemberDirectory = () => {
     },
     {
       id: 156,
-      name: "GM Morshed (Ploash Gazi-UK)",
+      name: "GM Morshed (Ploash)",
       memberType: "Founding Member",
       memberId: "RPM-FND-056",
       email: "morshed@raipurian.com",
@@ -1151,7 +1151,7 @@ const MemberDirectory = () => {
     },
     {
       id: 164,
-      name: "A B M Abu Yousuf Bhuiyan (Rubel)",
+      name: "Polash",
       memberType: "Founding Member",
       memberId: "RPM-FND-064",
       email: "bhuiyan@raipurian.com",
@@ -1165,7 +1165,7 @@ const MemberDirectory = () => {
     },
      {
       id: 165,
-      name: "Daraz Mahmud",
+      name: "Altaf Hossain Bhuiyan",
       memberType: "Founding Member",
       memberId: "RPM-FND-065",
       email: "mahmud@raipurian.com",
@@ -1529,7 +1529,7 @@ const MemberDirectory = () => {
     },
     {
       id: 191,
-      name: "Golam Mortuza Razu",
+      name: "Zia Ullah Mamun",
       memberType: "Founding Member",
       memberId: "RPM-FND-091",
       email: "example@raipurian.com",
@@ -1613,7 +1613,7 @@ const MemberDirectory = () => {
     },
     {
       id: 197,
-      name: "Md Zakaria  Nishan",
+      name: "Md Mohaiman",
       memberType: "Founding Member",
       memberId: "RPM-FND-097",
       email: "example@raipurian.com",
@@ -1627,7 +1627,7 @@ const MemberDirectory = () => {
     },
     {
       id: 198,
-      name: "Md Zakaria  Nishan",
+      name: "Al Nahian",
       memberType: "Founding Member",
       memberId: "RPM-FND-098",
       email: "example@raipurian.com",
