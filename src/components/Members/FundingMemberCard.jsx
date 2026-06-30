@@ -7,8 +7,8 @@ const FundingMemberCard = ({member, isManaging, expanded, onToggle}) => {
                 {/* Image Section */}
                 <div className="md:w-2/5">
                     <img
-                        src={member.image || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=2070&auto=format&fit=crop"}
-                        alt={member.name}
+                        src={member.image }
+                        alt="Please Provide your Image"
                         className="w-full h-64 md:h-full object-cover"
                     />
                 </div>

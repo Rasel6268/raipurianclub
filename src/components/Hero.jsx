@@ -1,4 +1,3 @@
-// components/Hero.jsx (fixed - using direct color classes instead of CSS variables)
 'use client';
 import { useEffect, useState } from 'react';
 import { ArrowRight, Users, Calendar, Heart, Award } from 'lucide-react';

@@ -350,7 +350,7 @@ const MemberDirectory = () => {
       profession: "Professional",
       joinedDate: "2020",
       image:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=2070&auto=format&fit=crop",
+        "https://res.cloudinary.com/doumlnejx/image/upload/v1782846039/WhatsApp_Image_2026-05-04_at_11.28.32_AM_p5shq9.jpg",
       bio: "Founding member committed to community welfare.",
     },
     {
@@ -577,7 +577,7 @@ const MemberDirectory = () => {
     },
     {
       id: 122,
-      name: "Md. Sarawar Amin (Sony)",
+      name: "Md.Sarawar Amin (Sony)",
       memberType: "Founding Member",
       memberId: "RPM-FND-022",
       email: "sarawar@raipurian.com",
@@ -586,12 +586,12 @@ const MemberDirectory = () => {
       profession: "Professional",
       joinedDate: "2020",
       image:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=2070&auto=format&fit=crop",
+        "https://res.cloudinary.com/doumlnejx/image/upload/v1782845801/WhatsApp_Image_2026-06-30_at_11.36.19_PM_l61vdy.jpg",
       bio: "Founding member dedicated to community development.",
     },
     {
       id: 123,
-      name: "Md Fathme Ali (Xebeen)",
+      name: "Md.Fathme Ali Xebin",
       memberType: "Founding Member",
       memberId: "RPM-FND-023",
       email: "fathme@raipurian.com",
@@ -600,7 +600,7 @@ const MemberDirectory = () => {
       profession: "Professional",
       joinedDate: "2020",
       image:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=2070&auto=format&fit=crop",
+        "https://res.cloudinary.com/doumlnejx/image/upload/v1782845801/WhatsApp_Image_2026-06-30_at_11.30.25_PM_ervbya.jpg",
       bio: "Founding member actively involved in community activities.",
     },
     {
@@ -745,7 +745,7 @@ const MemberDirectory = () => {
     },
     {
       id: 134,
-      name: "Md Jafor Ahammad",
+      name: "Ayesha Begum",
       memberType: "Founding Member",
       memberId: "RPM-FND-034",
       email: "jafor@raipurian.com",
@@ -754,7 +754,7 @@ const MemberDirectory = () => {
       profession: "Professional",
       joinedDate: "2020",
       image:
-        "https://res.cloudinary.com/doumlnejx/image/upload/v1777554797/WhatsApp_Image_2026-04-30_at_7.12.38_PM_l7ypn7.jpg",
+        "",
       bio: "Founding member dedicated to community welfare.",
     },
     {
@@ -768,7 +768,7 @@ const MemberDirectory = () => {
       profession: "Professional",
       joinedDate: "2020",
       image:
-        "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=2070&auto=format&fit=crop",
+        "",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -796,7 +796,7 @@ const MemberDirectory = () => {
       profession: "Professional",
       joinedDate: "2020",
       image:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=2070&auto=format&fit=crop",
+        "https://res.cloudinary.com/doumlnejx/image/upload/v1782845802/WhatsApp_Image_2026-06-30_at_11.32.33_PM_vwqdwm.jpg",
       bio: "Founding member committed to community development.",
     },
     {
@@ -1020,7 +1020,7 @@ const MemberDirectory = () => {
       profession: "Professional",
       joinedDate: "2020",
       image:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=2070&auto=format&fit=crop",
+        "https://res.cloudinary.com/doumlnejx/image/upload/v1782845665/WhatsApp_Image_2026-06-30_at_11.59.40_PM_zz57i9.jpg",
       bio: "Founding member contributing to community initiatives.",
     },
     {
@@ -1188,7 +1188,7 @@ const MemberDirectory = () => {
       profession: "Professional",
       joinedDate: "2020",
       image:
-        "https://res.cloudinary.com/doumlnejx/image/upload/v1781354028/WhatsApp_Image_2026-06-13_at_6.32.09_PM_ualf0j.jpg",
+        "https://res.cloudinary.com/doumlnejx/image/upload/v1782845801/WhatsApp_Image_2026-06-14_at_9.35.54_AM_guywn8.jpg",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1417,7 +1417,7 @@ const MemberDirectory = () => {
     },
     {
       id: 183,
-      name: "Sumon",
+      name: "MD NAZMUL ISLAM SUMON",
       memberType: "Founding Member",
       memberId: "RPM-FND-083",
       email: "example@raipurian.com",
@@ -1426,7 +1426,7 @@ const MemberDirectory = () => {
       profession: "Professional",
       joinedDate: "2020",
       image:
-        "",
+        "https://res.cloudinary.com/doumlnejx/image/upload/v1782845608/WhatsApp_Image_2026-06-30_at_11.57.35_PM_xg4b6y.jpg",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1641,7 +1641,7 @@ const MemberDirectory = () => {
     },
     {
       id: 199,
-      name: "Md Zakaria  Nishan",
+      name: "Md Kamruzzaman",
       memberType: "Founding Member",
       memberId: "RPM-FND-099",
       email: "example@raipurian.com",
@@ -1649,21 +1649,20 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:"",
+      image:"https://res.cloudinary.com/doumlnejx/image/upload/v1782844960/Kamruzzaman_-_PP_y1656e.png",
       bio: "Founding member passionate about community service.",
     },
     {
       id: 100,
-      name: "Md Zakaria  Nishan",
+      name: "Md Jafor Ahammad",
       memberType: "Founding Member",
-      memberId: "RPM-FND-069",
+      memberId: "RPM-FND-100",
       email: "example@raipurian.com",
       phone: "+88 017XXXXXXXX",
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image:"https://res.cloudinary.com/doumlnejx/image/upload/v1777554797/WhatsApp_Image_2026-04-30_at_7.12.38_PM_l7ypn7.jpg",
       bio: "Founding member passionate about community service.",
     }
 

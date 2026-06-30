@@ -187,12 +187,12 @@ const MissionVision = () => {
   ];
 
   return (
-    <section className="relative py-16 md:py-24 overflow-hidden bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <section className="relative py-16 md:py-24 overflow-hidden bg-linear-to-br from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-96 h-96 bg-gradient-to-r from-emerald-300 to-cyan-300 rounded-full mix-blend-multiply filter blur-3xl opacity-10 dark:opacity-5 animate-float-slow"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-r from-purple-300 to-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-10 dark:opacity-5 animate-float-reverse"></div>
-        <div className="absolute top-1/3 left-1/3 w-64 h-64 bg-gradient-to-r from-amber-300 to-orange-300 rounded-full mix-blend-multiply filter blur-3xl opacity-10 dark:opacity-5 animate-pulse-slow"></div>
+        <div className="absolute top-20 left-10 w-96 h-96 bg-linear-to-r from-emerald-300 to-cyan-300 rounded-full mix-blend-multiply filter blur-3xl opacity-10 dark:opacity-5 animate-float-slow"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-linear-to-r from-purple-300 to-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-10 dark:opacity-5 animate-float-reverse"></div>
+        <div className="absolute top-1/3 left-1/3 w-64 h-64 bg-linear-to-r from-amber-300 to-orange-300 rounded-full mix-blend-multiply filter blur-3xl opacity-10 dark:opacity-5 animate-pulse-slow"></div>
         
         {/* Grid Pattern */}
         <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
@@ -211,16 +211,16 @@ const MissionVision = () => {
       <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header with Enhanced Animation */}
         <div className="text-center mb-20">
-          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 backdrop-blur-sm rounded-full px-4 py-1.5 mb-4 animate-bounce-slow border border-emerald-500/20">
+          <div className="inline-flex items-center gap-2 bg-linear-to-r from-emerald-500/10 to-cyan-500/10 backdrop-blur-sm rounded-full px-4 py-1.5 mb-4 animate-bounce-slow border border-emerald-500/20">
             <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400 animate-pulse" />
-            <span className="text-sm font-medium bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">
+            <span className="text-sm font-medium bg-linear-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">
               Our Guiding Light
             </span>
           </div>
           <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white mb-6">
             Mission &{" "}
             <span className="relative inline-block">
-              <span className="relative z-10 bg-gradient-to-r from-emerald-600 via-teal-500 to-cyan-600 bg-clip-text text-transparent animate-gradient">
+              <span className="relative z-10 bg-linear-to-r from-emerald-600 via-teal-500 to-cyan-600 bg-clip-text text-transparent animate-gradient">
                 Vision
               </span>
               <svg
@@ -250,7 +250,7 @@ const MissionVision = () => {
           {/* Mission Card */}
           <div
             ref={missionRef}
-            className="group relative bg-gradient-to-br from-white to-emerald-50/30 dark:from-gray-800 dark:to-gray-900/80 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-700 hover:-translate-y-3 border border-emerald-100 dark:border-gray-700"
+            className="group relative bg-linear-to-br from-white to-emerald-50/30 dark:from-gray-800 dark:to-gray-900/80 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-700 hover:-translate-y-3 border border-emerald-100 dark:border-gray-700"
           >
             <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-br from-emerald-400/30 to-cyan-400/30 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-700"></div>
             <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
@@ -277,7 +277,7 @@ const MissionVision = () => {
               
               <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed mb-8">
                 রায়পুরের সামাজিক ও জীবনমানের সার্বিক উন্নয়ন সাধনের উদ্দেশ্যে
-                একটি আধুনিক, সুসংগঠিত ও বহুমুখী ক্লাব কমপ্লেক্স প্রতিষ্ঠা করা,
+                একটি অত্যাধুনিক, সুসংগঠিত ও বহুমুখী ক্লাব কমপ্লেক্স প্রতিষ্ঠা করা,
                 যেখানে অভিজাত ও সাধারণ জনগণের মধ্যে যোগাযোগ, বিনোদন, শিক্ষা,
                 স্বাস্থ্য ও সাংস্কৃতিক কার্যক্রমের মাধ্যমে একটি উন্নত ও সমন্বিত
                 সমাজ গড়ে তোলা সম্ভব হবে।
