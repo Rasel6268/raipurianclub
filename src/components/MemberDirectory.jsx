@@ -112,7 +112,7 @@ const MemberDirectory = () => {
     },
     {
       id: 5,
-      name: "Gias Miaji",
+      name: "Gias Uddin",
       position: "Member",
       memberType: "Managing Member",
       memberId: "RPM-M-005",
@@ -131,7 +131,7 @@ const MemberDirectory = () => {
     },
     {
       id: 6,
-      name: "Jahidul Islam Zahid",
+      name: "Zahidul Islam Jahid",
       position: "Member",
       memberType: "Managing Member",
       memberId: "RPM-M-006",
@@ -145,7 +145,7 @@ const MemberDirectory = () => {
       contributions: ["Team Collaboration"],
       achievements: ["Dedicated Member"],
       bio: "Contributes to team collaboration and club development.",
-      image: "https://via.placeholder.com/300",
+      image: "https://res.cloudinary.com/doumlnejx/image/upload/v1777554337/WhatsApp_Image_2026-04-30_at_7.04.15_PM_ojkb8c.jpg",
       social: { linkedin: "#", facebook: "#" },
     },
     {
@@ -558,7 +558,7 @@ const MemberDirectory = () => {
       profession: "Professional",
       joinedDate: "2020",
       image:
-        "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=2070&auto=format&fit=crop",
+        "https://res.cloudinary.com/doumlnejx/image/upload/v1782915053/WhatsApp_Image_2026-07-01_at_8.04.27_PM_y2dppx.jpg",
       bio: "Founding member passionate about community service.",
     },
     {
