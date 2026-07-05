@@ -23,7 +23,7 @@ import {
 import { useAuth } from "@/context/AuthContext";
 
 const Navbar2 = () => {
-  const { user, loading, isAuthenticated, isAdmin, isMember, isReviewPending, logout } = useAuth();
+  const { user, loading, isAuthenticated, isAdmin, isMember, isReviewPending, logout,isSuperAdmin } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
@@ -95,12 +95,7 @@ const Navbar2 = () => {
 
 
 
-  // Admin only links
-  const adminLinks = [
-    { name: "Admin Panel", href: "/admin", icon: Shield },
-    { name: "Manage Users", href: "/admin/users", icon: Users },
-    { name: "Settings", href: "/admin/settings", icon: Settings },
-  ];
+
 
   const handleLogout = async () => {
     setIsUserMenuOpen(false);
@@ -116,11 +111,20 @@ const Navbar2 = () => {
   };
 
   const getStatusBadge = () => {
-    if (isAdmin) return { text: "Admin", color: "bg-purple-100 text-purple-700" };
-    if (isReviewPending) return { text: "Pending Review", color: "bg-yellow-100 text-yellow-700" };
-    if (isMember && user?.status === "approved") return { text: "Member", color: "bg-green-100 text-green-700" };
-    return null;
-  };
+  if (isSuperAdmin)
+    return { text: "Super Admin", color: "bg-red-100 text-red-700" };
+
+  if (isAdmin)
+    return { text: "Admin", color: "bg-purple-100 text-purple-700" };
+
+  if (isReviewPending)
+    return { text: "Pending Review", color: "bg-yellow-100 text-yellow-700" };
+
+  if (isMember && user?.status === "approved")
+    return { text: "Member", color: "bg-green-100 text-green-700" };
+
+  return null;
+};
 
   const statusBadge = getStatusBadge();
 
@@ -178,30 +182,7 @@ const Navbar2 = () => {
               {/* Conditional Navigation based on auth status */}
               {isAuthenticated ? (
                 <>
-                 
-
-                  {/* Admin Links */}
-                  {isAdmin && adminLinks.map((link) => (
-                    <Link
-                      key={link.name}
-                      href={link.href}
-                      className={`px-4 py-2 rounded-full font-medium transition-all duration-300 hover:scale-105 ${
-                        pathname === link.href
-                          ? isScrolled
-                            ? "text-purple-600 bg-purple-50"
-                            : "text-white bg-white/20"
-                          : isScrolled
-                          ? "text-slate-600 hover:text-purple-600 hover:bg-purple-50"
-                          : "text-white/90 hover:text-white hover:bg-white/10"
-                      }`}
-                    >
-                      <span className="flex items-center gap-1">
-                        <link.icon className="w-4 h-4" />
-                        {link.name}
-                      </span>
-                    </Link>
-                  ))}
-
+                
                   {/* User Menu Dropdown */}
                   <div className="relative ml-4">
                     <button
@@ -256,7 +237,7 @@ const Navbar2 = () => {
 
                           <div className="py-1">
                             <Link
-                              href={isAdmin ? "/dashboard/admin" : "/dashboard/member"}
+                              href={isAdmin || isSuperAdmin ? "/dashboard" : "/member/dashboard"}
                               onClick={() => setIsUserMenuOpen(false)}
                               className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                             >
@@ -270,14 +251,6 @@ const Navbar2 = () => {
                             >
                               <User className="w-4 h-4" />
                               My Profile
-                            </Link>
-                            <Link
-                              href="/settings"
-                              onClick={() => setIsUserMenuOpen(false)}
-                              className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                            >
-                              <Settings className="w-4 h-4" />
-                              Settings
                             </Link>
                             <hr className="my-1 border-gray-100" />
                             <button
@@ -426,27 +399,7 @@ const Navbar2 = () => {
                     </Link>
                   </div>
 
-                  {/* Admin Links */}
-                  {isAdmin && (
-                    <div className="mt-6 pt-6 border-t border-gray-100">
-                      <div className="space-y-2">
-                        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
-                          Admin
-                        </p>
-                        {adminLinks.map((link) => (
-                          <Link
-                            key={link.name}
-                            href={link.href}
-                            onClick={() => setIsMobileMenuOpen(false)}
-                            className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 transition-colors"
-                          >
-                            <link.icon className="w-5 h-5" />
-                            <span className="font-medium">{link.name}</span>
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+              
                 </div>
               )}
 

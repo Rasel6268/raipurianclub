@@ -27,9 +27,11 @@ const AuthProvider = ({ children }) => {
 
   // Add these computed properties
   const isAuthenticated = !!user;
+  const isSuperAdmin = user?.role === "super_admin";
   const isAdmin = user?.role === "admin";
   const isMember = user?.role === "member";
   const isReviewPending = user?.status === "pending";
+  
 
   useEffect(() => {
     checkUser();
@@ -56,6 +58,7 @@ const AuthProvider = ({ children }) => {
         email,
         password,
       });
+      console.log(res.data)
 
       const userData = res?.data?.user || res?.data?.data?.user;
 
@@ -116,10 +119,11 @@ const AuthProvider = ({ children }) => {
   const value = {
     user,
     loading,
-    isAuthenticated, // Add this
-    isAdmin, // Add this
-    isMember, // Add this
-    isReviewPending, // Add this
+    isAuthenticated, 
+    isAdmin, 
+    isMember, 
+    isSuperAdmin,
+    isReviewPending, 
     login,
     logout,
     forgotPassword,

@@ -11,24 +11,8 @@ import {
   MapPin,
   GraduationCap,
   Briefcase,
-  Building,
-  Globe,
-  CreditCard,
-  Shield,
   CheckCircle,
-  ArrowRight,
   Home,
-  City,
-  Hash,
-  BookOpen,
-  Calendar as CalendarIcon,
-  Award,
-  Users,
-  Crown,
-  Star,
-  Gift,
-  Infinity,
-  AlertCircle,
 } from "lucide-react";
 import HeroProp from "@/components/HeroProp";
 import api from "@/config/api";
@@ -40,14 +24,11 @@ export default function RegisterPage() {
   const [step, setStep] = useState(1);
   const [sameAsPermanent, setSameAsPermanent] = useState(false);
   const [formData, setFormData] = useState({
-    // Personal Information
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
     phone: "",
-
-    // Permanent Address
     permanentAddress: {
       street: "",
       city: "",
@@ -55,8 +36,6 @@ export default function RegisterPage() {
       postalCode: "",
       country: "Bangladesh",
     },
-
-    // Present Address
     presentAddress: {
       street: "",
       city: "",
@@ -64,8 +43,6 @@ export default function RegisterPage() {
       postalCode: "",
       country: "Bangladesh",
     },
-
-    // Education
     educationalQualification: [
       {
         degree: "",
@@ -75,8 +52,6 @@ export default function RegisterPage() {
         currentlyStudying: false,
       },
     ],
-
-    // Occupation
     occupation: "",
     occupationDetails: {
       companyName: "",
@@ -88,7 +63,9 @@ export default function RegisterPage() {
 
   const [errors, setErrors] = useState({});
 
-  // Handle input changes
+  // Occupations that don't need company/position/industry details
+  const NO_OCCUPATION_DETAILS = ["unemployed", "retired", "student"];
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -97,7 +74,6 @@ export default function RegisterPage() {
     }));
   };
 
-  // Handle address changes
   const handleAddressChange = (type, field, value) => {
     setFormData((prev) => ({
       ...prev,
@@ -108,17 +84,17 @@ export default function RegisterPage() {
     }));
   };
 
-  // Handle education changes
+  // FIX: build a new array of new objects instead of mutating the
+  // existing education object in place (was mutating state directly).
   const handleEducationChange = (index, field, value) => {
-    const updatedEducation = [...formData.educationalQualification];
-    updatedEducation[index][field] = value;
     setFormData((prev) => ({
       ...prev,
-      educationalQualification: updatedEducation,
+      educationalQualification: prev.educationalQualification.map((edu, i) =>
+        i === index ? { ...edu, [field]: value } : edu,
+      ),
     }));
   };
 
-  // Add education field
   const addEducation = () => {
     setFormData((prev) => ({
       ...prev,
@@ -135,20 +111,17 @@ export default function RegisterPage() {
     }));
   };
 
-  // Remove education field
   const removeEducation = (index) => {
     if (formData.educationalQualification.length > 1) {
-      const updatedEducation = formData.educationalQualification.filter(
-        (_, i) => i !== index,
-      );
       setFormData((prev) => ({
         ...prev,
-        educationalQualification: updatedEducation,
+        educationalQualification: prev.educationalQualification.filter(
+          (_, i) => i !== index,
+        ),
       }));
     }
   };
 
-  // Handle occupation change
   const handleOccupationChange = (field, value) => {
     setFormData((prev) => ({
       ...prev,
@@ -159,11 +132,11 @@ export default function RegisterPage() {
     }));
   };
 
-  // Validate current step
-  const validateStep = () => {
+  // Runs the validation rules for a single step and returns the errors object for it.
+  const getStepErrors = (stepNum) => {
     const newErrors = {};
 
-    if (step === 1) {
+    if (stepNum === 1) {
       if (!formData.name) newErrors.name = "Name is required";
       if (!formData.email) newErrors.email = "Email is required";
       else if (!/\S+@\S+\.\S+/.test(formData.email))
@@ -178,7 +151,7 @@ export default function RegisterPage() {
         newErrors.phone = "Invalid Bangladesh phone number";
     }
 
-    if (step === 2) {
+    if (stepNum === 2) {
       if (!formData.permanentAddress.street)
         newErrors.permanentStreet = "Street address is required";
       if (!formData.permanentAddress.city)
@@ -189,7 +162,7 @@ export default function RegisterPage() {
         newErrors.permanentPostalCode = "Postal code is required";
     }
 
-    if (step === 3) {
+    if (stepNum === 3) {
       for (let i = 0; i < formData.educationalQualification.length; i++) {
         if (!formData.educationalQualification[i].degree) {
           newErrors[`degree_${i}`] = "Degree is required";
@@ -200,43 +173,32 @@ export default function RegisterPage() {
       }
     }
 
-    if (step === 4) {
-      if (!formData.occupation) newErrors.occupation = "Occupation is required";
+    if (stepNum === 4) {
+      if (!formData.occupation)
+        newErrors.occupation = "Occupation is required";
     }
 
+    return newErrors;
+  };
+
+  const validateStep = () => {
+    const newErrors = getStepErrors(step);
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  // Validate all steps before final submission
-  const validateAllSteps = () => {
-    // Validate Step 1
-    if (!formData.name) return false;
-    if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email)) return false;
-    if (!formData.password || formData.password.length < 6) return false;
-    if (formData.password !== formData.confirmPassword) return false;
-    if (!formData.phone || !/^(?:\+88|88)?(01[3-9]\d{8})$/.test(formData.phone))
-      return false;
-
-    // Validate Step 2
-    if (!formData.permanentAddress.street) return false;
-    if (!formData.permanentAddress.city) return false;
-    if (!formData.permanentAddress.state) return false;
-    if (!formData.permanentAddress.postalCode) return false;
-
-    // Validate Step 3
-    for (let i = 0; i < formData.educationalQualification.length; i++) {
-      if (!formData.educationalQualification[i].degree) return false;
-      if (!formData.educationalQualification[i].institution) return false;
+  // FIX: instead of a plain boolean, find the FIRST step that fails
+  // so we can jump the user there and show them exactly what's missing.
+  const findFirstInvalidStep = () => {
+    for (let s = 1; s <= 4; s++) {
+      const stepErrors = getStepErrors(s);
+      if (Object.keys(stepErrors).length > 0) {
+        return { step: s, errors: stepErrors };
+      }
     }
-
-    // Validate Step 4
-    if (!formData.occupation) return false;
-
-    return true;
+    return null;
   };
 
-  // Next step
   const nextStep = () => {
     if (validateStep()) {
       setStep(step + 1);
@@ -244,26 +206,32 @@ export default function RegisterPage() {
     }
   };
 
-  // Previous step
   const prevStep = () => {
     setStep(step - 1);
     window.scrollTo(0, 0);
   };
 
-  // Handle final registration and payment
   const handleSubmit = async () => {
-    // Validate all steps before submission
-    if (!validateAllSteps()) {
-      alert("Please fill in all required fields correctly.");
+    const invalid = findFirstInvalidStep();
+    if (invalid) {
+      setErrors(invalid.errors);
+      setStep(invalid.step);
+      window.scrollTo(0, 0);
+      toast.error("Please fill in all required fields correctly.");
       return;
     }
 
     setLoading(true);
 
     try {
-      // Prepare data for API
+      // FIX: strip confirmPassword — it should never be sent to the backend.
+      const { confirmPassword, ...rest } = formData;
+
       const submitData = {
-        ...formData,
+        ...rest,
+        // FIX: normalize email so "Foo@x.com" and "foo@x.com" aren't
+        // treated as different accounts by an exact-match lookup.
+        email: formData.email.trim().toLowerCase(),
         presentAddress: sameAsPermanent
           ? { ...formData.permanentAddress, sameAsPermanent: true }
           : { ...formData.presentAddress, sameAsPermanent: false },
@@ -272,9 +240,6 @@ export default function RegisterPage() {
             ...edu,
             yearOfPassing: edu.yearOfPassing
               ? parseInt(edu.yearOfPassing)
-              : null,
-            yearsOfExperience: edu.yearsOfExperience
-              ? parseInt(edu.yearsOfExperience)
               : null,
           }),
         ),
@@ -286,27 +251,16 @@ export default function RegisterPage() {
         },
       };
 
-      // Register user
-      const registerResponse = await api.post(`/auth/register`, submitData);
+      await api.post(`/auth/register`, submitData);
 
-      const registerData = registerResponse.data;
-      if (registerData.success) {
-        const userId = registerData.data._id;
-        
-        // Initiate payment
-        const paymentResponse = await api.post(`/payment/initiate`, { userId });
+      // Success toast
+      toast.success("Registration successful! Please login to continue.");
 
-        const paymentData = paymentResponse.data;
-
-        if (paymentData.success && paymentData.paymentUrl) {
-          window.location.href = paymentData.paymentUrl;
-        } else {
-          toast("Payment initialization failed. Please try again.");
-        }
-      }
+      // Redirect to login page
+      router.push("/login");
     } catch (error) {
       console.error("Registration error:", error);
-      toast(
+      toast.error(
         error.response?.data?.message || "An error occurred. Please try again.",
       );
     } finally {
@@ -317,7 +271,6 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen bg-linear-to-br from-emerald-50 via-teal-50 to-cyan-50">
       <div>
-        {/* Hero Section */}
         <HeroProp
           title="Become a Member"
           heading1="Join the"
@@ -326,36 +279,8 @@ export default function RegisterPage() {
           Icon={Sparkles}
         />
 
-        {/* Membership Price Banner */}
-        <div className="max-w-4xl mx-auto mb-8">
-          <div className="bg-linear-to-r from-amber-500 to-orange-500 rounded-2xl p-6 text-white shadow-xl">
-            <div className="flex items-center justify-between flex-wrap gap-4">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-                  <Crown className="w-6 h-6" />
-                </div>
-                <div>
-                  <h2 className="text-2xl font-bold">
-                    Lifetime Premium Membership
-                  </h2>
-                  <p className="text-amber-100 text-sm">
-                    One-time payment • Lifetime access • Never expires
-                  </p>
-                </div>
-              </div>
-              <div className="text-right">
-                <p className="text-sm opacity-90">Membership Fee</p>
-                <p className="text-4xl font-bold">৳50,000</p>
-                <p className="text-xs opacity-80">One-time payment only</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Registration Form */}
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-4xl mx-auto py-5">
           <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-            {/* Progress Steps */}
             <div className="bg-gray-50 border-b px-6 py-4">
               <div className="flex justify-between items-center">
                 {[
@@ -363,7 +288,6 @@ export default function RegisterPage() {
                   { num: 2, label: "Address", icon: Home },
                   { num: 3, label: "Education", icon: GraduationCap },
                   { num: 4, label: "Occupation", icon: Briefcase },
-                  { num: 5, label: "Payment", icon: CreditCard },
                 ].map((item) => (
                   <div
                     key={item.num}
@@ -401,7 +325,6 @@ export default function RegisterPage() {
             </div>
 
             <div className="p-6 md:p-8">
-              {/* Step 1: Personal Information */}
               {step === 1 && (
                 <div className="space-y-5">
                   <h2 className="text-2xl font-bold text-gray-800 mb-4">
@@ -513,7 +436,6 @@ export default function RegisterPage() {
                 </div>
               )}
 
-              {/* Step 2: Address Information */}
               {step === 2 && (
                 <div className="space-y-5">
                   <h2 className="text-2xl font-bold text-gray-800 mb-4">
@@ -559,6 +481,11 @@ export default function RegisterPage() {
                           }
                           className="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500"
                         />
+                        {errors.permanentCity && (
+                          <p className="text-red-500 text-sm">
+                            {errors.permanentCity}
+                          </p>
+                        )}
                         <input
                           type="text"
                           placeholder="State"
@@ -572,6 +499,11 @@ export default function RegisterPage() {
                           }
                           className="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500"
                         />
+                        {errors.permanentState && (
+                          <p className="text-red-500 text-sm">
+                            {errors.permanentState}
+                          </p>
+                        )}
                       </div>
 
                       <div className="grid md:grid-cols-2 gap-3">
@@ -604,6 +536,11 @@ export default function RegisterPage() {
                           <option value="Other">Other</option>
                         </select>
                       </div>
+                      {errors.permanentPostalCode && (
+                        <p className="text-red-500 text-sm">
+                          {errors.permanentPostalCode}
+                        </p>
+                      )}
                     </div>
                   </div>
 
@@ -701,7 +638,6 @@ export default function RegisterPage() {
                 </div>
               )}
 
-              {/* Step 3: Educational Qualification */}
               {step === 3 && (
                 <div className="space-y-5">
                   <h2 className="text-2xl font-bold text-gray-800 mb-4">
@@ -824,7 +760,6 @@ export default function RegisterPage() {
                 </div>
               )}
 
-              {/* Step 4: Occupation Information */}
               {step === 4 && (
                 <div className="space-y-5">
                   <h2 className="text-2xl font-bold text-gray-800 mb-4">
@@ -862,8 +797,7 @@ export default function RegisterPage() {
                   </div>
 
                   {formData.occupation &&
-                    formData.occupation !== "unemployed" &&
-                    formData.occupation !== "retired" && (
+                    !NO_OCCUPATION_DETAILS.includes(formData.occupation) && (
                       <div className="bg-gray-50 rounded-xl p-4 space-y-3">
                         <h3 className="font-semibold text-gray-800">
                           Occupation Details
@@ -920,93 +854,6 @@ export default function RegisterPage() {
                 </div>
               )}
 
-              {/* Step 5: Payment Summary */}
-              {step === 5 && (
-                <div className="space-y-5">
-                  <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                    Payment Summary
-                  </h2>
-
-                  <div className="bg-linear-to-r from-emerald-50 to-teal-50 rounded-xl p-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <div>
-                        <h3 className="font-bold text-gray-800 text-lg">
-                          Lifetime Premium Membership
-                        </h3>
-                        <p className="text-gray-600 text-sm">
-                          One-time payment • Never expires
-                        </p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-sm text-gray-600">Total Amount</p>
-                        <p className="text-3xl font-bold text-emerald-600">
-                          ৳50,000
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="border-t border-emerald-200 pt-4">
-                      <h4 className="font-semibold text-gray-800 mb-2 flex items-center gap-2">
-                        <Star className="w-4 h-4 text-amber-500" />
-                        Membership Benefits
-                      </h4>
-                      <div className="grid md:grid-cols-2 gap-2">
-                        {[
-                          "Access to all community events",
-                          "Full forum participation",
-                          "Monthly newsletter",
-                          "Priority support",
-                          "Premium profile badge",
-                          "Member directory listing",
-                          "Access to exclusive content",
-                          "Voting rights in club elections",
-                          "Eligible for leadership positions",
-                          "Free entry to all paid events",
-                          "Annual gift hamper",
-                          "Lifetime access to all future features",
-                        ].map((benefit, index) => (
-                          <div
-                            key={index}
-                            className="flex items-center gap-2 text-sm text-gray-700"
-                          >
-                            <CheckCircle className="w-3 h-3 text-emerald-500" />
-                            {benefit}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-blue-50 rounded-xl p-4 flex items-start gap-3">
-                    <Shield className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-semibold text-blue-800">
-                        Secure Payment
-                      </p>
-                      <p className="text-sm text-blue-700">
-                        Your payment will be processed securely via SSLCommerz.
-                        All major credit/debit cards, mobile banking, and bank
-                        transfers are accepted.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="bg-amber-50 rounded-xl p-4 flex items-start gap-3">
-                    <Infinity className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-semibold text-amber-800">
-                        Lifetime Validity
-                      </p>
-                      <p className="text-sm text-amber-700">
-                        This membership never expires. Pay once and enjoy
-                        benefits for a lifetime!
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Navigation Buttons */}
               <div className="flex justify-between mt-8 pt-6 border-t">
                 {step > 1 && (
                   <button
@@ -1018,7 +865,7 @@ export default function RegisterPage() {
                   </button>
                 )}
 
-                {step < 5 ? (
+                {step < 4 ? (
                   <button
                     type="button"
                     onClick={nextStep}
@@ -1039,31 +886,10 @@ export default function RegisterPage() {
                         Processing...
                       </>
                     ) : (
-                      <>
-                        <CreditCard className="w-4 h-4" />
-                        Pay ৳50,000 & Register
-                      </>
+                      "Register & Pay"
                     )}
                   </button>
                 )}
-              </div>
-            </div>
-          </div>
-
-          {/* Trust Badges */}
-          <div className="mt-6 text-center">
-            <div className="flex justify-center gap-6 flex-wrap">
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <Shield className="w-4 h-4 text-green-600" />
-                <span>256-bit SSL Secure</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <CheckCircle className="w-4 h-4 text-green-600" />
-                <span>Money-back guarantee</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <Users className="w-4 h-4 text-green-600" />
-                <span>500+ Happy Members</span>
               </div>
             </div>
           </div>
