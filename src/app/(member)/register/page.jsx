@@ -17,6 +17,7 @@ import {
 import HeroProp from "@/components/HeroProp";
 import api from "@/config/api";
 import toast from "react-hot-toast";
+import { divisions, occupations } from "../../../data/data";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -30,25 +31,26 @@ export default function RegisterPage() {
     confirmPassword: "",
     phone: "",
     permanentAddress: {
-      street: "",
-      city: "",
-      state: "",
+      villageOrArea: "", // Fixed: changed from "street" to match your form
+      upazila: "",
+      district: "",
+      division: "", 
       postalCode: "",
       country: "Bangladesh",
     },
     presentAddress: {
-      street: "",
-      city: "",
-      state: "",
+      villageOrArea: "", 
+      upazila: "",
+      district: "",
+      division: "", 
       postalCode: "",
-      country: "Bangladesh",
+      country: "",
     },
     educationalQualification: [
       {
         degree: "",
         institution: "",
         yearOfPassing: "",
-        grade: "",
         currentlyStudying: false,
       },
     ],
@@ -56,8 +58,6 @@ export default function RegisterPage() {
     occupationDetails: {
       companyName: "",
       position: "",
-      yearsOfExperience: "",
-      industry: "",
     },
   });
 
@@ -84,8 +84,6 @@ export default function RegisterPage() {
     }));
   };
 
-  // FIX: build a new array of new objects instead of mutating the
-  // existing education object in place (was mutating state directly).
   const handleEducationChange = (index, field, value) => {
     setFormData((prev) => ({
       ...prev,
@@ -104,7 +102,6 @@ export default function RegisterPage() {
           degree: "",
           institution: "",
           yearOfPassing: "",
-          grade: "",
           currentlyStudying: false,
         },
       ],
@@ -147,17 +144,17 @@ export default function RegisterPage() {
       if (formData.password !== formData.confirmPassword)
         newErrors.confirmPassword = "Passwords do not match";
       if (!formData.phone) newErrors.phone = "Phone number is required";
-      else if (!/^(?:\+88|88)?(01[3-9]\d{8})$/.test(formData.phone))
-        newErrors.phone = "Invalid Bangladesh phone number";
     }
 
     if (stepNum === 2) {
-      if (!formData.permanentAddress.street)
-        newErrors.permanentStreet = "Street address is required";
-      if (!formData.permanentAddress.city)
-        newErrors.permanentCity = "City is required";
-      if (!formData.permanentAddress.state)
-        newErrors.permanentState = "State is required";
+      if (!formData.permanentAddress.villageOrArea) 
+        newErrors.permanentVillageOrArea = "Village/Area is required";
+      if (!formData.permanentAddress.division)
+        newErrors.permanentDivision = "Division is required";
+      if (!formData.permanentAddress.district)
+        newErrors.permanentDistrict = "District is required";
+      if (!formData.permanentAddress.upazila)
+        newErrors.permanentUpazila = "Upazila is required";
       if (!formData.permanentAddress.postalCode)
         newErrors.permanentPostalCode = "Postal code is required";
     }
@@ -174,8 +171,7 @@ export default function RegisterPage() {
     }
 
     if (stepNum === 4) {
-      if (!formData.occupation)
-        newErrors.occupation = "Occupation is required";
+      if (!formData.occupation) newErrors.occupation = "Occupation is required";
     }
 
     return newErrors;
@@ -187,8 +183,6 @@ export default function RegisterPage() {
     return Object.keys(newErrors).length === 0;
   };
 
-  // FIX: instead of a plain boolean, find the FIRST step that fails
-  // so we can jump the user there and show them exactly what's missing.
   const findFirstInvalidStep = () => {
     for (let s = 1; s <= 4; s++) {
       const stepErrors = getStepErrors(s);
@@ -224,13 +218,10 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      // FIX: strip confirmPassword — it should never be sent to the backend.
       const { confirmPassword, ...rest } = formData;
 
       const submitData = {
         ...rest,
-        // FIX: normalize email so "Foo@x.com" and "foo@x.com" aren't
-        // treated as different accounts by an exact-match lookup.
         email: formData.email.trim().toLowerCase(),
         presentAddress: sameAsPermanent
           ? { ...formData.permanentAddress, sameAsPermanent: true }
@@ -245,18 +236,12 @@ export default function RegisterPage() {
         ),
         occupationDetails: {
           ...formData.occupationDetails,
-          yearsOfExperience: formData.occupationDetails.yearsOfExperience
-            ? parseInt(formData.occupationDetails.yearsOfExperience)
-            : null,
         },
       };
 
       await api.post(`/auth/register`, submitData);
 
-      // Success toast
       toast.success("Registration successful! Please login to continue.");
-
-      // Redirect to login page
       router.push("/login");
     } catch (error) {
       console.error("Registration error:", error);
@@ -279,9 +264,9 @@ export default function RegisterPage() {
           Icon={Sparkles}
         />
 
-        <div className="max-w-4xl mx-auto py-5">
+        <div className="max-w-4xl mx-auto py-5 px-4 sm:px-6">
           <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-            <div className="bg-gray-50 border-b px-6 py-4">
+            <div className="bg-gray-50 border-b px-4 sm:px-6 py-4">
               <div className="flex justify-between items-center">
                 {[
                   { num: 1, label: "Personal", icon: User },
@@ -296,7 +281,7 @@ export default function RegisterPage() {
                     }`}
                   >
                     <div
-                      className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold ${
+                      className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-semibold text-sm sm:text-base ${
                         step > item.num
                           ? "bg-emerald-600 text-white"
                           : step === item.num
@@ -305,12 +290,12 @@ export default function RegisterPage() {
                       }`}
                     >
                       {step > item.num ? (
-                        <CheckCircle className="w-5 h-5" />
+                        <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5" />
                       ) : (
                         item.num
                       )}
                     </div>
-                    <span className="text-xs mt-1 hidden sm:block">
+                    <span className="text-[10px] sm:text-xs mt-1 hidden sm:block">
                       {item.label}
                     </span>
                   </div>
@@ -324,16 +309,16 @@ export default function RegisterPage() {
               </div>
             </div>
 
-            <div className="p-6 md:p-8">
+            <div className="p-4 sm:p-6 md:p-8">
               {step === 1 && (
-                <div className="space-y-5">
-                  <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                <div className="space-y-4 sm:space-y-5">
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4">
                     Personal Information
                   </h2>
 
                   <div>
                     <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                      <User className="w-4 h-4" />
+                      <User className="w-4 h-4 shrink-0" />
                       Full Name <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -342,16 +327,19 @@ export default function RegisterPage() {
                       value={formData.name}
                       onChange={handleChange}
                       placeholder="Enter your full name"
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 text-base sm:text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all min-h-[48px] sm:min-h-[44px]"
                     />
                     {errors.name && (
-                      <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+                      <p className="text-red-500 text-sm mt-1 flex items-start gap-1.5">
+                        <span className="inline-block mt-0.5">⚠️</span>
+                        {errors.name}
+                      </p>
                     )}
                   </div>
 
                   <div>
                     <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                      <Mail className="w-4 h-4" />
+                      <Mail className="w-4 h-4 flex-shrink-0" />
                       Email Address <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -360,19 +348,20 @@ export default function RegisterPage() {
                       value={formData.email}
                       onChange={handleChange}
                       placeholder="you@example.com"
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 text-base sm:text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all min-h-[48px] sm:min-h-[44px]"
                     />
                     {errors.email && (
-                      <p className="text-red-500 text-sm mt-1">
+                      <p className="text-red-500 text-sm mt-1 flex items-start gap-1.5">
+                        <span className="inline-block mt-0.5">⚠️</span>
                         {errors.email}
                       </p>
                     )}
                   </div>
 
-                  <div className="grid md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                        <Lock className="w-4 h-4" />
+                        <Lock className="w-4 h-4 flex-shrink-0" />
                         Password <span className="text-red-500">*</span>
                       </label>
                       <input
@@ -381,10 +370,11 @@ export default function RegisterPage() {
                         value={formData.password}
                         onChange={handleChange}
                         placeholder="Min 6 characters"
-                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
+                        className="w-full px-4 py-3 text-base sm:text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all min-h-[48px] sm:min-h-[44px]"
                       />
                       {errors.password && (
-                        <p className="text-red-500 text-sm mt-1">
+                        <p className="text-red-500 text-sm mt-1 flex items-start gap-1.5">
+                          <span className="inline-block mt-0.5">⚠️</span>
                           {errors.password}
                         </p>
                       )}
@@ -392,7 +382,7 @@ export default function RegisterPage() {
 
                     <div>
                       <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                        <Lock className="w-4 h-4" />
+                        <Lock className="w-4 h-4 flex-shrink-0" />
                         Confirm Password <span className="text-red-500">*</span>
                       </label>
                       <input
@@ -401,10 +391,11 @@ export default function RegisterPage() {
                         value={formData.confirmPassword}
                         onChange={handleChange}
                         placeholder="Confirm your password"
-                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
+                        className="w-full px-4 py-3 text-base sm:text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all min-h-[48px] sm:min-h-[44px]"
                       />
                       {errors.confirmPassword && (
-                        <p className="text-red-500 text-sm mt-1">
+                        <p className="text-red-500 text-sm mt-1 flex items-start gap-1.5">
+                          <span className="inline-block mt-0.5">⚠️</span>
                           {errors.confirmPassword}
                         </p>
                       )}
@@ -413,7 +404,7 @@ export default function RegisterPage() {
 
                   <div>
                     <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                      <Phone className="w-4 h-4" />
+                      <Phone className="w-4 h-4 flex-shrink-0" />
                       Phone Number <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -422,13 +413,11 @@ export default function RegisterPage() {
                       value={formData.phone}
                       onChange={handleChange}
                       placeholder="01XXXXXXXXX"
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 text-base sm:text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all min-h-[48px] sm:min-h-[44px]"
                     />
-                    <p className="text-xs text-gray-500 mt-1">
-                      Enter a valid Bangladesh mobile number (01XXXXXXXXX)
-                    </p>
                     {errors.phone && (
-                      <p className="text-red-500 text-sm mt-1">
+                      <p className="text-red-500 text-sm mt-1 flex items-start gap-1.5">
+                        <span className="inline-block mt-0.5">⚠️</span>
                         {errors.phone}
                       </p>
                     )}
@@ -437,76 +426,105 @@ export default function RegisterPage() {
               )}
 
               {step === 2 && (
-                <div className="space-y-5">
-                  <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                <div className="space-y-4 sm:space-y-5">
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4">
                     Address Information
                   </h2>
 
                   <div className="bg-gray-50 rounded-xl p-4">
                     <h3 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                      <MapPin className="w-4 h-4 text-emerald-600" />
+                      <MapPin className="w-4 h-4 text-emerald-600 flex-shrink-0" />
                       Permanent Address
                     </h3>
                     <div className="space-y-3">
                       <input
                         type="text"
-                        placeholder="Street / Village / Road"
-                        value={formData.permanentAddress.street}
+                        placeholder="Village / Area / House / Road"
+                        value={formData.permanentAddress.villageOrArea}
                         onChange={(e) =>
                           handleAddressChange(
                             "permanentAddress",
-                            "street",
+                            "villageOrArea",
                             e.target.value,
                           )
                         }
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500"
+                        className="w-full px-4 py-2.5 text-base sm:text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 min-h-[44px]"
                       />
-                      {errors.permanentStreet && (
-                        <p className="text-red-500 text-sm">
-                          {errors.permanentStreet}
+                      {errors.permanentVillageOrArea && (
+                        <p className="text-red-500 text-sm flex items-start gap-1.5">
+                          <span className="inline-block mt-0.5">⚠️</span>
+                          {errors.permanentVillageOrArea}
                         </p>
                       )}
 
-                      <div className="grid md:grid-cols-2 gap-3">
-                        <input
-                          type="text"
-                          placeholder="City"
-                          value={formData.permanentAddress.city}
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <select
+                          value={formData.permanentAddress.division}
                           onChange={(e) =>
                             handleAddressChange(
                               "permanentAddress",
-                              "city",
+                              "division",
                               e.target.value,
                             )
                           }
-                          className="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500"
-                        />
-                        {errors.permanentCity && (
-                          <p className="text-red-500 text-sm">
-                            {errors.permanentCity}
+                          className="px-4 py-2.5 text-base sm:text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 min-h-[44px]"
+                        >
+                          <option value="">Select Division</option>
+                          {divisions.map((division) => (
+                            <option key={division.id} value={division.value}>
+                              {division.name}
+                            </option>
+                          ))}
+                        </select>
+                        {errors.permanentDivision && (
+                          <p className="text-red-500 text-sm col-span-full flex items-start gap-1.5">
+                            <span className="inline-block mt-0.5">⚠️</span>
+                            {errors.permanentDivision}
                           </p>
                         )}
+
                         <input
                           type="text"
-                          placeholder="State"
-                          value={formData.permanentAddress.state}
+                          placeholder="District"
+                          value={formData.permanentAddress.district}
                           onChange={(e) =>
                             handleAddressChange(
                               "permanentAddress",
-                              "state",
+                              "district",
                               e.target.value,
                             )
                           }
-                          className="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500"
+                          className="px-4 py-2.5 text-base sm:text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 min-h-[44px]"
                         />
-                        {errors.permanentState && (
-                          <p className="text-red-500 text-sm">
-                            {errors.permanentState}
+                        {errors.permanentDistrict && (
+                          <p className="text-red-500 text-sm col-span-full flex items-start gap-1.5">
+                            <span className="inline-block mt-0.5">⚠️</span>
+                            {errors.permanentDistrict}
+                          </p>
+                        )}
+
+                        <input
+                          type="text"
+                          placeholder="Upazila"
+                          value={formData.permanentAddress.upazila}
+                          onChange={(e) =>
+                            handleAddressChange(
+                              "permanentAddress",
+                              "upazila",
+                              e.target.value,
+                            )
+                          }
+                          className="px-4 py-2.5 text-base sm:text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 min-h-[44px]"
+                        />
+                        {errors.permanentUpazila && (
+                          <p className="text-red-500 text-sm col-span-full flex items-start gap-1.5">
+                            <span className="inline-block mt-0.5">⚠️</span>
+                            {errors.permanentUpazila}
                           </p>
                         )}
                       </div>
 
-                      <div className="grid md:grid-cols-2 gap-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <input
                           type="text"
                           placeholder="Postal Code"
@@ -518,8 +536,15 @@ export default function RegisterPage() {
                               e.target.value,
                             )
                           }
-                          className="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500"
+                          className="px-4 py-2.5 text-base sm:text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 min-h-[44px]"
                         />
+                        {errors.permanentPostalCode && (
+                          <p className="text-red-500 text-sm col-span-full flex items-start gap-1.5">
+                            <span className="inline-block mt-0.5">⚠️</span>
+                            {errors.permanentPostalCode}
+                          </p>
+                        )}
+
                         <select
                           value={formData.permanentAddress.country}
                           onChange={(e) =>
@@ -529,29 +554,22 @@ export default function RegisterPage() {
                               e.target.value,
                             )
                           }
-                          className="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500"
+                          className="px-4 py-2.5 text-base sm:text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 min-h-[44px]"
                         >
                           <option value="Bangladesh">Bangladesh</option>
-                          <option value="India">India</option>
-                          <option value="Other">Other</option>
                         </select>
                       </div>
-                      {errors.permanentPostalCode && (
-                        <p className="text-red-500 text-sm">
-                          {errors.permanentPostalCode}
-                        </p>
-                      )}
                     </div>
                   </div>
 
-                  <label className="flex items-center gap-2 cursor-pointer">
+                  <label className="flex items-center gap-2 cursor-pointer py-2">
                     <input
                       type="checkbox"
                       checked={sameAsPermanent}
                       onChange={(e) => setSameAsPermanent(e.target.checked)}
-                      className="w-4 h-4 text-emerald-600 rounded"
+                      className="w-5 h-5 text-emerald-600 rounded focus:ring-emerald-500"
                     />
-                    <span className="text-sm text-gray-700">
+                    <span className="text-sm sm:text-base text-gray-700">
                       Same as permanent address (Current address)
                     </span>
                   </label>
@@ -559,52 +577,70 @@ export default function RegisterPage() {
                   {!sameAsPermanent && (
                     <div className="bg-gray-50 rounded-xl p-4">
                       <h3 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                        <Home className="w-4 h-4 text-emerald-600" />
+                        <Home className="w-4 h-4 text-emerald-600 flex-shrink-0" />
                         Present/Current Address
                       </h3>
                       <div className="space-y-3">
                         <input
                           type="text"
-                          placeholder="Street / Village / Road"
-                          value={formData.presentAddress.street}
+                          placeholder="Village / Area / House / Road"
+                          value={formData.presentAddress.villageOrArea}
                           onChange={(e) =>
                             handleAddressChange(
                               "presentAddress",
-                              "street",
+                              "villageOrArea",
                               e.target.value,
                             )
                           }
-                          className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500"
+                          className="w-full px-4 py-2.5 text-base sm:text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 min-h-[44px]"
                         />
-                        <div className="grid md:grid-cols-2 gap-3">
-                          <input
-                            type="text"
-                            placeholder="City"
-                            value={formData.presentAddress.city}
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                          <select
+                            value={formData.presentAddress.division}
                             onChange={(e) =>
                               handleAddressChange(
                                 "presentAddress",
-                                "city",
+                                "division",
                                 e.target.value,
                               )
                             }
-                            className="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500"
+                            className="px-4 py-2.5 text-base sm:text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 min-h-[44px]"
+                          >
+                            <option value="">Select Division</option>
+                            {divisions.map((division) => (
+                              <option key={division.id} value={division.value}>
+                                {division.name}
+                              </option>
+                            ))}
+                          </select>
+                          <input
+                            type="text"
+                            placeholder="District"
+                            value={formData.presentAddress.district}
+                            onChange={(e) =>
+                              handleAddressChange(
+                                "presentAddress",
+                                "district",
+                                e.target.value,
+                              )
+                            }
+                            className="px-4 py-2.5 text-base sm:text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 min-h-[44px]"
                           />
                           <input
                             type="text"
-                            placeholder="State"
-                            value={formData.presentAddress.state}
+                            placeholder="Upazila"
+                            value={formData.presentAddress.upazila}
                             onChange={(e) =>
                               handleAddressChange(
                                 "presentAddress",
-                                "state",
+                                "upazila",
                                 e.target.value,
                               )
                             }
-                            className="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500"
+                            className="px-4 py-2.5 text-base sm:text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 min-h-[44px]"
                           />
                         </div>
-                        <div className="grid md:grid-cols-2 gap-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           <input
                             type="text"
                             placeholder="Postal Code"
@@ -616,7 +652,7 @@ export default function RegisterPage() {
                                 e.target.value,
                               )
                             }
-                            className="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500"
+                            className="px-4 py-2.5 text-base sm:text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 min-h-[44px]"
                           />
                           <select
                             value={formData.presentAddress.country}
@@ -627,9 +663,19 @@ export default function RegisterPage() {
                                 e.target.value,
                               )
                             }
-                            className="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500"
+                            className="px-4 py-2.5 text-base sm:text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 min-h-[44px]"
                           >
                             <option value="Bangladesh">Bangladesh</option>
+                            <option value="Saudi Arabia">Saudi Arabia</option>
+                            <option value="United Arab Emirates">
+                              United Arab Emirates
+                            </option>
+                            <option value="United States">United States</option>
+                            <option value="Canada">Canada</option>
+                            <option value="United Kingdom">
+                              United Kingdom
+                            </option>
+                            <option value="Australia">Australia</option>
                           </select>
                         </div>
                       </div>
@@ -639,8 +685,8 @@ export default function RegisterPage() {
               )}
 
               {step === 3 && (
-                <div className="space-y-5">
-                  <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                <div className="space-y-4 sm:space-y-5">
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4">
                     Educational Qualification
                   </h2>
 
@@ -653,7 +699,8 @@ export default function RegisterPage() {
                         <button
                           type="button"
                           onClick={() => removeEducation(index)}
-                          className="absolute top-2 right-2 text-red-500 hover:text-red-700"
+                          className="absolute top-3 right-3 text-red-500 hover:text-red-700 p-1"
+                          aria-label="Remove education"
                         >
                           ✕
                         </button>
@@ -673,10 +720,11 @@ export default function RegisterPage() {
                               e.target.value,
                             )
                           }
-                          className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500"
+                          className="w-full px-4 py-2.5 text-base sm:text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 min-h-[44px]"
                         />
                         {errors[`degree_${index}`] && (
-                          <p className="text-red-500 text-sm">
+                          <p className="text-red-500 text-sm flex items-start gap-1.5">
+                            <span className="inline-block mt-0.5">⚠️</span>
                             {errors[`degree_${index}`]}
                           </p>
                         )}
@@ -692,15 +740,16 @@ export default function RegisterPage() {
                               e.target.value,
                             )
                           }
-                          className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500"
+                          className="w-full px-4 py-2.5 text-base sm:text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 min-h-[44px]"
                         />
                         {errors[`institution_${index}`] && (
-                          <p className="text-red-500 text-sm">
+                          <p className="text-red-500 text-sm flex items-start gap-1.5">
+                            <span className="inline-block mt-0.5">⚠️</span>
                             {errors[`institution_${index}`]}
                           </p>
                         )}
 
-                        <div className="grid md:grid-cols-2 gap-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           <input
                             type="number"
                             placeholder="Year of Passing"
@@ -712,24 +761,11 @@ export default function RegisterPage() {
                                 e.target.value,
                               )
                             }
-                            className="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500"
-                          />
-                          <input
-                            type="text"
-                            placeholder="Grade / CGPA (optional)"
-                            value={edu.grade}
-                            onChange={(e) =>
-                              handleEducationChange(
-                                index,
-                                "grade",
-                                e.target.value,
-                              )
-                            }
-                            className="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500"
+                            className="px-4 py-2.5 text-base sm:text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 min-h-[44px]"
                           />
                         </div>
 
-                        <label className="flex items-center gap-2">
+                        <label className="flex items-center gap-2 py-1">
                           <input
                             type="checkbox"
                             checked={edu.currentlyStudying}
@@ -740,9 +776,9 @@ export default function RegisterPage() {
                                 e.target.checked,
                               )
                             }
-                            className="w-4 h-4 text-emerald-600 rounded"
+                            className="w-5 h-5 text-emerald-600 rounded focus:ring-emerald-500"
                           />
-                          <span className="text-sm text-gray-700">
+                          <span className="text-sm sm:text-base text-gray-700">
                             Currently Studying
                           </span>
                         </label>
@@ -753,7 +789,7 @@ export default function RegisterPage() {
                   <button
                     type="button"
                     onClick={addEducation}
-                    className="w-full py-2 border-2 border-dashed border-emerald-300 rounded-lg text-emerald-600 hover:bg-emerald-50 transition-colors"
+                    className="w-full py-3 text-base sm:text-sm border-2 border-dashed border-emerald-300 rounded-lg text-emerald-600 hover:bg-emerald-50 transition-colors min-h-[48px]"
                   >
                     + Add Another Qualification
                   </button>
@@ -761,36 +797,69 @@ export default function RegisterPage() {
               )}
 
               {step === 4 && (
-                <div className="space-y-5">
-                  <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                <div className="space-y-4 sm:space-y-5">
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4">
                     Occupation Information
                   </h2>
 
                   <div>
                     <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                      <Briefcase className="w-4 h-4" />
+                      <Briefcase className="w-4 h-4 flex-shrink-0" />
                       Occupation Type <span className="text-red-500">*</span>
                     </label>
-                    <select
-                      value={formData.occupation}
-                      onChange={(e) =>
-                        setFormData({ ...formData, occupation: e.target.value })
-                      }
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500"
-                    >
-                      <option value="">Select Occupation</option>
-                      <option value="student">Student</option>
-                      <option value="employed">
-                        Employed (Service Holder)
-                      </option>
-                      <option value="self_employed">Self Employed</option>
-                      <option value="business">Business Owner</option>
-                      <option value="unemployed">Unemployed</option>
-                      <option value="retired">Retired</option>
-                      <option value="other">Other</option>
-                    </select>
+
+                    {/* Mobile-optimized select with better touch targets */}
+                    <div className="relative">
+                      <select
+                        value={formData.occupation}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            occupation: e.target.value,
+                          })
+                        }
+                        className="w-full px-4 py-3.5 sm:py-3 text-base sm:text-sm border border-gray-200 rounded-xl 
+                 focus:ring-2 focus:ring-emerald-500 focus:border-transparent 
+                 bg-white appearance-none cursor-pointer
+                 transition-all duration-200
+                 min-h-[48px] sm:min-h-[44px]"
+                        style={{
+                          WebkitAppearance: "none",
+                          MozAppearance: "none",
+                        }}
+                      >
+                        <option value="">Select Occupation</option>
+                        {occupations.map((occupation) => (
+                          <option
+                            key={occupation.value}
+                            value={occupation.value}
+                          >
+                            {occupation.label}
+                          </option>
+                        ))}
+                      </select>
+
+                      {/* Custom dropdown arrow - better for mobile */}
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                        <svg
+                          className="w-5 h-5 sm:w-4 sm:h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 9l-7 7-7-7"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+
                     {errors.occupation && (
-                      <p className="text-red-500 text-sm mt-1">
+                      <p className="text-red-500 text-sm mt-1.5 flex items-start gap-1.5">
+                        <span className="inline-block mt-0.5">⚠️</span>
                         {errors.occupation}
                       </p>
                     )}
@@ -813,7 +882,7 @@ export default function RegisterPage() {
                               e.target.value,
                             )
                           }
-                          className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500"
+                          className="w-full px-4 py-2.5 text-base sm:text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 min-h-[44px]"
                         />
 
                         <input
@@ -823,43 +892,19 @@ export default function RegisterPage() {
                           onChange={(e) =>
                             handleOccupationChange("position", e.target.value)
                           }
-                          className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500"
+                          className="w-full px-4 py-2.5 text-base sm:text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 min-h-[44px]"
                         />
-
-                        <div className="grid md:grid-cols-2 gap-3">
-                          <input
-                            type="number"
-                            placeholder="Years of Experience"
-                            value={formData.occupationDetails.yearsOfExperience}
-                            onChange={(e) =>
-                              handleOccupationChange(
-                                "yearsOfExperience",
-                                e.target.value,
-                              )
-                            }
-                            className="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500"
-                          />
-                          <input
-                            type="text"
-                            placeholder="Industry"
-                            value={formData.occupationDetails.industry}
-                            onChange={(e) =>
-                              handleOccupationChange("industry", e.target.value)
-                            }
-                            className="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500"
-                          />
-                        </div>
                       </div>
                     )}
                 </div>
               )}
 
-              <div className="flex justify-between mt-8 pt-6 border-t">
+              <div className="flex justify-between mt-8 pt-6 border-t flex-wrap gap-3">
                 {step > 1 && (
                   <button
                     type="button"
                     onClick={prevStep}
-                    className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all font-medium"
+                    className="px-4 sm:px-6 py-2.5 sm:py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all font-medium text-sm sm:text-base min-h-[44px]"
                   >
                     ← Previous
                   </button>
@@ -869,7 +914,7 @@ export default function RegisterPage() {
                   <button
                     type="button"
                     onClick={nextStep}
-                    className="px-6 py-2 bg-linear-to-r from-emerald-600 to-teal-600 text-white rounded-lg hover:from-emerald-700 hover:to-teal-700 transition-all ml-auto font-medium shadow-md"
+                    className="px-4 sm:px-6 py-2.5 sm:py-2 bg-linear-to-r from-emerald-600 to-teal-600 text-white rounded-lg hover:from-emerald-700 hover:to-teal-700 transition-all ml-auto font-medium shadow-md text-sm sm:text-base min-h-[44px]"
                   >
                     Next →
                   </button>
@@ -878,7 +923,7 @@ export default function RegisterPage() {
                     type="button"
                     onClick={handleSubmit}
                     disabled={loading}
-                    className="px-6 py-2 bg-linear-to-r from-emerald-600 to-teal-600 text-white rounded-lg hover:from-emerald-700 hover:to-teal-700 transition-all ml-auto font-medium shadow-md flex items-center gap-2 disabled:opacity-50"
+                    className="px-4 sm:px-6 py-2.5 sm:py-2 bg-linear-to-r from-emerald-600 to-teal-600 text-white rounded-lg hover:from-emerald-700 hover:to-teal-700 transition-all ml-auto font-medium shadow-md flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base min-h-[44px]"
                   >
                     {loading ? (
                       <>
@@ -886,7 +931,7 @@ export default function RegisterPage() {
                         Processing...
                       </>
                     ) : (
-                      "Register & Pay"
+                      "Register"
                     )}
                   </button>
                 )}
