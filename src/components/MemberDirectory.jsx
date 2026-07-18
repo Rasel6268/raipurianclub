@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import MemberCard from "./Members/MemberCard";
 import FundingMemberCard from "./Members/FundingMemberCard";
+import HeroProp from "./HeroProp";
 
 const MemberDirectory = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -50,7 +51,8 @@ const MemberDirectory = () => {
       contributions: ["Core Leadership", "Strategy Planning"],
       achievements: ["Managing Committee Lead"],
       bio: "Convener of the managing committee, leading strategic direction and operations.",
-      image: "https://res.cloudinary.com/doumlnejx/image/upload/v1777464001/WhatsApp_Image_2026-04-29_at_5.44.28_PM_cvmbsf.jpg",
+      image:
+        "https://res.cloudinary.com/doumlnejx/image/upload/v1777464001/WhatsApp_Image_2026-04-29_at_5.44.28_PM_cvmbsf.jpg",
       social: { linkedin: "#", facebook: "#" },
     },
     {
@@ -69,7 +71,8 @@ const MemberDirectory = () => {
       contributions: ["Event Management", "Operations"],
       achievements: ["Outstanding Coordinator"],
       bio: "Handles coordination of events and internal operations.",
-      image: "https://res.cloudinary.com/doumlnejx/image/upload/v1777554338/WhatsApp_Image_2026-04-30_at_7.03.55_PM_1_k4jj6y.jpg",
+      image:
+        "https://res.cloudinary.com/doumlnejx/image/upload/v1777554338/WhatsApp_Image_2026-04-30_at_7.03.55_PM_1_k4jj6y.jpg",
       social: { linkedin: "#", facebook: "#" },
     },
     {
@@ -88,7 +91,8 @@ const MemberDirectory = () => {
       contributions: ["Support Operations"],
       achievements: ["Active Committee Member"],
       bio: "Supports coordination and ensures smooth execution of activities.",
-      image: "https://res.cloudinary.com/doumlnejx/image/upload/v1777616787/WhatsApp_Image_2026-05-01_at_12.04.06_PM_vhdkwc.jpg",
+      image:
+        "https://res.cloudinary.com/doumlnejx/image/upload/v1777616787/WhatsApp_Image_2026-05-01_at_12.04.06_PM_vhdkwc.jpg",
       social: { linkedin: "#", facebook: "#" },
     },
     {
@@ -107,7 +111,8 @@ const MemberDirectory = () => {
       contributions: ["Committee Support"],
       achievements: ["Managing Member Recognition"],
       bio: "Active member of the managing committee contributing to initiatives.",
-      image: "https://res.cloudinary.com/doumlnejx/image/upload/v1777554336/WhatsApp_Image_2026-04-30_at_7.04.24_PM_ixr5wy.jpg",
+      image:
+        "https://res.cloudinary.com/doumlnejx/image/upload/v1777554336/WhatsApp_Image_2026-04-30_at_7.04.24_PM_ixr5wy.jpg",
       social: { linkedin: "#", facebook: "#" },
     },
     {
@@ -126,7 +131,8 @@ const MemberDirectory = () => {
       contributions: ["Community Activities"],
       achievements: ["Active Member"],
       bio: "Supports community-focused programs and initiatives.",
-      image: "https://res.cloudinary.com/doumlnejx/image/upload/v1777616958/WhatsApp_Image_2026-05-01_at_12.09.49_PM_p9ajox.jpg",
+      image:
+        "https://res.cloudinary.com/doumlnejx/image/upload/v1777616958/WhatsApp_Image_2026-05-01_at_12.09.49_PM_p9ajox.jpg",
       social: { linkedin: "#", facebook: "#" },
     },
     {
@@ -145,7 +151,8 @@ const MemberDirectory = () => {
       contributions: ["Team Collaboration"],
       achievements: ["Dedicated Member"],
       bio: "Contributes to team collaboration and club development.",
-      image: "https://res.cloudinary.com/doumlnejx/image/upload/v1777554337/WhatsApp_Image_2026-04-30_at_7.04.15_PM_ojkb8c.jpg",
+      image:
+        "https://res.cloudinary.com/doumlnejx/image/upload/v1777554337/WhatsApp_Image_2026-04-30_at_7.04.15_PM_ojkb8c.jpg",
       social: { linkedin: "#", facebook: "#" },
     },
     {
@@ -164,7 +171,8 @@ const MemberDirectory = () => {
       contributions: ["Event Participation"],
       achievements: ["Committee Member"],
       bio: "Actively participates in organizing cultural and social events.",
-      image: "https://res.cloudinary.com/doumlnejx/image/upload/v1777615406/10_oasrak.jpg",
+      image:
+        "https://res.cloudinary.com/doumlnejx/image/upload/v1777615406/10_oasrak.jpg",
       social: { linkedin: "#", facebook: "#" },
     },
     {
@@ -202,7 +210,8 @@ const MemberDirectory = () => {
       contributions: ["Community Engagement"],
       achievements: ["Team Player"],
       bio: "Engaged in community development and volunteer activities.",
-      image: "https://res.cloudinary.com/doumlnejx/image/upload/v1777554797/WhatsApp_Image_2026-04-30_at_7.12.38_PM_l7ypn7.jpg",
+      image:
+        "https://res.cloudinary.com/doumlnejx/image/upload/v1777554797/WhatsApp_Image_2026-04-30_at_7.12.38_PM_l7ypn7.jpg",
       social: { linkedin: "#", facebook: "#" },
     },
     {
@@ -221,7 +230,8 @@ const MemberDirectory = () => {
       contributions: ["Committee Support"],
       achievements: ["Active Member"],
       bio: "Contributes to club success through active involvement.",
-      image: "https://res.cloudinary.com/doumlnejx/image/upload/v1777625882/WhatsApp_Image_2026-05-01_at_12.42.58_PM_qzx8fd.jpg",
+      image:
+        "https://res.cloudinary.com/doumlnejx/image/upload/v1777625882/WhatsApp_Image_2026-05-01_at_12.42.58_PM_qzx8fd.jpg",
       social: { linkedin: "#", facebook: "#" },
     },
   ];
@@ -433,7 +443,8 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=2070&auto=format&fit=crop",
+      image:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=2070&auto=format&fit=crop",
       bio: "Founding member actively involved in community initiatives.",
     },
     {
@@ -544,7 +555,8 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=2070&auto=format&fit=crop",
+      image:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=2070&auto=format&fit=crop",
       bio: "Founding member contributing to community initiatives.",
     },
     {
@@ -753,8 +765,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "",
       bio: "Founding member dedicated to community welfare.",
     },
     {
@@ -767,8 +778,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1163,7 +1173,7 @@ const MemberDirectory = () => {
         "https://res.cloudinary.com/doumlnejx/image/upload/v1777709637/WhatsApp_Image_2026-05-02_at_11.13.15_AM_vqyqc2.jpg",
       bio: "Founding member passionate about community service.",
     },
-     {
+    {
       id: 165,
       name: "Altaf Hossain Bhuiyan",
       memberType: "Founding Member",
@@ -1201,11 +1211,10 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "",
       bio: "Founding member passionate about community service.",
     },
-      {
+    {
       id: 168,
       name: "Zahirul Islam",
       memberType: "Founding Member",
@@ -1215,8 +1224,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1229,8 +1237,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1243,8 +1250,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1257,8 +1263,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1271,8 +1276,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1285,8 +1289,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1299,8 +1302,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1313,8 +1315,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1327,8 +1328,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1341,8 +1341,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1355,8 +1354,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1369,8 +1367,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1383,8 +1380,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1397,8 +1393,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1411,8 +1406,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1439,8 +1433,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1453,8 +1446,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1467,8 +1459,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1481,8 +1472,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1495,8 +1485,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1509,8 +1498,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1523,8 +1511,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1537,8 +1524,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1551,8 +1537,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1565,8 +1550,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1579,8 +1563,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1593,8 +1576,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1607,8 +1589,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1621,8 +1602,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1635,8 +1615,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:
-        "",
+      image: "",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1649,7 +1628,8 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:"https://res.cloudinary.com/doumlnejx/image/upload/v1782844960/Kamruzzaman_-_PP_y1656e.png",
+      image:
+        "https://res.cloudinary.com/doumlnejx/image/upload/v1782844960/Kamruzzaman_-_PP_y1656e.png",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1662,11 +1642,10 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image:"https://res.cloudinary.com/doumlnejx/image/upload/v1777554797/WhatsApp_Image_2026-04-30_at_7.12.38_PM_l7ypn7.jpg",
+      image:
+        "https://res.cloudinary.com/doumlnejx/image/upload/v1777554797/WhatsApp_Image_2026-04-30_at_7.12.38_PM_l7ypn7.jpg",
       bio: "Founding member passionate about community service.",
-    }
-
-    //
+    },
   ];
 
   // General Members Data
@@ -1688,8 +1667,7 @@ const MemberDirectory = () => {
       image:
         "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=2070&auto=format&fit=crop",
       social: { linkedin: "#", twitter: "#" },
-    }
-    
+    },
   ];
 
   // Filter members based on search term
@@ -1719,322 +1697,301 @@ const MemberDirectory = () => {
   if (!mounted) return null;
 
   return (
-    <section className="relative py-16 min-h-screen bg-linear-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+    <section className="relative min-h-screen bg-linear-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
       {/* Background Decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-72 h-72 bg-emerald-300 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-float-slow"></div>
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-300 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-float-reverse"></div>
       </div>
 
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 bg-emerald-100 dark:bg-emerald-900/40 rounded-full px-4 py-1.5 mb-4">
-            <Users className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-            <span className="text-sm font-medium text-emerald-700 dark:text-emerald-300">
-              Our Community
-            </span>
-          </div>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-4">
-            Member{" "}
-            <span className="relative inline-block">
-              <span className="relative z-10 bg-linear-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">
-                Directory
-              </span>
-              <svg
-                className="absolute -bottom-2 left-0 w-full h-3 text-emerald-400/40"
-                viewBox="0 0 100 8"
-                preserveAspectRatio="none"
-              >
-                <path
-                  d="M0 4 L100 4"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  fill="none"
-                  strokeLinecap="round"
+      <div className="relative z-10">
+        {/* Hero Section - Full Width */}
+        <HeroProp
+          title="Our Community"
+          heading1="Member"
+          heading2="Directory"
+          content="Meet the incredible individuals shaping our community's future"
+          Icon={Users}
+        />
+
+        {/* Content Container */}
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Search and Filter Bar */}
+          <div className="max-w-4xl mx-auto mb-12">
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex-1 relative">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Search by name, profession, or location..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-12 pr-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300"
                 />
-              </svg>
-            </span>
-          </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            Meet the incredible individuals shaping our community's future
-          </p>
-        </div>
-
-        {/* Search and Filter Bar */}
-        <div className="max-w-4xl mx-auto mb-12">
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="flex-1 relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search by name, profession, or location..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300"
-              />
-            </div>
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center justify-center gap-2 px-6 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300"
-            >
-              <Filter className="w-5 h-5" />
-              <span>Filters</span>
-              {showFilters ? (
-                <ChevronUp className="w-4 h-4" />
-              ) : (
-                <ChevronDown className="w-4 h-4" />
-              )}
-            </button>
-          </div>
-
-          {/* Filter Options */}
-          {showFilters && (
-            <div className="mt-4 p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
-              <div className="flex flex-wrap gap-3">
-                <button
-                  onClick={() => setSelectedCategory("all")}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                    selectedCategory === "all"
-                      ? "bg-emerald-600 text-white"
-                      : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
-                  }`}
-                >
-                  All Members
-                </button>
-                <button
-                  onClick={() => setSelectedCategory("patron")}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                    selectedCategory === "patron"
-                      ? "bg-emerald-600 text-white"
-                      : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
-                  }`}
-                >
-                  Patron Members
-                </button>
-                <button
-                  onClick={() => setSelectedCategory("donor")}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                    selectedCategory === "donor"
-                      ? "bg-emerald-600 text-white"
-                      : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
-                  }`}
-                >
-                  Donner Members
-                </button>
-                <button
-                  onClick={() => setSelectedCategory("founding")}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                    selectedCategory === "founding"
-                      ? "bg-emerald-600 text-white"
-                      : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
-                  }`}
-                >
-                  Founding Members
-                </button>
-                <button
-                  onClick={() => setSelectedCategory("managing")}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                    selectedCategory === "managing"
-                      ? "bg-emerald-600 text-white"
-                      : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
-                  }`}
-                >
-                  Managing Members
-                </button>
-                <button
-                  onClick={() => setSelectedCategory("general")}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                    selectedCategory === "general"
-                      ? "bg-emerald-600 text-white"
-                      : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
-                  }`}
-                >
-                  General Members
-                </button>
               </div>
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className="flex items-center justify-center gap-2 px-6 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300"
+              >
+                <Filter className="w-5 h-5" />
+                <span>Filters</span>
+                {showFilters ? (
+                  <ChevronUp className="w-4 h-4" />
+                ) : (
+                  <ChevronDown className="w-4 h-4" />
+                )}
+              </button>
             </div>
-          )}
-        </div>
 
-        <div className="mb-16">
-          {/* Patron & Donor Members - Side by Side */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Patron Members Section */}
-            {(selectedCategory === "all" || selectedCategory === "patron") &&
-              filteredPatronMembers.length > 0 && (
-                <div>
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 bg-linear-to-br from-amber-600 to-yellow-600 rounded-lg flex items-center justify-center shadow-lg">
-                      <Crown className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
-                        Patron Members
-                      </h2>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Esteemed patrons & advisors
-                      </p>
-                    </div>
-                  </div>
-                  <div className="space-y-4">
-                    {filteredPatronMembers.map((member) => (
-                      <FundingMemberCard
-                        key={member.id}
-                        member={member}
-                        isManaging={true}
-                        expanded={expandedMember === member.id}
-                        onToggle={() => toggleMemberExpand(member.id)}
-                      />
-                    ))}
-                  </div>
-                </div>
-              )}
-
-            {/* Donor Members Section */}
-            {(selectedCategory === "all" || selectedCategory === "donor") &&
-              filteredDonorMembers.length > 0 && (
-                <div>
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-pink-500 rounded-lg flex items-center justify-center shadow-lg">
-                      <Heart className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
-                        Donor Members
-                      </h2>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Generous contributors
-                      </p>
-                    </div>
-                  </div>
-                  <div className="space-y-4">
-                    {filteredDonorMembers.map((member) => (
-                      <FundingMemberCard
-                        key={member.id}
-                        member={member}
-                        isManaging={false}
-                        expanded={expandedMember === member.id}
-                        onToggle={() => toggleMemberExpand(member.id)}
-                      />
-                    ))}
-                  </div>
-                </div>
-              )}
-          </div>
-        </div>
-
-        {/* Founding Members Section */}
-        {(selectedCategory === "all" || selectedCategory === "founding") &&
-          filteredFoundingMembers.length > 0 && (
-            <div className="mb-16">
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-12 h-12 bg-linear-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg">
-                  <Sparkles className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+            {/* Filter Options */}
+            {showFilters && (
+              <div className="mt-4 p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+                <div className="flex flex-wrap gap-3">
+                  <button
+                    onClick={() => setSelectedCategory("all")}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                      selectedCategory === "all"
+                        ? "bg-emerald-600 text-white"
+                        : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                    }`}
+                  >
+                    All Members
+                  </button>
+                  <button
+                    onClick={() => setSelectedCategory("patron")}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                      selectedCategory === "patron"
+                        ? "bg-emerald-600 text-white"
+                        : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                    }`}
+                  >
+                    Patron Members
+                  </button>
+                  <button
+                    onClick={() => setSelectedCategory("donor")}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                      selectedCategory === "donor"
+                        ? "bg-emerald-600 text-white"
+                        : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                    }`}
+                  >
+                    Donor Members
+                  </button>
+                  <button
+                    onClick={() => setSelectedCategory("founding")}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                      selectedCategory === "founding"
+                        ? "bg-emerald-600 text-white"
+                        : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                    }`}
+                  >
                     Founding Members
-                  </h2>
-                  <p className="text-gray-500 dark:text-gray-400">
-                    The visionaries who started it all
-                  </p>
-                </div>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredFoundingMembers.map((member) => (
-                  <MemberCard
-                    key={member.id}
-                    member={member}
-                    isManaging={false}
-                    expanded={expandedMember === member.id}
-                    onToggle={() => toggleMemberExpand(member.id)}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
-
-        {/* Managing Members Section */}
-        {(selectedCategory === "all" || selectedCategory === "managing") &&
-          filteredManagingMembers.length > 0 && (
-            <div className="mb-16">
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-12 h-12 bg-linear-to-br from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center shadow-lg">
-                  <Trophy className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+                  </button>
+                  <button
+                    onClick={() => setSelectedCategory("managing")}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                      selectedCategory === "managing"
+                        ? "bg-emerald-600 text-white"
+                        : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                    }`}
+                  >
                     Managing Members
-                  </h2>
-                  <p className="text-gray-500 dark:text-gray-400">
-                    Leadership that drives our vision forward
-                  </p>
-                </div>
-              </div>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {filteredManagingMembers.map((member) => (
-                  <FundingMemberCard
-                    key={member.id}
-                    member={member}
-                    isManaging={true}
-                    expanded={expandedMember === member.id}
-                    onToggle={() => toggleMemberExpand(member.id)}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
-
-        {/* General Members Section */}
-        {(selectedCategory === "all" || selectedCategory === "general") &&
-          filteredGeneralMembers.length > 0 && (
-            <div>
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-12 h-12 bg-linear-to-br from-emerald-500 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg">
-                  <Users className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+                  </button>
+                  <button
+                    onClick={() => setSelectedCategory("general")}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                      selectedCategory === "general"
+                        ? "bg-emerald-600 text-white"
+                        : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                    }`}
+                  >
                     General Members
-                  </h2>
-                  <p className="text-gray-500 dark:text-gray-400">
-                    {filteredGeneralMembers.length} active members
-                  </p>
+                  </button>
                 </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredGeneralMembers.map((member) => (
-                  <MemberCard
-                    key={member.id}
-                    member={member}
-                    isManaging={false}
-                    expanded={expandedMember === member.id}
-                    onToggle={() => toggleMemberExpand(member.id)}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
+            )}
+          </div>
 
-        {/* No Results */}
-        {filteredPatronMembers.length === 0 &&
-          filteredDonorMembers.length === 0 &&
-          filteredManagingMembers.length === 0 &&
-          filteredFoundingMembers.length === 0 &&
-          filteredGeneralMembers.length === 0 && (
-            <div className="text-center py-16">
-              <div className="w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
-                <SearchXIcon className="w-10 h-10 text-gray-400" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                No members found
-              </h3>
-              <p className="text-gray-500 dark:text-gray-400">
-                Try adjusting your search or filter criteria
-              </p>
+          {/* Member Sections */}
+          <div className="mb-16">
+            {/* Patron & Donor Members - Side by Side */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Patron Members Section */}
+              {(selectedCategory === "all" || selectedCategory === "patron") &&
+                filteredPatronMembers.length > 0 && (
+                  <div>
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="w-10 h-10 bg-linear-to-br from-amber-600 to-yellow-600 rounded-lg flex items-center justify-center shadow-lg">
+                        <Crown className="w-5 h-5 text-white" />
+                      </div>
+                      <div>
+                        <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
+                          Patron Members
+                        </h2>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                          Esteemed patrons & advisors
+                        </p>
+                      </div>
+                    </div>
+                    <div className="space-y-4">
+                      {filteredPatronMembers.map((member) => (
+                        <FundingMemberCard
+                          key={member.id}
+                          member={member}
+                          isManaging={true}
+                          expanded={expandedMember === member.id}
+                          onToggle={() => toggleMemberExpand(member.id)}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+              {/* Donor Members Section */}
+              {(selectedCategory === "all" || selectedCategory === "donor") &&
+                filteredDonorMembers.length > 0 && (
+                  <div>
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-pink-500 rounded-lg flex items-center justify-center shadow-lg">
+                        <Heart className="w-5 h-5 text-white" />
+                      </div>
+                      <div>
+                        <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
+                          Donor Members
+                        </h2>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                          Generous contributors
+                        </p>
+                      </div>
+                    </div>
+                    <div className="space-y-4">
+                      {filteredDonorMembers.map((member) => (
+                        <FundingMemberCard
+                          key={member.id}
+                          member={member}
+                          isManaging={false}
+                          expanded={expandedMember === member.id}
+                          onToggle={() => toggleMemberExpand(member.id)}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
             </div>
-          )}
+          </div>
+
+          {/* Founding Members Section */}
+          {(selectedCategory === "all" || selectedCategory === "founding") &&
+            filteredFoundingMembers.length > 0 && (
+              <div className="mb-16">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-12 h-12 bg-linear-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg">
+                    <Sparkles className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+                      Founding Members
+                    </h2>
+                    <p className="text-gray-500 dark:text-gray-400">
+                      The visionaries who started it all
+                    </p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredFoundingMembers.map((member) => (
+                    <MemberCard
+                      key={member.id}
+                      member={member}
+                      isManaging={false}
+                      expanded={expandedMember === member.id}
+                      onToggle={() => toggleMemberExpand(member.id)}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+          {/* Managing Members Section */}
+          {(selectedCategory === "all" || selectedCategory === "managing") &&
+            filteredManagingMembers.length > 0 && (
+              <div className="mb-16">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-12 h-12 bg-linear-to-br from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center shadow-lg">
+                    <Trophy className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+                      Managing Members
+                    </h2>
+                    <p className="text-gray-500 dark:text-gray-400">
+                      Leadership that drives our vision forward
+                    </p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {filteredManagingMembers.map((member) => (
+                    <FundingMemberCard
+                      key={member.id}
+                      member={member}
+                      isManaging={true}
+                      expanded={expandedMember === member.id}
+                      onToggle={() => toggleMemberExpand(member.id)}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+          {/* General Members Section */}
+          {(selectedCategory === "all" || selectedCategory === "general") &&
+            filteredGeneralMembers.length > 0 && (
+              <div>
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-12 h-12 bg-linear-to-br from-emerald-500 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg">
+                    <Users className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+                      General Members
+                    </h2>
+                    <p className="text-gray-500 dark:text-gray-400">
+                      {filteredGeneralMembers.length} active members
+                    </p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredGeneralMembers.map((member) => (
+                    <MemberCard
+                      key={member.id}
+                      member={member}
+                      isManaging={false}
+                      expanded={expandedMember === member.id}
+                      onToggle={() => toggleMemberExpand(member.id)}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+          {/* No Results */}
+          {filteredPatronMembers.length === 0 &&
+            filteredDonorMembers.length === 0 &&
+            filteredManagingMembers.length === 0 &&
+            filteredFoundingMembers.length === 0 &&
+            filteredGeneralMembers.length === 0 && (
+              <div className="text-center py-16">
+                <div className="w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <SearchXIcon className="w-10 h-10 text-gray-400" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                  No members found
+                </h3>
+                <p className="text-gray-500 dark:text-gray-400">
+                  Try adjusting your search or filter criteria
+                </p>
+              </div>
+            )}
+        </div>
       </div>
 
       <style jsx>{`

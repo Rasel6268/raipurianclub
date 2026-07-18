@@ -1,4 +1,4 @@
-// components/Navbar.js
+// components/Navbar.js - Updated with Membership Dropdown
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -19,14 +19,18 @@ import {
   ChevronDown,
   Sparkles,
   Award,
+  Crown,
+  GitBranch,
+  Layers,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 const Navbar2 = () => {
-  const { user, loading, isAuthenticated, isAdmin, isMember, isReviewPending, logout,isSuperAdmin } = useAuth();
+  const { user, loading, isAuthenticated, isAdmin, isMember, isReviewPending, logout, isSuperAdmin } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isMembershipDropdownOpen, setIsMembershipDropdownOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
 
@@ -42,6 +46,7 @@ const Navbar2 = () => {
   useEffect(() => {
     setIsMobileMenuOpen(false);
     setIsUserMenuOpen(false);
+    setIsMembershipDropdownOpen(false);
   }, [pathname]);
 
   // Show loading state while checking authentication
@@ -62,7 +67,6 @@ const Navbar2 = () => {
               </span>
             </div>
             
-            {/* Skeleton loader for nav items */}
             <div className="hidden md:flex items-center space-x-1">
               <div className="h-10 w-20 bg-gray-200 rounded-full animate-pulse"></div>
               <div className="h-10 w-24 bg-gray-200 rounded-full animate-pulse"></div>
@@ -72,7 +76,6 @@ const Navbar2 = () => {
               <div className="h-10 w-24 bg-gray-200 rounded-full animate-pulse ml-2"></div>
             </div>
             
-            {/* Mobile skeleton */}
             <div className="md:hidden">
               <div className="h-10 w-10 bg-gray-200 rounded-full animate-pulse"></div>
             </div>
@@ -89,13 +92,30 @@ const Navbar2 = () => {
     { name: "Amenities", href: "/amenities", icon: Sparkles, showAlways: true },
     { name: "Events", href: "/events", icon: Calendar, showAlways: true },
     { name: "Gallery", href: "/gallery", icon: Image, showAlways: true },
-    { name: "Beauty of Raipur", href: "/beauty", icon: Image, showAlways: true },
-    { name: "Projects", href: "/projects", icon: Heart, showAlways: true },
+    { name: "Beauty of Raipur", href: "/beauty", icon: Image, showAlways: true }
   ];
 
-
-
-
+  // Membership dropdown items
+  const membershipDropdownItems = [
+    { 
+      name: "View Plans", 
+      href: "/", 
+      icon: Crown,
+      description: "Explore all membership plans"
+    },
+    { 
+      name: "Compare Plans", 
+      href: "/membership/compare", 
+      icon: GitBranch,
+      description: "Compare membership benefits"
+    },
+    { 
+      name: "Terms & Condition", 
+      href: "/terms", 
+      icon: Award,
+      description: "Become a member today"
+    },
+  ];
 
   const handleLogout = async () => {
     setIsUserMenuOpen(false);
@@ -111,20 +131,16 @@ const Navbar2 = () => {
   };
 
   const getStatusBadge = () => {
-  if (isSuperAdmin)
-    return { text: "Super Admin", color: "bg-red-100 text-red-700" };
-
-  if (isAdmin)
-    return { text: "Admin", color: "bg-purple-100 text-purple-700" };
-
-  if (isReviewPending)
-    return { text: "Pending Review", color: "bg-yellow-100 text-yellow-700" };
-
-  if (isMember && user?.status === "approved")
-    return { text: "Member", color: "bg-green-100 text-green-700" };
-
-  return null;
-};
+    if (isSuperAdmin)
+      return { text: "Super Admin", color: "bg-red-100 text-red-700" };
+    if (isAdmin)
+      return { text: "Admin", color: "bg-purple-100 text-purple-700" };
+    if (isReviewPending)
+      return { text: "Pending Review", color: "bg-yellow-100 text-yellow-700" };
+    if (isMember && user?.status === "approved")
+      return { text: "Member", color: "bg-green-100 text-green-700" };
+    return null;
+  };
 
   const statusBadge = getStatusBadge();
 
@@ -179,10 +195,56 @@ const Navbar2 = () => {
                 </Link>
               ))}
 
+              {/* Membership Dropdown */}
+              <div 
+                className="relative"
+                onMouseEnter={() => setIsMembershipDropdownOpen(true)}
+                onMouseLeave={() => setIsMembershipDropdownOpen(false)}
+              >
+                <button
+                  className={`px-4 py-2 rounded-full font-medium transition-all duration-300 hover:scale-105 flex items-center gap-1 ${
+                    pathname.includes('/membership')
+                      ? isScrolled
+                        ? "text-emerald-600 bg-emerald-50"
+                        : "text-white bg-white/20"
+                      : isScrolled
+                      ? "text-slate-600 hover:text-emerald-600 hover:bg-emerald-50"
+                      : "text-white/90 hover:text-white hover:bg-white/10"
+                  }`}
+                >
+                  <Crown className="w-4 h-4" />
+                  Membership
+                  <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isMembershipDropdownOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {/* Dropdown Menu */}
+                {isMembershipDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden z-50 animate-fade-down">
+                    <div className="p-2">
+                      {membershipDropdownItems.map((item) => (
+                        <Link
+                          key={item.name}
+                          href={item.href}
+                          className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-emerald-50 transition-colors group"
+                          onClick={() => setIsMembershipDropdownOpen(false)}
+                        >
+                          <div className={`p-2 rounded-lg bg-emerald-100 text-emerald-600 group-hover:bg-emerald-200 transition-colors`}>
+                            <item.icon className="w-4 h-4" />
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium text-gray-800">{item.name}</p>
+                            <p className="text-xs text-gray-500">{item.description}</p>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
               {/* Conditional Navigation based on auth status */}
               {isAuthenticated ? (
                 <>
-                
                   {/* User Menu Dropdown */}
                   <div className="relative ml-4">
                     <button
@@ -308,7 +370,7 @@ const Navbar2 = () => {
         </div>
       </header>
 
-      {/* Mobile Menu Overlay - Only show when not loading */}
+      {/* Mobile Menu Overlay */}
       {!loading && (
         <div
           className={`fixed inset-0 z-40 bg-white/95 backdrop-blur-lg transition-all duration-500 md:hidden ${
@@ -318,7 +380,6 @@ const Navbar2 = () => {
           }`}
           style={{ top: "70px" }}
         >
-          {/* Rest of your mobile menu content remains the same */}
           <div className="flex flex-col h-full overflow-y-auto">
             {/* User Info Section (if logged in) */}
             {isAuthenticated && (
@@ -366,6 +427,27 @@ const Navbar2 = () => {
                 ))}
               </div>
 
+              {/* Membership Section in Mobile */}
+              <div className="mt-6 pt-6 border-t border-gray-100">
+                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
+                  Membership
+                </p>
+                {membershipDropdownItems.map((item) => (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 transition-colors"
+                  >
+                    <item.icon className="w-5 h-5" />
+                    <div>
+                      <span className="font-medium">{item.name}</span>
+                      <p className="text-xs text-gray-400">{item.description}</p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+
               {/* Authenticated User Links */}
               {isAuthenticated && (
                 <div className="mt-6 pt-6 border-t border-gray-100">
@@ -398,8 +480,6 @@ const Navbar2 = () => {
                       <span className="font-medium">Settings</span>
                     </Link>
                   </div>
-
-              
                 </div>
               )}
 
