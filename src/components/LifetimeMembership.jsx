@@ -1,576 +1,509 @@
-// app/membership/compare/page.jsx
-'use client';
-import React, { useState, useEffect, useRef } from 'react';
-import Link from 'next/link';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+// components/LifetimeMembership.js
+"use client";
+import React, { useState, useEffect, useRef } from "react";
+import Link from "next/link";
 import {
   Crown,
   Star,
-  Sparkles,
   CheckCircle,
   XCircle,
-  ArrowRight,
-  Heart,
-  Calendar,
   Users,
   Award,
   Gift,
-  Zap,
   Shield,
-  Coffee,
-  Wifi,
-  Car,
-  Home,
-  Bell,
-  CreditCard,
-  TrendingUp,
-  Rocket,
-  Gem,
-  Diamond,
   Medal,
-  Trophy,
   Infinity,
-  Clock,
-  BadgeCheck,
-  Wallet,
-  PiggyBank,
-  Globe,
-  Lock,
-  Unlock,
-  Mail,
-  Phone,
-  MapPin,
-  Video,
-  Headphones,
-  FileText,
-  Share2,
-  ThumbsUp,
   GitBranch,
   Layers,
-  BarChart3,
   DollarSign,
-} from 'lucide-react';
-
-gsap.registerPlugin(ScrollTrigger);
-
-const TicketIcon = ({ className }) => (
-  <span className={className}>🎟️</span>
-);
-
-const BookOpenIcon = ({ className }) => (
-  <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-  </svg>
-);
+  PiggyBank,
+  Check,
+  ChevronRight,
+  Sparkles,
+} from "lucide-react";
 
 const MembershipCompare = () => {
-  const [selectedTier, setSelectedTier] = useState(null);
+  const [selectedTier, setSelectedTier] = useState("life");
   const [hoveredRow, setHoveredRow] = useState(null);
-  const tableRef = useRef(null);
-  const headerRef = useRef(null);
+  const [viewMode, setViewMode] = useState("cards"); // 'cards' or 'table'
 
-  // Membership categories based on the provided data
   const membershipCategories = [
     {
-      id: 'patron',
-      name: 'Patron Member',
+      id: "patron",
+      name: "Patron Member",
       icon: Crown,
-      color: 'from-amber-500 to-orange-500',
-      bgColor: 'bg-amber-50',
-      textColor: 'text-amber-700',
-      fee: '৳10,00,000',
+      color: "from-amber-500 to-orange-500",
+      bgColor: "bg-amber-50 dark:bg-amber-950/30",
+      textColor: "text-amber-700 dark:text-amber-300",
+      badgeColor: "bg-amber-500 text-white",
+      fee: "৳10,00,000",
       features: {
-        age: '60+ years',
-        education: 'Post Graduation',
-        location: 'Raipurian',
-        profession: 'Professional',
-        politics: 'Not actively involved',
-        voting: 'Yes',
-        servicePriority: 'Priority 1',
-        generalDiscount: '50%',
-        foodDiscount: '25%',
-        beverageDiscount: 'Not applicable',
-        maxGuests: 'Unlimited',
-        inheritance: 'Yes',
-        transferability: 'Yes',
-        honourBoard: 'Separate Honour Board',
-        execCommittee: 'Meetings only',
-        monthlySubscription: 'Not applicable',
-      }
+        age: "60+ years",
+        education: "Post Graduation",
+        location: "Raipurian",
+        profession: "Professional",
+        politics: "Not actively involved",
+        voting: "Yes",
+        servicePriority: "Priority 1",
+        generalDiscount: "50%",
+        foodDiscount: "25%",
+        beverageDiscount: "Not applicable",
+        maxGuests: "Unlimited",
+        inheritance: "Yes",
+        transferability: "Yes",
+        honourBoard: "Separate Honour Board",
+        execCommittee: "Meetings only",
+        monthlySubscription: "Not applicable",
+      },
     },
     {
-      id: 'donor',
-      name: 'Donor Member',
+      id: "donor",
+      name: "Donor Member",
       icon: Gift,
-      color: 'from-purple-500 to-pink-500',
-      bgColor: 'bg-purple-50',
-      textColor: 'text-purple-700',
-      fee: '৳6,00,000',
+      color: "from-purple-500 to-pink-500",
+      bgColor: "bg-purple-50 dark:bg-purple-950/30",
+      textColor: "text-purple-700 dark:text-purple-300",
+      badgeColor: "bg-purple-500 text-white",
+      fee: "৳6,00,000",
       features: {
-        age: '45+ years',
-        education: 'Graduate',
-        location: 'Raipurian',
-        profession: 'Professional/Well-established',
-        politics: 'Not actively involved',
-        voting: 'Yes',
-        servicePriority: 'Priority 1',
-        generalDiscount: '45%',
-        foodDiscount: '20%',
-        beverageDiscount: 'Not applicable',
-        maxGuests: 'Unlimited',
-        inheritance: 'Yes',
-        transferability: 'No',
-        honourBoard: 'Separate Honour Board',
-        execCommittee: 'Meetings only',
-        monthlySubscription: 'Not applicable',
-      }
+        age: "45+ years",
+        education: "Graduate",
+        location: "Raipurian",
+        profession: "Professional/Established",
+        politics: "Not actively involved",
+        voting: "Yes",
+        servicePriority: "Priority 1",
+        generalDiscount: "45%",
+        foodDiscount: "20%",
+        beverageDiscount: "Not applicable",
+        maxGuests: "Unlimited",
+        inheritance: "Yes",
+        transferability: "No",
+        honourBoard: "Separate Honour Board",
+        execCommittee: "Meetings only",
+        monthlySubscription: "Not applicable",
+      },
     },
     {
-      id: 'founder',
-      name: 'Founder Member',
-      icon: Star,
-      color: 'from-blue-500 to-cyan-500',
-      bgColor: 'bg-blue-50',
-      textColor: 'text-blue-700',
-      fee: '৳2,00,000',
-      features: {
-        age: '18+ years',
-        education: 'Graduate',
-        location: 'Raipurian',
-        profession: 'Professionally established',
-        politics: 'Not actively involved in Raipur',
-        voting: 'Yes',
-        servicePriority: 'Priority 1',
-        generalDiscount: '40%',
-        foodDiscount: '20%',
-        beverageDiscount: 'Not applicable',
-        maxGuests: 'Unlimited',
-        inheritance: 'Yes',
-        transferability: 'Yes',
-        honourBoard: 'Separate Honour Board',
-        execCommittee: 'Eligible for Executive Committee',
-        monthlySubscription: 'Applicable first year',
-      }
-    },
-    {
-      id: 'life',
-      name: 'Life Member',
+      id: "life",
+      name: "Life Member",
       icon: Infinity,
-      color: 'from-emerald-500 to-teal-500',
-      bgColor: 'bg-emerald-50',
-      textColor: 'text-emerald-700',
-      fee: '৳4,00,000',
+      color: "from-emerald-500 to-teal-500",
+      bgColor: "bg-emerald-50 dark:bg-emerald-950/30",
+      textColor: "text-emerald-700 dark:text-emerald-300",
+      badgeColor: "bg-emerald-500 text-white",
+      popular: true,
+      fee: "৳4,00,000",
       features: {
-        age: '18+ years',
-        education: 'Graduate',
-        location: 'Raipurian',
-        profession: 'Professional/Well-established',
-        politics: 'Not actively involved in Raipur',
-        voting: 'Yes',
-        servicePriority: 'Priority 2',
-        generalDiscount: '35%',
-        foodDiscount: '20%',
-        beverageDiscount: 'Not applicable',
-        maxGuests: 'Up to 6',
-        inheritance: 'Yes',
-        transferability: 'Yes',
-        honourBoard: 'Not applicable',
-        execCommittee: 'Eligible for Executive Committee',
-        monthlySubscription: 'Applicable first year',
-      }
+        age: "18+ years",
+        education: "Graduate",
+        location: "Raipurian",
+        profession: "Professional/Established",
+        politics: "Not actively in Raipur",
+        voting: "Yes",
+        servicePriority: "Priority 2",
+        generalDiscount: "35%",
+        foodDiscount: "20%",
+        beverageDiscount: "Not applicable",
+        maxGuests: "Up to 6",
+        inheritance: "Yes",
+        transferability: "Yes",
+        honourBoard: "Not applicable",
+        execCommittee: "Eligible for Committee",
+        monthlySubscription: "Applicable first year",
+      },
     },
     {
-      id: 'general',
-      name: 'General/Permanent Member',
+      id: "founder",
+      name: "Founder Member",
+      icon: Star,
+      color: "from-blue-500 to-cyan-500",
+      bgColor: "bg-blue-50 dark:bg-blue-950/30",
+      textColor: "text-blue-700 dark:text-blue-300",
+      badgeColor: "bg-blue-500 text-white",
+      fee: "৳2,00,000",
+      features: {
+        age: "18+ years",
+        education: "Graduate",
+        location: "Raipurian",
+        profession: "Professionally established",
+        politics: "Not actively in Raipur",
+        voting: "Yes",
+        servicePriority: "Priority 1",
+        generalDiscount: "40%",
+        foodDiscount: "20%",
+        beverageDiscount: "Not applicable",
+        maxGuests: "Unlimited",
+        inheritance: "Yes",
+        transferability: "Yes",
+        honourBoard: "Separate Honour Board",
+        execCommittee: "Eligible for Committee",
+        monthlySubscription: "Applicable first year",
+      },
+    },
+    {
+      id: "general",
+      name: "General Member",
       icon: Users,
-      color: 'from-indigo-500 to-blue-500',
-      bgColor: 'bg-indigo-50',
-      textColor: 'text-indigo-700',
-      fee: '৳2,00,000',
+      color: "from-indigo-500 to-blue-500",
+      bgColor: "bg-indigo-50 dark:bg-indigo-950/30",
+      textColor: "text-indigo-700 dark:text-indigo-300",
+      badgeColor: "bg-indigo-500 text-white",
+      fee: "৳2,00,000",
       features: {
-        age: '18+ years',
-        education: 'HSC',
-        location: 'Raipurian',
-        profession: 'Well-established',
-        politics: 'Any ideology accepted',
-        voting: 'No',
-        servicePriority: 'Priority 3',
-        generalDiscount: '25%',
-        foodDiscount: '20%',
-        beverageDiscount: 'Not applicable',
-        maxGuests: 'Up to 4',
-        inheritance: 'Yes',
-        transferability: 'Yes',
-        honourBoard: 'Not applicable',
-        execCommittee: 'Not applicable',
-        monthlySubscription: 'Applicable',
-      }
+        age: "18+ years",
+        education: "HSC",
+        location: "Raipurian",
+        profession: "Well-established",
+        politics: "Any ideology accepted",
+        voting: "No",
+        servicePriority: "Priority 3",
+        generalDiscount: "25%",
+        foodDiscount: "20%",
+        beverageDiscount: "Not applicable",
+        maxGuests: "Up to 4",
+        inheritance: "Yes",
+        transferability: "Yes",
+        honourBoard: "Not applicable",
+        execCommittee: "Not applicable",
+        monthlySubscription: "Applicable",
+      },
     },
     {
-      id: 'associate',
-      name: 'Associate/Use Member',
+      id: "associate",
+      name: "Associate Member",
       icon: Users,
-      color: 'from-gray-500 to-slate-500',
-      bgColor: 'bg-gray-50',
-      textColor: 'text-gray-700',
-      fee: '৳50,000',
+      color: "from-slate-500 to-gray-500",
+      bgColor: "bg-slate-50 dark:bg-slate-800/40",
+      textColor: "text-slate-700 dark:text-slate-300",
+      badgeColor: "bg-slate-500 text-white",
+      fee: "৳50,000",
       features: {
-        age: '18+ years',
-        education: 'HSC',
-        location: 'Not specified',
-        profession: 'Not specified',
-        politics: 'Not specified',
-        voting: 'No',
-        servicePriority: 'Priority 4',
-        generalDiscount: 'Not applicable',
-        foodDiscount: 'Not applicable',
-        beverageDiscount: 'Not applicable',
-        maxGuests: 'Up to 4',
-        inheritance: 'No',
-        transferability: 'No',
-        honourBoard: 'Not applicable',
-        execCommittee: 'Not applicable',
-        monthlySubscription: 'Applicable',
-      }
+        age: "18+ years",
+        education: "HSC",
+        location: "Not specified",
+        profession: "Not specified",
+        politics: "Not specified",
+        voting: "No",
+        servicePriority: "Priority 4",
+        generalDiscount: "Not applicable",
+        foodDiscount: "Not applicable",
+        beverageDiscount: "Not applicable",
+        maxGuests: "Up to 4",
+        inheritance: "No",
+        transferability: "No",
+        honourBoard: "Not applicable",
+        execCommittee: "Not applicable",
+        monthlySubscription: "Applicable",
+      },
     },
     {
-      id: 'honorary',
-      name: 'Honorary Member',
+      id: "honorary",
+      name: "Honorary Member",
       icon: Medal,
-      color: 'from-rose-500 to-red-500',
-      bgColor: 'bg-rose-50',
-      textColor: 'text-rose-700',
-      fee: 'No Fee',
+      color: "from-rose-500 to-red-500",
+      bgColor: "bg-rose-50 dark:bg-rose-950/30",
+      textColor: "text-rose-700 dark:text-rose-300",
+      badgeColor: "bg-rose-500 text-white",
+      fee: "No Fee",
       features: {
-        age: '35+ years',
-        education: 'Post Graduation',
-        location: 'Not specified',
-        profession: 'Specific appointments/posts',
-        politics: 'Not specified',
-        voting: 'No',
-        servicePriority: 'Priority 1',
-        generalDiscount: 'Not applicable',
-        foodDiscount: '10%',
-        beverageDiscount: 'Not applicable',
-        maxGuests: 'Unlimited',
-        inheritance: 'No',
-        transferability: 'No',
-        honourBoard: 'Not applicable',
-        execCommittee: 'Not applicable',
-        monthlySubscription: 'Not applicable',
-      }
+        age: "35+ years",
+        education: "Post Graduation",
+        location: "Not specified",
+        profession: "Special Appointments",
+        politics: "Not specified",
+        voting: "No",
+        servicePriority: "Priority 1",
+        generalDiscount: "Not applicable",
+        foodDiscount: "10%",
+        beverageDiscount: "Not applicable",
+        maxGuests: "Unlimited",
+        inheritance: "No",
+        transferability: "No",
+        honourBoard: "Not applicable",
+        execCommittee: "Not applicable",
+        monthlySubscription: "Not applicable",
+      },
     },
   ];
 
-  // Feature categories for comparison
   const featureCategories = [
     {
-      category: 'Eligibility Requirements',
-      features: ['age', 'education', 'location', 'profession', 'politics']
+      category: "Eligibility & Status",
+      features: ["age", "education", "location", "profession", "politics"],
     },
     {
-      category: 'Membership Benefits',
-      features: ['voting', 'servicePriority', 'generalDiscount', 'foodDiscount', 'beverageDiscount', 'maxGuests']
+      category: "Privileges & Discounts",
+      features: ["voting", "servicePriority", "generalDiscount", "foodDiscount", "maxGuests"],
     },
     {
-      category: 'Additional Features',
-      features: ['inheritance', 'transferability', 'honourBoard', 'execCommittee', 'monthlySubscription']
-    }
+      category: "Asset Rights & Governance",
+      features: ["inheritance", "transferability", "honourBoard", "execCommittee", "monthlySubscription"],
+    },
   ];
 
   const featureLabels = {
-    age: 'Minimum Age',
-    education: 'Education',
-    location: 'Location',
-    profession: 'Profession',
-    politics: 'Political Involvement',
-    voting: 'Voting Rights',
-    servicePriority: 'Service Priority',
-    generalDiscount: 'General Service Discount',
-    foodDiscount: 'Food Discount',
-    beverageDiscount: 'Beverage Discount',
-    maxGuests: 'Maximum Guests',
-    inheritance: 'Inheritance',
-    transferability: 'Transferability',
-    honourBoard: 'Honour Board',
-    execCommittee: 'Executive Committee',
-    monthlySubscription: 'Monthly Subscription',
+    age: "Minimum Age",
+    education: "Education Requirement",
+    location: "Locality Eligibility",
+    profession: "Professional Standing",
+    politics: "Political Involvement",
+    voting: "Voting Rights",
+    servicePriority: "Club Service Priority",
+    generalDiscount: "Service Discounts",
+    foodDiscount: "Dining Discount",
+    beverageDiscount: "Beverage Discount",
+    maxGuests: "Guest Allowance",
+    inheritance: "Family Inheritance",
+    transferability: "Transferable Rights",
+    honourBoard: "Honour Board Listing",
+    execCommittee: "Executive Committee Eligibility",
+    monthlySubscription: "Monthly Subscription",
   };
 
-  useEffect(() => {
-    // Animate header
-    gsap.fromTo(headerRef.current,
-      { opacity: 0, y: -30 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        scrollTrigger: {
-          trigger: headerRef.current,
-          start: "top 85%",
-          toggleActions: "play none none reverse"
-        }
-      }
-    );
-
-    // Animate table rows
-    const rows = document.querySelectorAll('.comparison-row');
-    rows.forEach((row, index) => {
-      gsap.fromTo(row,
-        { opacity: 0, x: -20 },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 0.5,
-          delay: index * 0.05,
-          scrollTrigger: {
-            trigger: row,
-            start: "top 95%",
-            toggleActions: "play none none reverse"
-          }
-        }
-      );
-    });
-
-    return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-    };
-  }, []);
+  const currentCategory = membershipCategories.find((c) => c.id === selectedTier) || membershipCategories[0];
 
   const getFeatureValue = (member, featureKey) => {
     const value = member.features[featureKey];
-    if (typeof value === 'boolean') {
-      return value ? <CheckCircle className="w-5 h-5 text-green-500 mx-auto" /> : <XCircle className="w-5 h-5 text-red-400 mx-auto" />;
+    if (typeof value === "boolean") {
+      return value ? <CheckCircle className="w-4 h-4 text-emerald-500 mx-auto" /> : <XCircle className="w-4 h-4 text-red-400 mx-auto" />;
     }
-    return value || '—';
+    return value || "—";
   };
 
   const getFeatureColor = (member, featureKey) => {
     const value = member.features[featureKey];
-    if (typeof value === 'boolean') {
-      return value ? 'text-green-500' : 'text-red-400';
+    if (value === "Yes" || value === "Unlimited" || (typeof value === "string" && value.includes("Eligible"))) {
+      return "text-emerald-600 dark:text-emerald-400 font-semibold";
     }
-    if (value === 'Yes' || value === 'Unlimited' || value.includes('Eligible')) {
-      return 'text-green-600';
+    if (value === "No" || value === "Not applicable" || value === "Not specified") {
+      return "text-slate-400 dark:text-slate-500";
     }
-    if (value === 'No' || value === 'Not applicable' || value === 'Not specified') {
-      return 'text-gray-400';
-    }
-    return 'text-gray-700';
+    return "text-slate-800 dark:text-slate-200";
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-20">
-      {/* Background decorative elements */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-40 right-10 w-80 h-80 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-10 dark:opacity-5 animate-float-slow"></div>
-        <div className="absolute bottom-40 left-10 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-10 dark:opacity-5 animate-float-reverse"></div>
-      </div>
-
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-16 sm:py-20 md:py-24 bg-slate-50/70 dark:bg-slate-900/60 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div ref={headerRef} className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 bg-blue-100 dark:bg-blue-900/40 rounded-full px-4 py-1.5 mb-4">
-            <GitBranch className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-            <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
-              Membership Comparison
+        <div className="text-center mb-10 sm:mb-12">
+          <div className="inline-flex items-center gap-2 bg-emerald-500/10 dark:bg-emerald-500/20 border border-emerald-500/20 rounded-full px-4 py-1.5 mb-3.5">
+            <Crown className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+            <span className="text-xs sm:text-sm font-semibold text-emerald-700 dark:text-emerald-300">
+              Prestigious Membership
             </span>
           </div>
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-            Compare All{" "}
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Membership Plans
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-4 tracking-tight">
+            Compare Club{" "}
+            <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+              Membership Tiers
             </span>
-          </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-            Find the perfect membership tier that matches your needs, preferences, and eligibility.
-            Compare features, benefits, and pricing side by side.
+          </h2>
+          <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
+            Choose the membership package that matches your profile, eligibility, and lifestyle goals.
           </p>
-          <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
-            <Link 
-              href="/membership"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-600 rounded-lg hover:bg-emerald-100 transition-colors"
+
+          {/* View Mode Toggle (Mobile / Desktop) */}
+          <div className="mt-6 inline-flex items-center p-1 bg-white dark:bg-slate-800 rounded-full shadow-xs border border-slate-200 dark:border-slate-700">
+            <button
+              onClick={() => setViewMode("cards")}
+              className={`px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold transition-all ${
+                viewMode === "cards"
+                  ? "bg-emerald-600 text-white shadow-sm"
+                  : "text-slate-600 dark:text-slate-300 hover:text-emerald-600"
+              }`}
             >
-              <Crown className="w-4 h-4" />
-              View Plans
-            </Link>
-            <Link 
-              href="/register"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-600 to-cyan-600 text-white rounded-lg hover:shadow-lg transition-all hover:scale-105"
+              Plan Card View
+            </button>
+            <button
+              onClick={() => setViewMode("table")}
+              className={`px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold transition-all ${
+                viewMode === "table"
+                  ? "bg-emerald-600 text-white shadow-sm"
+                  : "text-slate-600 dark:text-slate-300 hover:text-emerald-600"
+              }`}
             >
-              <Award className="w-4 h-4" />
-              Join Now
-            </Link>
+              Full Comparison Matrix
+            </button>
           </div>
         </div>
 
-        {/* Membership Cards Preview */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3 mb-8">
+        {/* Tier Horizontal Pills Selector */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-8 no-scrollbar scroll-smooth">
           {membershipCategories.map((member) => {
             const Icon = member.icon;
+            const isSelected = selectedTier === member.id;
             return (
-              <div
+              <button
                 key={member.id}
-                className={`p-3 rounded-xl text-center transition-all duration-300 hover:scale-105 ${member.bgColor} border border-gray-200 dark:border-gray-700 cursor-pointer`}
-                onMouseEnter={() => setSelectedTier(member.id)}
-                onMouseLeave={() => setSelectedTier(null)}
+                onClick={() => setSelectedTier(member.id)}
+                className={`flex items-center gap-2.5 px-4 py-2.5 rounded-2xl shrink-0 transition-all border cursor-pointer ${
+                  isSelected
+                    ? "bg-emerald-600 text-white border-emerald-600 shadow-md scale-105"
+                    : "bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:border-emerald-300"
+                }`}
               >
-                <div className={`w-10 h-10 mx-auto rounded-full bg-gradient-to-r ${member.color} flex items-center justify-center mb-2`}>
-                  <Icon className="w-5 h-5 text-white" />
+                <div
+                  className={`w-7 h-7 rounded-full flex items-center justify-center ${
+                    isSelected ? "bg-white/20 text-white" : member.bgColor + " " + member.textColor
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
                 </div>
-                <p className="text-xs font-medium text-gray-800 dark:text-gray-200 truncate">{member.name}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 font-semibold">{member.fee}</p>
-              </div>
+                <div className="text-left">
+                  <p className="text-xs font-bold leading-tight">{member.name}</p>
+                  <p className={`text-[10px] ${isSelected ? "text-emerald-100" : "text-slate-400"}`}>
+                    {member.fee}
+                  </p>
+                </div>
+              </button>
             );
           })}
         </div>
 
-        {/* Comparison Table */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700">
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[800px]">
-              <thead>
-                <tr className="bg-gradient-to-r from-blue-600 to-purple-600">
-                  <th className="px-4 py-4 text-left text-sm font-semibold text-white sticky left-0 bg-gradient-to-r from-blue-600 to-purple-600 min-w-[180px]">
-                    <div className="flex items-center gap-2">
-                      <Layers className="w-4 h-4" />
-                      Features & Benefits
-                    </div>
-                  </th>
-                  {membershipCategories.map((member) => (
-                    <th key={member.id} className="px-3 py-4 text-center text-sm font-semibold text-white min-w-[120px]">
-                      <div className="flex flex-col items-center">
-                        <span className="text-xs opacity-80">{member.fee}</span>
-                        <span className="text-xs font-medium mt-1">{member.name}</span>
-                      </div>
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {featureCategories.map((category) => (
-                  <React.Fragment key={category.category}>
-                    <tr className="bg-gray-50 dark:bg-gray-700/50">
-                      <td colSpan={membershipCategories.length + 1} className="px-4 py-3 text-sm font-semibold text-gray-700 dark:text-gray-300">
-                        {category.category}
-                      </td>
-                    </tr>
-                    {category.features.map((featureKey) => (
-                      <tr 
-                        key={featureKey}
-                        className={`comparison-row hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors ${
-                          hoveredRow === featureKey ? 'bg-blue-50 dark:bg-blue-900/20' : ''
-                        }`}
-                        onMouseEnter={() => setHoveredRow(featureKey)}
-                        onMouseLeave={() => setHoveredRow(null)}
-                      >
-                        <td className="px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 sticky left-0 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700">
-                          {featureLabels[featureKey] || featureKey}
-                        </td>
-                        {membershipCategories.map((member) => {
-                          const value = getFeatureValue(member, featureKey);
-                          const color = getFeatureColor(member, featureKey);
-                          return (
-                            <td key={`${member.id}-${featureKey}`} className="px-3 py-3 text-center text-sm">
-                              <div className={`${color} flex items-center justify-center`}>
-                                {typeof member.features[featureKey] === 'boolean' 
-                                  ? value
-                                  : <span className="text-xs">{value}</span>
-                                }
-                              </div>
-                            </td>
-                          );
-                        })}
-                      </tr>
-                    ))}
-                  </React.Fragment>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {/* Legend */}
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 dark:text-gray-400">
-          <div className="flex items-center gap-2">
-            <CheckCircle className="w-4 h-4 text-green-500" />
-            <span>Available/Yes</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <XCircle className="w-4 h-4 text-red-400" />
-            <span>Not Available/No</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="w-4 h-4 rounded-full bg-gradient-to-r from-blue-600 to-purple-600"></span>
-            <span>Highlighted Category</span>
-          </div>
-        </div>
-
-        {/* Call to Action */}
-        <div className="mt-12 text-center">
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white relative overflow-hidden">
-            <div className="absolute inset-0 bg-black/20"></div>
-            <div className="relative z-10">
-              <h3 className="text-2xl font-bold mb-2">Ready to Join the Community?</h3>
-              <p className="mb-6 opacity-95 max-w-md mx-auto">
-                Choose your membership plan and start enjoying exclusive benefits today
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link
-                  href="/membership"
-                  className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-300 hover:scale-105 shadow-lg flex items-center justify-center gap-2"
-                >
-                  <Crown className="w-5 h-5" />
-                  View All Plans
-                </Link>
+        {/* CARD VIEW (Great on Mobile & Quick Inspection) */}
+        {viewMode === "cards" ? (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+            {/* Selected Card Highlight */}
+            <div className="lg:col-span-2 bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl border border-slate-200 dark:border-slate-700">
+              <div className="flex flex-wrap items-start justify-between gap-4 pb-6 border-b border-slate-100 dark:border-slate-700">
+                <div className="flex items-center gap-3.5">
+                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${currentCategory.color} flex items-center justify-center text-white shadow-lg`}>
+                    <currentCategory.icon className="w-7 h-7" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
+                      {currentCategory.name}
+                    </h3>
+                    <p className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
+                      Fee: {currentCategory.fee}
+                    </p>
+                  </div>
+                </div>
                 <Link
                   href="/register"
-                  className="bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-300 hover:scale-105 shadow-lg flex items-center justify-center gap-2"
+                  className="px-6 py-3 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold text-sm shadow-md hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
                 >
-                  <Award className="w-5 h-5" />
-                  Apply Now
+                  <span>Apply for Tier</span>
+                  <ChevronRight className="w-4 h-4" />
+                </Link>
+              </div>
+
+              {/* Feature Grid inside the Card */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+                {Object.entries(currentCategory.features).map(([key, val]) => (
+                  <div
+                    key={key}
+                    className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800 flex items-center justify-between"
+                  >
+                    <span className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400">
+                      {featureLabels[key] || key}
+                    </span>
+                    <span className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white text-right">
+                      {val}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Quick Membership Summary Cards */}
+            <div className="space-y-4">
+              <div className="bg-gradient-to-br from-emerald-600 to-teal-600 rounded-3xl p-6 text-white shadow-xl">
+                <Sparkles className="w-8 h-8 mb-3 opacity-90" />
+                <h4 className="text-xl font-bold mb-2">Lifetime Privileges</h4>
+                <p className="text-xs sm:text-sm text-emerald-100 leading-relaxed mb-4">
+                  All club memberships grant prestigious access to clubhouse sports, dining lounges, event discounts, and networking communities.
+                </p>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 text-xs">
+                    <Check className="w-4 h-4 text-emerald-200" />
+                    <span>Exclusive club lounge & amenities</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs">
+                    <Check className="w-4 h-4 text-emerald-200" />
+                    <span>Voting rights on top tier packages</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs">
+                    <Check className="w-4 h-4 text-emerald-200" />
+                    <span>Guest privileges for family members</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-md border border-slate-200 dark:border-slate-700 text-center">
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">
+                  Need Help Choosing?
+                </p>
+                <h5 className="font-bold text-slate-800 dark:text-slate-100 mb-4">
+                  Talk to the Membership Secretary
+                </h5>
+                <Link
+                  href="/membership/compare"
+                  className="block w-full py-2.5 rounded-xl border border-emerald-500 text-emerald-600 dark:text-emerald-400 font-bold text-sm hover:bg-emerald-50 dark:hover:bg-emerald-950/40 transition-colors"
+                >
+                  View Full Policy
                 </Link>
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Quick Stats */}
-        <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
-          {[
-            { label: 'Total Memberships', value: membershipCategories.length, icon: Users },
-            { label: 'Highest Fee', value: '৳10,00,000', icon: DollarSign },
-            { label: 'Lowest Fee', value: '৳50,000', icon: PiggyBank },
-            { label: 'Voting Rights', value: '4 Categories', icon: Shield },
-          ].map((stat, idx) => (
-            <div key={idx} className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-md text-center border border-gray-200 dark:border-gray-700">
-              <stat.icon className="w-6 h-6 mx-auto text-blue-600 dark:text-blue-400 mb-2" />
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">{stat.label}</p>
+        ) : (
+          /* COMPARISON TABLE VIEW (Deep Inspection) */
+          <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-xl overflow-hidden border border-slate-200 dark:border-slate-700">
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[760px] text-left border-collapse">
+                <thead>
+                  <tr className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white">
+                    <th className="px-4 py-4 text-xs sm:text-sm font-bold sticky left-0 bg-gradient-to-r from-emerald-600 to-emerald-700 min-w-[160px]">
+                      Features & Benefits
+                    </th>
+                    {membershipCategories.map((member) => (
+                      <th key={member.id} className="px-3 py-4 text-center text-xs sm:text-sm font-bold min-w-[110px]">
+                        <p className="text-[11px] opacity-85 font-medium">{member.fee}</p>
+                        <p className="mt-0.5">{member.name.split(" ")[0]}</p>
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
+                  {featureCategories.map((category) => (
+                    <React.Fragment key={category.category}>
+                      <tr className="bg-slate-100/70 dark:bg-slate-900/80">
+                        <td
+                          colSpan={membershipCategories.length + 1}
+                          className="px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300"
+                        >
+                          {category.category}
+                        </td>
+                      </tr>
+                      {category.features.map((featureKey) => (
+                        <tr
+                          key={featureKey}
+                          className="hover:bg-slate-50 dark:hover:bg-slate-750 transition-colors"
+                        >
+                          <td className="px-4 py-3 text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 sticky left-0 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700">
+                            {featureLabels[featureKey] || featureKey}
+                          </td>
+                          {membershipCategories.map((member) => {
+                            const value = getFeatureValue(member, featureKey);
+                            const colorClass = getFeatureColor(member, featureKey);
+                            return (
+                              <td key={`${member.id}-${featureKey}`} className="px-3 py-3 text-center text-xs">
+                                <span className={colorClass}>{value}</span>
+                              </td>
+                            );
+                          })}
+                        </tr>
+                      ))}
+                    </React.Fragment>
+                  ))}
+                </tbody>
+              </table>
             </div>
-          ))}
-        </div>
+          </div>
+        )}
       </div>
-
-      <style jsx>{`
-        @keyframes float-slow {
-          0%, 100% { transform: translateY(0px) translateX(0px); }
-          50% { transform: translateY(-20px) translateX(10px); }
-        }
-        @keyframes float-reverse {
-          0%, 100% { transform: translateY(0px) translateX(0px); }
-          50% { transform: translateY(20px) translateX(-10px); }
-        }
-        .animate-float-slow {
-          animation: float-slow 8s ease-in-out infinite;
-        }
-        .animate-float-reverse {
-          animation: float-reverse 10s ease-in-out infinite;
-        }
-      `}</style>
-    </div>
+    </section>
   );
 };
 

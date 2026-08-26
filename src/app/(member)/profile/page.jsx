@@ -43,46 +43,64 @@ const ProfilePage = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
 
-  // Form data state initialized with user data
-  const [formData, setFormData] = useState({
-    name: user?.name || "",
-    email: user?.email || "",
-    phone: user?.phone || "",
-    bio: user?.bio || "",
-    interests: user?.interests || [],
-    profileImage: user?.profileImage || "",
-    
-    // Address Information
+  const mapUserToFormData = (userData) => ({
+    name: userData?.name || "",
+    email: userData?.email || "",
+    phone: userData?.phone || "",
+    bio: userData?.bio || "",
+    interests: userData?.interests || [],
+    profileImage: userData?.profileImage || "",
+
+    // Address Information (supports both formats)
     permanentAddress: {
-      street: user?.permanentAddress?.street || "",
-      city: user?.permanentAddress?.city || "",
-      state: user?.permanentAddress?.state || "",
-      postalCode: user?.permanentAddress?.postalCode || "",
-      country: user?.permanentAddress?.country || "Bangladesh",
+      villageOrArea: userData?.permanentAddress?.villageOrArea || userData?.permanentAddress?.street || "",
+      street: userData?.permanentAddress?.street || userData?.permanentAddress?.villageOrArea || "",
+      upazila: userData?.permanentAddress?.upazila || "",
+      district: userData?.permanentAddress?.district || userData?.permanentAddress?.city || "",
+      city: userData?.permanentAddress?.city || userData?.permanentAddress?.district || "",
+      division: userData?.permanentAddress?.division || userData?.permanentAddress?.state || "",
+      state: userData?.permanentAddress?.state || userData?.permanentAddress?.division || "",
+      postalCode: userData?.permanentAddress?.postalCode || "",
+      country: userData?.permanentAddress?.country || "Bangladesh",
     },
     presentAddress: {
-      street: user?.presentAddress?.street || "",
-      city: user?.presentAddress?.city || "",
-      state: user?.presentAddress?.state || "",
-      postalCode: user?.presentAddress?.postalCode || "",
-      country: user?.presentAddress?.country || "Bangladesh",
-      sameAsPermanent: user?.presentAddress?.sameAsPermanent || false,
+      villageOrArea: userData?.presentAddress?.villageOrArea || userData?.presentAddress?.street || "",
+      street: userData?.presentAddress?.street || userData?.presentAddress?.villageOrArea || "",
+      upazila: userData?.presentAddress?.upazila || "",
+      district: userData?.presentAddress?.district || userData?.presentAddress?.city || "",
+      city: userData?.presentAddress?.city || userData?.presentAddress?.district || "",
+      division: userData?.presentAddress?.division || userData?.presentAddress?.state || "",
+      state: userData?.presentAddress?.state || userData?.presentAddress?.division || "",
+      postalCode: userData?.presentAddress?.postalCode || "",
+      country: userData?.presentAddress?.country || "Bangladesh",
+      sameAsPermanent: userData?.presentAddress?.sameAsPermanent || false,
     },
-    
+
     // Education
-    educationalQualification: user?.educationalQualification?.length > 0 
-      ? user.educationalQualification 
+    educationalQualification: userData?.educationalQualification?.length > 0
+      ? userData.educationalQualification
       : [{ degree: "", institution: "", yearOfPassing: "", grade: "", currentlyStudying: false }],
-    
+
     // Occupation
-    occupation: user?.occupation || "",
+    occupation: userData?.occupation || "",
     occupationDetails: {
-      companyName: user?.occupationDetails?.companyName || "",
-      position: user?.occupationDetails?.position || "",
-      yearsOfExperience: user?.occupationDetails?.yearsOfExperience || "",
-      industry: user?.occupationDetails?.industry || "",
+      companyName: userData?.occupationDetails?.companyName || "",
+      position: userData?.occupationDetails?.position || "",
+      yearsOfExperience: userData?.occupationDetails?.yearsOfExperience || "",
+      industry: userData?.occupationDetails?.industry || "",
     },
   });
+
+  // Form data state initialized with user data
+  const [formData, setFormData] = useState(mapUserToFormData(user));
+
+  // Sync form data when user state updates
+  useEffect(() => {
+    if (user) {
+      setFormData(mapUserToFormData(user));
+      setImagePreview(user?.profileImage || null);
+    }
+  }, [user]);
 
   // Monitor uploadImages for changes and update preview
   useEffect(() => {
@@ -130,13 +148,40 @@ const ProfilePage = () => {
   };
 
   const handleAddressChange = (type, field, value) => {
-    setFormData(prev => ({
-      ...prev,
-      [type]: {
+    setFormData(prev => {
+      const updatedAddr = {
         ...prev[type],
-        [field]: value
+        [field]: value,
+      };
+
+      // Keep alias fields synchronized
+      if (field === 'street' || field === 'villageOrArea') {
+        updatedAddr.street = value;
+        updatedAddr.villageOrArea = value;
       }
-    }));
+      if (field === 'city' || field === 'district') {
+        updatedAddr.city = value;
+        updatedAddr.district = value;
+      }
+      if (field === 'state' || field === 'division') {
+        updatedAddr.state = value;
+        updatedAddr.division = value;
+      }
+
+      const next = {
+        ...prev,
+        [type]: updatedAddr,
+      };
+
+      if (type === 'permanentAddress' && prev.presentAddress.sameAsPermanent) {
+        next.presentAddress = {
+          ...updatedAddr,
+          sameAsPermanent: true,
+        };
+      }
+
+      return next;
+    });
   };
 
   const handleSameAsPermanent = () => {
@@ -153,8 +198,12 @@ const ProfilePage = () => {
       setFormData(prev => ({
         ...prev,
         presentAddress: {
+          villageOrArea: "",
           street: "",
+          upazila: "",
+          district: "",
           city: "",
+          division: "",
           state: "",
           postalCode: "",
           country: "Bangladesh",
@@ -283,39 +332,7 @@ const ProfilePage = () => {
     setUploadImages([]);
     
     // Reset form data to original user data
-    setFormData({
-      name: user?.name || "",
-      email: user?.email || "",
-      phone: user?.phone || "",
-      bio: user?.bio || "",
-      interests: user?.interests || [],
-      profileImage: user?.profileImage || "",
-      permanentAddress: {
-        street: user?.permanentAddress?.street || "",
-        city: user?.permanentAddress?.city || "",
-        state: user?.permanentAddress?.state || "",
-        postalCode: user?.permanentAddress?.postalCode || "",
-        country: user?.permanentAddress?.country || "Bangladesh",
-      },
-      presentAddress: {
-        street: user?.presentAddress?.street || "",
-        city: user?.presentAddress?.city || "",
-        state: user?.presentAddress?.state || "",
-        postalCode: user?.presentAddress?.postalCode || "",
-        country: user?.presentAddress?.country || "Bangladesh",
-        sameAsPermanent: user?.presentAddress?.sameAsPermanent || false,
-      },
-      educationalQualification: user?.educationalQualification?.length > 0 
-        ? user.educationalQualification 
-        : [{ degree: "", institution: "", yearOfPassing: "", grade: "", currentlyStudying: false }],
-      occupation: user?.occupation || "",
-      occupationDetails: {
-        companyName: user?.occupationDetails?.companyName || "",
-        position: user?.occupationDetails?.position || "",
-        yearsOfExperience: user?.occupationDetails?.yearsOfExperience || "",
-        industry: user?.occupationDetails?.industry || "",
-      },
-    });
+    setFormData(mapUserToFormData(user));
   };
 
   const copyMemberId = () => {

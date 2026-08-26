@@ -1,342 +1,370 @@
 // components/UpcomingEvents.js
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { Calendar, MapPin, Clock, Users, ArrowRight, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
+import Link from "next/link";
+import {
+  Calendar,
+  MapPin,
+  Clock,
+  Users,
+  ArrowRight,
+  ChevronLeft,
+  ChevronRight,
+  Sparkles,
+  Loader,
+  Music,
+  Laptop,
+  Heart,
+  Coffee,
+  Gift,
+  PartyPopper,
+  Flame,
+  Palette,
+  Mountain,
+  Microscope,
+} from "lucide-react";
+import api from "@/config/api";
 
 const UpcomingEvents = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
   const autoPlayRef = useRef(null);
 
-  // Events data
-  const events = [
-    {
-      id: 1,
-      title: "Raipur Tech Summit 2026",
-      description: "Join the biggest tech gathering in Central India featuring workshops from industry leaders, hackathon, and networking sessions.",
-      date: "June 15-17, 2026",
-      time: "9:00 AM - 6:00 PM",
-      location: "Raipur Convention Center, Raipur",
-      image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=2070&auto=format&fit=crop",
-      category: "Technology",
-      attendees: 450,
-      featured: true
-    },
-    {
-      id: 2,
-      title: "Cultural Fest & Food Mela",
-      description: "Experience the rich cultural heritage of Chhattisgarh with folk performances, art exhibitions, and authentic local cuisine.",
-      date: "July 5-6, 2026",
-      time: "11:00 AM - 9:00 PM",
-      location: "Science College Ground, Raipur",
-      image: "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=2070&auto=format&fit=crop",
-      category: "Cultural",
-      attendees: 1200,
-      featured: false
-    },
-    {
-      id: 3,
-      title: "Startup Founders Meetup",
-      description: "Connect with Raipur's thriving startup ecosystem. Pitch sessions, mentor talks, and investment opportunities.",
-      date: "July 20, 2026",
-      time: "4:00 PM - 8:00 PM",
-      location: "The Hub Coworking, Raipur",
-      image: "https://images.unsplash.com/photo-1556761175-4b46a572b786?q=80&w=2070&auto=format&fit=crop",
-      category: "Business",
-      attendees: 200,
-      featured: false
-    },
-    {
-      id: 4,
-      title: "Annual Sports Championship",
-      description: "Compete in cricket, badminton, football, and athletics. Open for all age groups with exciting prizes.",
-      date: "August 10-12, 2026",
-      time: "7:00 AM - 7:00 PM",
-      location: "Shaheed Veer Narayan Singh International Stadium",
-      image: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?q=80&w=2070&auto=format&fit=crop",
-      category: "Sports",
-      attendees: 800,
-      featured: false
-    },
-    {
-      id: 5,
-      title: "Environment Conservation Drive",
-      description: "Join us for a massive tree plantation drive and awareness campaign across major city zones.",
-      date: "August 25, 2026",
-      time: "8:00 AM - 12:00 PM",
-      location: "Multiple locations across Raipur",
-      image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2070&auto=format&fit=crop",
-      category: "Social",
-      attendees: 500,
-      featured: false
-    }
-  ];
+  // Event-type → icon mapping
+  const eventTypeIcons = {
+    music:   Music,
+    tech:    Laptop,
+    wellness:Heart,
+    food:    Coffee,
+    charity: Gift,
+    party:   PartyPopper,
+    sports:  Flame,
+    art:     Palette,
+    nature:  Mountain,
+    science: Microscope,
+  };
 
-  // Featured event (first one with featured flag or just first)
-  const featuredEvent = events.find(e => e.featured) || events[0];
-  const regularEvents = events.filter(e => !e.featured);
+  // Fallback stock images per event type
+  const fallbackImages = {
+    music:    "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=800&auto=format&fit=crop",
+    tech:     "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=800&auto=format&fit=crop",
+    wellness: "https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=800&auto=format&fit=crop",
+    food:     "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=800&auto=format&fit=crop",
+    charity:  "https://images.unsplash.com/photo-1559027615-cd4628902d4a?q=80&w=800&auto=format&fit=crop",
+    party:    "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=800&auto=format&fit=crop",
+    sports:   "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?q=80&w=800&auto=format&fit=crop",
+    art:      "https://images.unsplash.com/photo-1541701494587-cb58502866ab?q=80&w=800&auto=format&fit=crop",
+    nature:   "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=800&auto=format&fit=crop",
+    science:  "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?q=80&w=800&auto=format&fit=crop",
+    default:  "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=800&auto=format&fit=crop",
+  };
 
-  // Auto-slide carousel for regular events
+  // Fetch published events from backend
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        setLoading(true);
+        const res = await api.get('/events');
+        const raw = res.data?.events?.data ?? res.data?.data ?? [];
+        // Only show published events, sort by targetDate ascending
+        const published = raw
+          .filter(e => !e.status || e.status === 'published')
+          .sort((a, b) => new Date(a.targetDate || a.date) - new Date(b.targetDate || b.date));
+        setEvents(published);
+      } catch (err) {
+        console.error('UpcomingEvents fetch error:', err);
+        setEvents([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchEvents();
+  }, []);
+
+  // Normalise a DB event into the shape this component expects
+  const normalise = (evt) => ({
+    id:          evt._id || evt.id,
+    title:       evt.title || 'Untitled Event',
+    description: evt.description || '',
+    date:        evt.date || (evt.targetDate ? new Date(evt.targetDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'TBA'),
+    time:        evt.venueDetails || '',
+    location:    evt.location || 'Location TBA',
+    image:       evt.bannerImage || fallbackImages[evt.eventType] || fallbackImages.default,
+    category:    evt.eventType ? evt.eventType.charAt(0).toUpperCase() + evt.eventType.slice(1) : 'Event',
+    attendees:   evt.registeredCount || 0,
+    featured:    evt.isFeatured || false,
+  });
+
+  const normalisedEvents = events.map(normalise);
+  const featuredEvent = normalisedEvents.find(e => e.featured) || normalisedEvents[0];
+  const regularEvents = normalisedEvents.filter(e => e.id !== featuredEvent?.id);
+
   useEffect(() => {
     if (autoPlayRef.current) clearInterval(autoPlayRef.current);
-    
     if (!isHovering && regularEvents.length > 1) {
       autoPlayRef.current = setInterval(() => {
-        setActiveIndex((prev) => (prev + 1) % regularEvents.length);
+        setActiveIndex(prev => (prev + 1) % regularEvents.length);
       }, 5000);
     }
-    
-    return () => {
-      if (autoPlayRef.current) clearInterval(autoPlayRef.current);
-    };
+    return () => { if (autoPlayRef.current) clearInterval(autoPlayRef.current); };
   }, [isHovering, regularEvents.length]);
 
-  const nextSlide = () => {
-    setActiveIndex((prev) => (prev + 1) % regularEvents.length);
-  };
-
-  const prevSlide = () => {
-    setActiveIndex((prev) => (prev - 1 + regularEvents.length) % regularEvents.length);
-  };
-
-  const currentEvent = regularEvents[activeIndex];
+  const nextSlide = () => setActiveIndex(prev => (prev + 1) % regularEvents.length);
+  const prevSlide = () => setActiveIndex(prev => (prev - 1 + regularEvents.length) % regularEvents.length);
+  const currentEvent = regularEvents[activeIndex] || regularEvents[0];
 
   return (
-    <section className="relative py-8 bg-linear-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 overflow-hidden">
-      {/* Background decorative elements */}
+    <section className="relative py-16 sm:py-20 md:py-24 bg-gradient-to-b from-slate-50 via-white to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 overflow-hidden">
+      {/* Background Orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-emerald-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 dark:opacity-10"></div>
-        <div className="absolute bottom-0 right-0 w-80 h-80 bg-cyan-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 dark:opacity-10"></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-teal-200 rounded-full mix-blend-multiply filter blur-3xl opacity-10"></div>
+        <div className="absolute top-0 left-0 w-80 sm:w-96 h-80 sm:h-96 bg-emerald-300/20 rounded-full filter blur-3xl"></div>
+        <div className="absolute bottom-0 right-0 w-80 sm:w-96 h-80 sm:h-96 bg-teal-300/20 rounded-full filter blur-3xl"></div>
       </div>
 
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 bg-emerald-100 dark:bg-emerald-900/30 rounded-full px-4 py-1.5 mb-4">
+        <div className="text-center mb-12 sm:mb-16">
+          <div className="inline-flex items-center gap-2 bg-emerald-500/10 dark:bg-emerald-500/20 border border-emerald-500/20 rounded-full px-4 py-1.5 mb-3.5">
             <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-            <span className="text-sm font-medium text-emerald-700 dark:text-emerald-300">
-              Never Miss Out
+            <span className="text-xs sm:text-sm font-semibold text-emerald-700 dark:text-emerald-300">
+              Community Calendar
             </span>
           </div>
-          <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-4 tracking-tight">
             Upcoming{" "}
-            <span className="relative inline-block">
-              <span className="relative z-10 bg-linear-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">
-                Events
-              </span>
-              <svg
-                className="absolute -bottom-2 left-0 w-full h-3 text-emerald-400/40"
-                viewBox="0 0 100 8"
-                preserveAspectRatio="none"
-              >
-                <path
-                  d="M0 4 L100 4"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  fill="none"
-                  strokeLinecap="round"
-                />
-              </svg>
+            <span className="relative inline-block bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+              Events
             </span>
           </h2>
-          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            Join the most anticipated community gatherings and create unforgettable memories
+          <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
+            Participate in top community gatherings, workshops, and celebrations designed to inspire and connect.
           </p>
         </div>
 
-        {/* Featured Event Card - Hero Style */}
-        <div className="mb-16 group">
-          <div className="relative rounded-2xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-500">
-            <div className="absolute inset-0 bg-linear-to-r from-black/70 to-black/30 z-10"></div>
+        {/* Loading State */}
+        {loading && (
+          <div className="flex flex-col items-center justify-center py-20 gap-4">
+            <Loader className="w-10 h-10 text-emerald-500 animate-spin" />
+            <p className="text-slate-500 dark:text-slate-400 text-sm">Loading upcoming events…</p>
+          </div>
+        )}
+
+        {/* Empty State */}
+        {!loading && normalisedEvents.length === 0 && (
+          <div className="text-center py-20">
+            <div className="w-20 h-20 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Calendar className="w-10 h-10 text-emerald-400" />
+            </div>
+            <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-2">No Upcoming Events</h3>
+            <p className="text-slate-500 dark:text-slate-400 text-sm">Check back soon for exciting community events!</p>
+          </div>
+        )}
+
+        {/* Featured Hero Event Card */}
+        {!loading && featuredEvent && (
+        <div className="mb-12 sm:mb-16 group">
+          <div className="relative rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 bg-slate-900">
+            <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-black/90 via-black/60 to-black/30 z-10"></div>
             <img
               src={featuredEvent.image}
               alt={featuredEvent.title}
-              className="w-full h-80 sm:h-96 md:h-112.5 object-cover transition-transform duration-700 group-hover:scale-105"
+              className="w-full h-80 sm:h-96 md:h-[440px] object-cover transition-transform duration-700 group-hover:scale-105"
             />
-            <div className="absolute inset-0 z-20 flex flex-col justify-end p-6 sm:p-8 md:p-10">
-              <div className="inline-flex items-center gap-2 bg-emerald-500 text-white text-xs font-semibold px-3 py-1 rounded-full w-fit mb-3">
-                <Sparkles className="w-3 h-3" />
+            <div className="absolute inset-0 z-20 flex flex-col justify-end p-5 sm:p-8 md:p-10">
+              <div className="inline-flex items-center gap-1.5 bg-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-full w-fit mb-3 shadow-md">
+                <Sparkles className="w-3.5 h-3.5" />
                 Featured Event
               </div>
-              <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3">
+              <h3 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mb-2.5 leading-tight">
                 {featuredEvent.title}
               </h3>
-              <p className="text-white/80 text-base sm:text-lg max-w-2xl mb-4 line-clamp-2">
+              <p className="text-slate-200 text-sm sm:text-base max-w-2xl mb-4 line-clamp-2">
                 {featuredEvent.description}
               </p>
-              <div className="flex flex-wrap gap-4 mb-5">
-                <div className="flex items-center gap-2 text-white/90 text-sm">
+              <div className="flex flex-wrap gap-3 sm:gap-5 mb-5">
+                <div className="flex items-center gap-1.5 text-slate-200 text-xs sm:text-sm bg-black/30 px-3 py-1 rounded-full backdrop-blur-xs">
                   <Calendar className="w-4 h-4 text-emerald-400" />
                   <span>{featuredEvent.date}</span>
                 </div>
-                <div className="flex items-center gap-2 text-white/90 text-sm">
+                <div className="flex items-center gap-1.5 text-slate-200 text-xs sm:text-sm bg-black/30 px-3 py-1 rounded-full backdrop-blur-xs">
                   <Clock className="w-4 h-4 text-emerald-400" />
                   <span>{featuredEvent.time}</span>
                 </div>
-                <div className="flex items-center gap-2 text-white/90 text-sm">
+                <div className="flex items-center gap-1.5 text-slate-200 text-xs sm:text-sm bg-black/30 px-3 py-1 rounded-full backdrop-blur-xs">
                   <MapPin className="w-4 h-4 text-emerald-400" />
-                  <span>{featuredEvent.location}</span>
+                  <span className="truncate max-w-[180px] sm:max-w-none">{featuredEvent.location}</span>
                 </div>
-                <div className="flex items-center gap-2 text-white/90 text-sm">
+                <div className="flex items-center gap-1.5 text-slate-200 text-xs sm:text-sm bg-black/30 px-3 py-1 rounded-full backdrop-blur-xs">
                   <Users className="w-4 h-4 text-emerald-400" />
                   <span>{featuredEvent.attendees}+ attending</span>
                 </div>
               </div>
-              <button className="inline-flex items-center gap-2 bg-white text-emerald-700 px-6 py-2.5 rounded-full font-semibold hover:bg-emerald-50 transition-all duration-300 hover:gap-3 w-fit shadow-lg">
-                Register Now
+              <Link
+                href="/events"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-6 py-3 rounded-full font-bold text-sm sm:text-base hover:from-emerald-400 hover:to-teal-400 transition-all duration-200 hover:scale-105 active:scale-95 w-fit shadow-lg shadow-emerald-500/30"
+              >
+                <span>Register for Event</span>
                 <ArrowRight className="w-4 h-4" />
-              </button>
+              </Link>
             </div>
           </div>
         </div>
+        )}
 
-        {/* More Events Section - Carousel Style */}
-        <div className="mt-16">
-          <div className="flex items-center justify-between mb-8">
+        {/* Carousel & Previews Grid */}
+        {!loading && regularEvents.length > 0 && (
+        <div>
+          <div className="flex items-center justify-between mb-6 sm:mb-8">
             <div>
-              <h3 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white">
+              <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">
                 More <span className="text-emerald-600 dark:text-emerald-400">Events</span>
               </h3>
-              <p className="text-gray-500 dark:text-gray-400 mt-1">
-                Discover what's happening in the community
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+                Discover what's happening throughout the season
               </p>
             </div>
             {regularEvents.length > 1 && (
               <div className="flex gap-2">
                 <button
                   onClick={prevSlide}
-                  className="p-2 rounded-full bg-white dark:bg-gray-800 shadow-md hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition-all duration-300 border border-gray-200 dark:border-gray-700"
+                  className="p-2 rounded-full bg-white dark:bg-slate-800 shadow-md hover:bg-emerald-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer"
                   aria-label="Previous event"
                 >
-                  <ChevronLeft className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                  <ChevronLeft className="w-5 h-5" />
                 </button>
                 <button
                   onClick={nextSlide}
-                  className="p-2 rounded-full bg-white dark:bg-gray-800 shadow-md hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition-all duration-300 border border-gray-200 dark:border-gray-700"
+                  className="p-2 rounded-full bg-white dark:bg-slate-800 shadow-md hover:bg-emerald-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer"
                   aria-label="Next event"
                 >
-                  <ChevronRight className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                  <ChevronRight className="w-5 h-5" />
                 </button>
               </div>
             )}
           </div>
 
-          {/* Carousel Container */}
+          {/* Regular Events Responsive Grid */}
           <div
             className="relative"
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
           >
-            <div className="transition-all duration-500 ease-in-out">
-              {regularEvents.length > 0 && (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  {/* Main Carousel Card */}
-                  <div className="group bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-                    <div className="relative h-64 overflow-hidden">
-                      <img
-                        src={currentEvent.image}
-                        alt={currentEvent.title}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                      />
-                      <div className="absolute top-4 left-4">
-                        <span className="bg-emerald-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
-                          {currentEvent.category}
-                        </span>
-                      </div>
+            {regularEvents.length > 0 && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+                {/* Active Highlight Card */}
+                <div className="bg-white dark:bg-slate-800/90 rounded-3xl shadow-xl overflow-hidden border border-slate-200/70 dark:border-slate-700 flex flex-col justify-between hover:shadow-2xl transition-all duration-300">
+                  <div className="relative h-56 sm:h-64 overflow-hidden">
+                    <img
+                      src={currentEvent.image}
+                      alt={currentEvent.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute top-4 left-4">
+                      <span className="bg-emerald-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+                        {currentEvent.category}
+                      </span>
                     </div>
-                    <div className="p-6">
-                      <h4 className="text-xl font-bold text-gray-800 dark:text-white mb-2">
+                  </div>
+                  <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between">
+                    <div>
+                      <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-2">
                         {currentEvent.title}
                       </h4>
-                      <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-2">
+                      <p className="text-slate-600 dark:text-slate-300 text-sm mb-4 line-clamp-2 leading-relaxed">
                         {currentEvent.description}
                       </p>
-                      <div className="space-y-2 mb-4">
-                        <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-sm">
-                          <Calendar className="w-4 h-4 text-emerald-500" />
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-5">
+                        <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400 text-xs">
+                          <Calendar className="w-4 h-4 text-emerald-500 shrink-0" />
                           <span>{currentEvent.date}</span>
                         </div>
-                        <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-sm">
-                          <Clock className="w-4 h-4 text-emerald-500" />
+                        <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400 text-xs">
+                          <Clock className="w-4 h-4 text-emerald-500 shrink-0" />
                           <span>{currentEvent.time}</span>
                         </div>
-                        <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-sm">
-                          <MapPin className="w-4 h-4 text-emerald-500" />
+                        <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400 text-xs sm:col-span-2">
+                          <MapPin className="w-4 h-4 text-emerald-500 shrink-0" />
                           <span className="truncate">{currentEvent.location}</span>
                         </div>
                       </div>
-                      <button className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-600 to-cyan-600 text-white px-4 py-2.5 rounded-xl font-semibold hover:from-emerald-700 hover:to-cyan-700 transition-all duration-300">
-                        Reserve Your Spot
-                        <ArrowRight className="w-4 h-4" />
-                      </button>
                     </div>
+                    <Link
+                      href="/events"
+                      className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white py-3 rounded-2xl font-bold text-sm hover:from-emerald-500 hover:to-teal-500 shadow-md transition-all duration-200 hover:scale-[1.01]"
+                    >
+                      <span>Reserve Your Spot</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
                   </div>
+                </div>
 
-                  {/* Thumbnails / Event Previews */}
-                  <div className="space-y-4">
-                    {regularEvents.map((event, idx) => (
+                {/* Event Thumbnails / Stack */}
+                <div className="space-y-3 sm:space-y-3.5 flex flex-col justify-between">
+                  {regularEvents.map((event, idx) => {
+                    const isSelected = activeIndex === idx;
+                    return (
                       <div
                         key={event.id}
                         onClick={() => setActiveIndex(idx)}
-                        className={`group flex gap-4 p-4 rounded-xl cursor-pointer transition-all duration-300 ${
-                          activeIndex === idx
-                            ? "bg-emerald-50 dark:bg-emerald-900/20 border-2 border-emerald-400 dark:border-emerald-500 shadow-md"
-                            : "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-md hover:border-emerald-300 dark:hover:border-emerald-600"
+                        className={`flex gap-3 sm:gap-4 p-3.5 sm:p-4 rounded-2xl cursor-pointer transition-all duration-200 items-center ${
+                          isSelected
+                            ? "bg-emerald-50 dark:bg-emerald-950/40 border-2 border-emerald-500 shadow-md"
+                            : "bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 hover:border-emerald-300"
                         }`}
                       >
-                        <div className="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0">
+                        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden shrink-0">
                           <img
                             src={event.image}
                             alt={event.title}
-                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                            className="w-full h-full object-cover transition-transform duration-300"
                           />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
-                            <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
-                              activeIndex === idx 
-                                ? "bg-emerald-500 text-white" 
-                                : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
-                            }`}>
+                            <span
+                              className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                                isSelected
+                                  ? "bg-emerald-600 text-white"
+                                  : "bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300"
+                              }`}
+                            >
                               {event.category}
                             </span>
+                            <span className="text-xs text-slate-400">• {event.attendees}+ going</span>
                           </div>
-                          <h5 className="font-bold text-gray-800 dark:text-white text-sm mb-1 line-clamp-1">
+                          <h5 className="font-bold text-slate-900 dark:text-white text-sm sm:text-base truncate mb-1">
                             {event.title}
                           </h5>
-                          <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400 text-xs">
-                            <Calendar className="w-3 h-3" />
-                            <span>{event.date.split(",")[0]}</span>
-                          </div>
-                          <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400 text-xs mt-0.5">
-                            <Users className="w-3 h-3" />
-                            <span>{event.attendees}+ going</span>
+                          <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 text-xs">
+                            <Calendar className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                            <span className="truncate">{event.date}</span>
                           </div>
                         </div>
-                        {activeIndex === idx && (
-                          <div className="flex items-center">
-                            <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                          </div>
-                        )}
+                        <ChevronRight
+                          className={`w-5 h-5 transition-transform ${
+                            isSelected ? "text-emerald-600 translate-x-1" : "text-slate-300"
+                          }`}
+                        />
                       </div>
-                    ))}
-                  </div>
+                    );
+                  })}
                 </div>
-              )}
-            </div>
+              </div>
+            )}
 
-            {/* Carousel Indicators */}
+            {/* Carousel Dots */}
             {regularEvents.length > 1 && (
-              <div className="flex justify-center gap-2 mt-8">
+              <div className="flex justify-center gap-2 mt-6 sm:mt-8">
                 {regularEvents.map((_, idx) => (
                   <button
                     key={idx}
                     onClick={() => setActiveIndex(idx)}
-                    className={`h-2 rounded-full transition-all duration-300 ${
+                    className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
                       activeIndex === idx
                         ? "w-8 bg-emerald-600 dark:bg-emerald-400"
-                        : "w-2 bg-gray-300 dark:bg-gray-600 hover:bg-emerald-400"
+                        : "w-2 bg-slate-300 dark:bg-slate-700 hover:bg-emerald-400"
                     }`}
                     aria-label={`Go to event ${idx + 1}`}
                   />
@@ -345,39 +373,23 @@ const UpcomingEvents = () => {
             )}
           </div>
         </div>
+        )}
 
         {/* View All CTA */}
-        <div className="text-center mt-16">
-          <button className="inline-flex items-center gap-2 px-8 py-3 bg-transparent border-2 border-emerald-600 dark:border-emerald-400 text-emerald-700 dark:text-emerald-300 rounded-full font-semibold hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition-all duration-300 hover:gap-3 group">
-            View All Events
+        {!loading && normalisedEvents.length > 0 && (
+        <div className="text-center mt-12 sm:mt-16">
+          <Link
+            href="/events"
+            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full border-2 border-emerald-600 dark:border-emerald-400 text-emerald-700 dark:text-emerald-300 font-bold hover:bg-emerald-50 dark:hover:bg-emerald-950/40 transition-all duration-200 hover:scale-105 active:scale-95 group"
+          >
+            <span>View All Events</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </button>
+          </Link>
         </div>
+        )}
       </div>
-
-      <style jsx>{`
-        .line-clamp-1 {
-          display: -webkit-box;
-          -webkit-line-clamp: 1;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
-        .line-clamp-2 {
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
-        @keyframes float-slow {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-20px); }
-        }
-        .animate-float-slow {
-          animation: float-slow 8s ease-in-out infinite;
-        }
-      `}</style>
     </section>
   );
 };
 
-export default UpcomingEvents;
+export default UpcomingEvents;

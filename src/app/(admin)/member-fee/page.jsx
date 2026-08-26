@@ -287,11 +287,15 @@ const MemberFeePage = () => {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+    return date.toLocaleDateString("en-BD", { day: "numeric", month: "short", year: "numeric" });
   };
 
   const formatAmount = (amount) => {
-    return new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(amount);
+    return new Intl.NumberFormat("en-BD", {
+      style: "currency",
+      currency: "BDT",
+      minimumFractionDigits: 0
+    }).format(amount);
   };
 
   const exportToCSV = () => {
@@ -320,179 +324,201 @@ const MemberFeePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      <div className="p-6 lg:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div className="p-4 sm:p-6 lg:p-8 max-w-[1600px] mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
-            Member Fee Management
-          </h1>
-          <p className="text-gray-500 mt-1">Manage and track member fee payments</p>
+        <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">
+              Member Fee Management
+            </h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+              Monitor, track, and export Raipurian Club subscription fees
+            </p>
+          </div>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
+          {/* Total Collection */}
+          <div className="relative overflow-hidden bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300 p-6 group">
+            <div className="absolute top-0 left-0 w-2 h-full bg-emerald-500" />
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-500 text-sm font-medium">Total Collection</p>
-                <p className="text-2xl font-bold text-gray-800 mt-1">{formatAmount(stats.totalFees)}</p>
+                <p className="text-gray-400 dark:text-gray-500 text-xs font-semibold uppercase tracking-wider">Total Collection</p>
+                <p className="text-2xl sm:text-3xl font-extrabold text-gray-850 dark:text-white mt-2 tracking-tight">
+                  {formatAmount(stats.totalFees)}
+                </p>
               </div>
-              <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center">
-                <DollarSign className="w-6 h-6 text-emerald-600" />
+              <div className="w-12 h-12 bg-emerald-50 dark:bg-emerald-950/40 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <DollarSign className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
               </div>
             </div>
-            <div className="mt-3 flex items-center text-xs text-gray-500">
-              <TrendingUp className="w-3 h-3 mr-1" />
-              <span>From {stats.totalMembers} members</span>
+            <div className="mt-4 pt-4 border-t border-gray-50 dark:border-gray-700/50 flex items-center text-xs text-gray-500 dark:text-gray-400">
+              <TrendingUp className="w-3.5 h-3.5 mr-1.5 text-emerald-500" />
+              <span>From <span className="font-semibold text-gray-700 dark:text-gray-300">{stats.totalMembers}</span> active payments</span>
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition">
+          {/* Total Members */}
+          <div className="relative overflow-hidden bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300 p-6 group">
+            <div className="absolute top-0 left-0 w-2 h-full bg-blue-500" />
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-500 text-sm font-medium">Total Members</p>
-                <p className="text-2xl font-bold text-gray-800 mt-1">{stats.totalMembers}</p>
+                <p className="text-gray-400 dark:text-gray-500 text-xs font-semibold uppercase tracking-wider">Total Members</p>
+                <p className="text-2xl sm:text-3xl font-extrabold text-gray-850 dark:text-white mt-2 tracking-tight">
+                  {stats.totalMembers}
+                </p>
               </div>
-              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                <Users className="w-6 h-6 text-blue-600" />
+              <div className="w-12 h-12 bg-blue-50 dark:bg-blue-950/40 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <Users className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               </div>
             </div>
-            <div className="mt-3 flex items-center text-xs text-gray-500">
-              <Calendar className="w-3 h-3 mr-1" />
-              <span>Active members paying fee</span>
+            <div className="mt-4 pt-4 border-t border-gray-50 dark:border-gray-700/50 flex items-center text-xs text-gray-500 dark:text-gray-400">
+              <Calendar className="w-3.5 h-3.5 mr-1.5 text-blue-500" />
+              <span>Members paying subscription</span>
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition">
+          {/* Completed */}
+          <div className="relative overflow-hidden bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300 p-6 group">
+            <div className="absolute top-0 left-0 w-2 h-full bg-green-500" />
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-500 text-sm font-medium">Completed</p>
-                <p className="text-2xl font-bold text-green-600 mt-1">{stats.completedPayments}</p>
+                <p className="text-gray-400 dark:text-gray-500 text-xs font-semibold uppercase tracking-wider">Completed</p>
+                <p className="text-2xl sm:text-3xl font-extrabold text-green-600 dark:text-green-400 mt-2 tracking-tight">
+                  {stats.completedPayments}
+                </p>
               </div>
-              <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                <CheckCircle className="w-6 h-6 text-green-600" />
+              <div className="w-12 h-12 bg-green-50 dark:bg-green-950/40 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400" />
               </div>
             </div>
-            <div className="mt-3 flex items-center text-xs text-gray-500">
-              <span>Successfully processed</span>
+            <div className="mt-4 pt-4 border-t border-gray-50 dark:border-gray-700/50 flex items-center text-xs text-gray-500 dark:text-gray-400">
+              <span>Successfully processed & approved</span>
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition">
+          {/* Pending */}
+          <div className="relative overflow-hidden bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300 p-6 group">
+            <div className="absolute top-0 left-0 w-2 h-full bg-yellow-500" />
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-500 text-sm font-medium">Pending</p>
-                <p className="text-2xl font-bold text-yellow-600 mt-1">{stats.pendingPayments}</p>
+                <p className="text-gray-400 dark:text-gray-500 text-xs font-semibold uppercase tracking-wider">Pending</p>
+                <p className="text-2xl sm:text-3xl font-extrabold text-yellow-600 dark:text-yellow-400 mt-2 tracking-tight">
+                  {stats.pendingPayments}
+                </p>
               </div>
-              <div className="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center">
-                <Clock className="w-6 h-6 text-yellow-600" />
+              <div className="w-12 h-12 bg-yellow-50 dark:bg-yellow-950/40 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <Clock className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
               </div>
             </div>
-            <div className="mt-3 flex items-center text-xs text-gray-500">
-              <span>Awaiting confirmation</span>
+            <div className="mt-4 pt-4 border-t border-gray-50 dark:border-gray-700/50 flex items-center text-xs text-gray-500 dark:text-gray-400">
+              <span>Awaiting manual / bank verification</span>
             </div>
           </div>
         </div>
 
         {/* Filters Section */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
-          <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 sm:p-6 mb-8">
+          <div className="flex flex-col lg:flex-row gap-4 items-stretch lg:items-center justify-between">
             {/* Search */}
-            <div className="relative flex-1 w-full">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <div className="relative flex-1 min-w-0">
+              <Search className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-gray-400 w-4.5 h-4.5" />
               <input
                 type="text"
-                placeholder="Search by name, email or transaction ID..."
+                placeholder="Search by member, email or transaction ID..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-gray-900/50 text-gray-855 dark:text-white border border-gray-250 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
               />
             </div>
 
-            {/* Payment Method Filter */}
-            <div className="flex items-center gap-2">
-              <Filter className="w-4 h-4 text-gray-400" />
-              <select
-                value={selectedPaymentMethod}
-                onChange={(e) => setSelectedPaymentMethod(e.target.value)}
-                className="px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white"
-              >
-                <option value="all">All Methods</option>
-                <option value="bikash">bKash</option>
-                <option value="nogod">Nagad</option>
-                <option value="rocket">Rocket</option>
-                <option value="bank">Bank Transfer</option>
-              </select>
-            </div>
+            {/* Select options & action buttons */}
+            <div className="flex flex-wrap items-center gap-3">
+              {/* Payment Method Filter */}
+              <div className="flex items-center gap-2 flex-1 sm:flex-initial">
+                <select
+                  value={selectedPaymentMethod}
+                  onChange={(e) => setSelectedPaymentMethod(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-250 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-sm font-medium transition cursor-pointer"
+                >
+                  <option value="all">All Payment Methods</option>
+                  <option value="bikash">bKash</option>
+                  <option value="nogod">Nagad</option>
+                  <option value="rocket">Rocket</option>
+                  <option value="bank">Bank Transfer</option>
+                </select>
+              </div>
 
-            {/* Status Filter */}
-            <div className="flex items-center gap-2">
-              <select
-                value={selectedStatus}
-                onChange={(e) => setSelectedStatus(e.target.value)}
-                className="px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white"
-              >
-                <option value="all">All Status</option>
-                <option value="completed">Completed</option>
-                <option value="pending">Pending</option>
-                <option value="failed">Failed</option>
-              </select>
-            </div>
+              {/* Status Filter */}
+              <div className="flex items-center gap-2 flex-1 sm:flex-initial">
+                <select
+                  value={selectedStatus}
+                  onChange={(e) => setSelectedStatus(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-250 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-sm font-medium transition cursor-pointer"
+                >
+                  <option value="all">All Payment Status</option>
+                  <option value="completed">Completed</option>
+                  <option value="pending">Pending</option>
+                  <option value="failed">Failed</option>
+                </select>
+              </div>
 
-            {/* Export Button */}
-            <button
-              onClick={exportToCSV}
-              className="flex items-center gap-2 px-4 py-2.5 bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 transition shadow-sm"
-            >
-              <Download className="w-4 h-4" />
-              Export CSV
-            </button>
+              {/* Export Button */}
+              <button
+                onClick={exportToCSV}
+                className="flex items-center justify-center gap-2 px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl transition-all shadow-sm duration-200 active:scale-95 cursor-pointer w-full sm:w-auto"
+              >
+                <Download className="w-4 h-4" />
+                <span>Export CSV</span>
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Table */}
-        <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+        {/* TABLE (Hidden on Mobile, Displayed on Desktop >= md) */}
+        <div className="hidden md:block bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-200">
+              <thead className="bg-gray-50 dark:bg-gray-700/35 border-b border-gray-100 dark:border-gray-700">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    <button onClick={() => handleSort("name")} className="flex items-center gap-1 hover:text-gray-800">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 dark:text-gray-400 uppercase tracking-wider">
+                    <button onClick={() => handleSort("name")} className="flex items-center gap-1.5 hover:text-gray-700 dark:hover:text-white transition">
                       Member Name
-                      <ArrowUpDown className="w-3 h-3" />
+                      <ArrowUpDown className="w-3.5 h-3.5" />
                     </button>
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Contact
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 dark:text-gray-400 uppercase tracking-wider">
+                    Contact Details
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    <button onClick={() => handleSort("amount")} className="flex items-center gap-1 hover:text-gray-800">
-                      Amount
-                      <ArrowUpDown className="w-3 h-3" />
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 dark:text-gray-400 uppercase tracking-wider">
+                    <button onClick={() => handleSort("amount")} className="flex items-center gap-1.5 hover:text-gray-700 dark:hover:text-white transition">
+                      Amount Paid
+                      <ArrowUpDown className="w-3.5 h-3.5" />
                     </button>
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Payment Method
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 dark:text-gray-400 uppercase tracking-wider">
+                    Method
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 dark:text-gray-400 uppercase tracking-wider">
                     Transaction ID
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 dark:text-gray-400 uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    <button onClick={() => handleSort("date")} className="flex items-center gap-1 hover:text-gray-800">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 dark:text-gray-400 uppercase tracking-wider">
+                    <button onClick={() => handleSort("date")} className="flex items-center gap-1.5 hover:text-gray-700 dark:hover:text-white transition">
                       Date
-                      <ArrowUpDown className="w-3 h-3" />
+                      <ArrowUpDown className="w-3.5 h-3.5" />
                     </button>
                   </th>
-                  <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Action
+                  <th className="px-6 py-4 text-center text-xs font-bold text-gray-400 dark:text-gray-400 uppercase tracking-wider">
+                    Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-gray-100 dark:divide-gray-700/50">
                 {paginatedData.map((fee) => {
                   const PaymentIcon = paymentMethodConfig[fee.paymentMethod]?.icon || CreditCard;
                   const StatusIcon = statusConfig[fee.status]?.icon || Clock;
@@ -500,52 +526,57 @@ const MemberFeePage = () => {
                   const statusBgColor = statusConfig[fee.status]?.bgColor || "bg-gray-100";
                   
                   return (
-                    <tr key={fee.id} className="hover:bg-gray-50 transition">
-                      <td className="px-6 py-4">
+                    <tr key={fee.id} className="hover:bg-gray-50/50 dark:hover:bg-gray-900/10 transition duration-150">
+                      <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-full flex items-center justify-center">
-                            <User className="w-4 h-4 text-white" />
+                          <div className="w-9 h-9 bg-gradient-to-tr from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center shadow-xs">
+                            <User className="w-4.5 h-4.5 text-white" />
                           </div>
                           <div>
-                            <p className="font-medium text-gray-800">{fee.name}</p>
-                            <p className="text-xs text-gray-500">ID: #{fee.id}</p>
+                            <p className="font-semibold text-gray-800 dark:text-white">{fee.name}</p>
+                            <p className="text-xs text-gray-400 dark:text-gray-500">ID: #{fee.id}</p>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <p className="text-sm text-gray-600">{fee.email}</p>
-                        <p className="text-xs text-gray-400">{fee.phone}</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-300 truncate max-w-[200px]">{fee.email}</p>
+                        <p className="text-xs text-gray-400 dark:text-gray-500">{fee.phone}</p>
                       </td>
-                      <td className="px-6 py-4">
-                        <p className="font-semibold text-gray-800">{formatAmount(fee.amount)}</p>
-                        <p className="text-xs text-gray-400">{fee.year} • {fee.quarter}</p>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <p className="font-bold text-gray-800 dark:text-white">{formatAmount(fee.amount)}</p>
+                        <p className="text-[10px] text-gray-400 dark:text-gray-500 font-semibold">{fee.year} • {fee.quarter}</p>
                       </td>
-                      <td className="px-6 py-4">
-                        <div className={`flex items-center gap-2 px-2 py-1 rounded-lg w-fit ${paymentMethodConfig[fee.paymentMethod]?.bgColor || "bg-gray-100"}`}>
-                          <PaymentIcon className={`w-4 h-4 ${paymentMethodConfig[fee.paymentMethod]?.color || "text-gray-500"}`} />
-                          <span className="text-sm font-medium">{paymentMethodConfig[fee.paymentMethod]?.name || fee.paymentMethod}</span>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full w-fit ${paymentMethodConfig[fee.paymentMethod]?.bgColor || "bg-gray-100 dark:bg-gray-800"}`}>
+                          <PaymentIcon className={`w-3.5 h-3.5 ${paymentMethodConfig[fee.paymentMethod]?.color || "text-gray-500"}`} />
+                          <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
+                            {paymentMethodConfig[fee.paymentMethod]?.name || fee.paymentMethod}
+                          </span>
                         </div>
                       </td>
-                      <td className="px-6 py-4">
-                        <p className="text-sm font-mono text-gray-600">{fee.transactionId}</p>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <p className="text-xs font-mono font-medium text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/40 px-2 py-1 rounded-md w-fit">
+                          {fee.transactionId}
+                        </p>
                       </td>
-                      <td className="px-6 py-4">
-                        <div className={`flex items-center gap-1.5 px-2 py-1 rounded-lg w-fit ${statusBgColor}`}>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className={`flex items-center gap-1 px-2.5 py-1 rounded-full w-fit ${statusBgColor} dark:${statusBgColor.replace('10', '950/20')}`}>
                           <StatusIcon className={`w-3.5 h-3.5 ${statusColor}`} />
-                          <span className={`text-xs font-medium ${statusColor}`}>
+                          <span className={`text-xs font-bold ${statusColor}`}>
                             {statusConfig[fee.status]?.label || fee.status}
                           </span>
                         </div>
                       </td>
-                      <td className="px-6 py-4">
-                        <p className="text-sm text-gray-600">{formatDate(fee.date)}</p>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                        {formatDate(fee.date)}
                       </td>
-                      <td className="px-6 py-4 text-center">
+                      <td className="px-6 py-4 whitespace-nowrap text-center">
                         <button
                           onClick={() => handleViewDetails(fee)}
-                          className="p-2 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition"
+                          className="p-2 text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-450 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 rounded-xl transition duration-150 active:scale-90 cursor-pointer"
+                          title="View Details"
                         >
-                          <Eye className="w-4 h-4" />
+                          <Eye className="w-4.5 h-4.5" />
                         </button>
                       </td>
                     </tr>
@@ -554,144 +585,229 @@ const MemberFeePage = () => {
               </tbody>
             </table>
           </div>
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
-              <p className="text-sm text-gray-500">
-                Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, filteredData.length)} of {filteredData.length} entries
-              </p>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                  disabled={currentPage === 1}
-                  className="p-2 rounded-lg border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                </button>
-                <div className="flex gap-1">
-                  {[...Array(Math.min(5, totalPages))].map((_, i) => {
-                    let pageNum;
-                    if (totalPages <= 5) {
-                      pageNum = i + 1;
-                    } else if (currentPage <= 3) {
-                      pageNum = i + 1;
-                    } else if (currentPage >= totalPages - 2) {
-                      pageNum = totalPages - 4 + i;
-                    } else {
-                      pageNum = currentPage - 2 + i;
-                    }
-                    
-                    return (
-                      <button
-                        key={i}
-                        onClick={() => setCurrentPage(pageNum)}
-                        className={`w-8 h-8 rounded-lg text-sm font-medium transition ${
-                          currentPage === pageNum
-                            ? "bg-emerald-500 text-white"
-                            : "text-gray-600 hover:bg-gray-100"
-                        }`}
-                      >
-                        {pageNum}
-                      </button>
-                    );
-                  })}
-                </div>
-                <button
-                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                  disabled={currentPage === totalPages}
-                  className="p-2 rounded-lg border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition"
-                >
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          )}
         </div>
+
+        {/* MOBILE CARD LIST (Visible on screens < md) */}
+        <div className="md:hidden space-y-4">
+          {paginatedData.map((fee) => {
+            const PaymentIcon = paymentMethodConfig[fee.paymentMethod]?.icon || CreditCard;
+            const StatusIcon = statusConfig[fee.status]?.icon || Clock;
+            const statusColor = statusConfig[fee.status]?.color || "text-gray-500";
+            const statusBgColor = statusConfig[fee.status]?.bgColor || "bg-gray-100";
+            
+            return (
+              <div key={fee.id} className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col gap-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-tr from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center shadow-xs shrink-0">
+                      <User className="w-5 h-5 text-white" />
+                    </div>
+                    <div className="min-w-0">
+                      <h4 className="font-bold text-gray-800 dark:text-white truncate">{fee.name}</h4>
+                      <p className="text-xs text-gray-400 dark:text-gray-500">ID: #{fee.id}</p>
+                    </div>
+                  </div>
+                  
+                  <div className={`flex items-center gap-1 px-2.5 py-0.5 rounded-full shrink-0 ${statusBgColor}`}>
+                    <StatusIcon className={`w-3 h-3 ${statusColor}`} />
+                    <span className={`text-[10px] font-extrabold ${statusColor}`}>
+                      {statusConfig[fee.status]?.label || fee.status}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 text-xs border-t border-b border-gray-50 dark:border-gray-700/50 py-3">
+                  <div>
+                    <span className="text-gray-400 dark:text-gray-500 block mb-0.5">Amount</span>
+                    <span className="font-bold text-gray-800 dark:text-white text-sm">{formatAmount(fee.amount)}</span>
+                  </div>
+                  <div>
+                    <span className="text-gray-400 dark:text-gray-500 block mb-0.5">Payment Method</span>
+                    <span className="font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-1">
+                      <PaymentIcon className={`w-3.5 h-3.5 ${paymentMethodConfig[fee.paymentMethod]?.color}`} />
+                      {paymentMethodConfig[fee.paymentMethod]?.name}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-gray-400 dark:text-gray-500 block mb-0.5 font-medium">Txn ID</span>
+                    <span className="font-mono text-gray-600 dark:text-gray-400 truncate block">{fee.transactionId}</span>
+                  </div>
+                  <div>
+                    <span className="text-gray-400 dark:text-gray-500 block mb-0.5">Payment Date</span>
+                    <span className="text-gray-600 dark:text-gray-400 font-semibold">{formatDate(fee.date)}</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between gap-3 pt-1">
+                  <span className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
+                    {fee.year} • {fee.quarter}
+                  </span>
+                  
+                  <button
+                    onClick={() => handleViewDetails(fee)}
+                    className="flex items-center gap-1.5 px-3 py-2 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/20 dark:hover:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 text-xs font-bold rounded-lg transition active:scale-95 cursor-pointer"
+                  >
+                    <Eye className="w-3.5 h-3.5" />
+                    <span>View Details</span>
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 mt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-xs sm:text-sm text-gray-400 dark:text-gray-500 font-medium text-center sm:text-left">
+              Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, filteredData.length)} of {filteredData.length} entries
+            </p>
+            
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="p-2 rounded-xl border border-gray-200 dark:border-gray-700 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-900/20 text-gray-600 dark:text-gray-400 transition"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              
+              <div className="flex gap-1.5">
+                {[...Array(Math.min(5, totalPages))].map((_, i) => {
+                  let pageNum;
+                  if (totalPages <= 5) {
+                    pageNum = i + 1;
+                  } else if (currentPage <= 3) {
+                    pageNum = i + 1;
+                  } else if (currentPage >= totalPages - 2) {
+                    pageNum = totalPages - 4 + i;
+                  } else {
+                    pageNum = currentPage - 2 + i;
+                  }
+                  
+                  return (
+                    <button
+                      key={i}
+                      onClick={() => setCurrentPage(pageNum)}
+                      className={`w-9 h-9 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 ${
+                        currentPage === pageNum
+                          ? "bg-emerald-600 text-white shadow-xs"
+                          : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50"
+                      }`}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                })}
+              </div>
+              
+              <button
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className="p-2 rounded-xl border border-gray-200 dark:border-gray-700 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-900/20 text-gray-600 dark:text-gray-400 transition"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Details Modal */}
       {showDetailsModal && selectedMember && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setShowDetailsModal(false)}>
-          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-            <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between">
-              <h2 className="text-xl font-bold text-gray-800">Member Fee Details</h2>
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 animate-fade-in"
+          onClick={() => setShowDetailsModal(false)}
+        >
+          <div 
+            className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto transform scale-95 animate-scale-up border border-gray-150 dark:border-gray-700"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="sticky top-0 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md border-b border-gray-100 dark:border-gray-700 px-6 py-4 flex items-center justify-between z-10">
+              <h2 className="text-lg font-extrabold text-gray-850 dark:text-white">Payment Details</h2>
               <button
                 onClick={() => setShowDetailsModal(false)}
-                className="p-2 hover:bg-gray-100 rounded-lg transition"
+                className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 cursor-pointer"
               >
-                <XCircle className="w-5 h-5 text-gray-500" />
+                <XCircle className="w-5.5 h-5.5" />
               </button>
             </div>
             
             <div className="p-6">
-              {/* Member Info */}
-              <div className="flex items-center gap-4 mb-6 pb-6 border-b border-gray-100">
-                <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-full flex items-center justify-center">
-                  <User className="w-8 h-8 text-white" />
+              {/* Profile Card Summary */}
+              <div className="flex items-center gap-4 mb-6 pb-6 border-b border-gray-100 dark:border-gray-750">
+                <div className="w-14 h-14 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center shadow-sm">
+                  <User className="w-6.5 h-6.5 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-800">{selectedMember.name}</h3>
-                  <p className="text-gray-500">Member since {selectedMember.memberSince}</p>
+                  <h3 className="text-lg font-extrabold text-gray-800 dark:text-white leading-tight">
+                    {selectedMember.name}
+                  </h3>
+                  <p className="text-xs text-gray-400 dark:text-gray-500 font-medium mt-1">
+                    Raipurian Club Member since {selectedMember.memberSince}
+                  </p>
                 </div>
               </div>
 
-              {/* Details Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <div className="bg-gray-50 rounded-xl p-4">
-                  <p className="text-xs text-gray-500 mb-1">Email Address</p>
-                  <p className="text-gray-800 font-medium">{selectedMember.email}</p>
+              {/* Data Detail Block Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-6">
+                <div className="bg-gray-50 dark:bg-gray-900/40 rounded-2xl p-4">
+                  <span className="text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase tracking-wider block mb-1">Email Address</span>
+                  <span className="text-sm text-gray-850 dark:text-gray-300 font-medium break-all">{selectedMember.email}</span>
                 </div>
-                <div className="bg-gray-50 rounded-xl p-4">
-                  <p className="text-xs text-gray-500 mb-1">Phone Number</p>
-                  <p className="text-gray-800 font-medium">{selectedMember.phone}</p>
+                <div className="bg-gray-50 dark:bg-gray-900/40 rounded-2xl p-4">
+                  <span className="text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase tracking-wider block mb-1">Phone Number</span>
+                  <span className="text-sm text-gray-850 dark:text-gray-300 font-medium">{selectedMember.phone}</span>
                 </div>
-                <div className="bg-gray-50 rounded-xl p-4">
-                  <p className="text-xs text-gray-500 mb-1">Amount Paid</p>
-                  <p className="text-gray-800 font-bold text-xl">{formatAmount(selectedMember.amount)}</p>
+                <div className="bg-gray-50 dark:bg-gray-900/40 rounded-2xl p-4">
+                  <span className="text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase tracking-wider block mb-1">Amount Paid</span>
+                  <span className="text-base text-gray-900 dark:text-white font-black">{formatAmount(selectedMember.amount)}</span>
                 </div>
-                <div className="bg-gray-50 rounded-xl p-4">
-                  <p className="text-xs text-gray-500 mb-1">Payment Method</p>
-                  <div className="flex items-center gap-2">
+                <div className="bg-gray-50 dark:bg-gray-900/40 rounded-2xl p-4">
+                  <span className="text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase tracking-wider block mb-1">Payment Method</span>
+                  <div className="flex items-center gap-1.5">
                     {(() => {
                       const Icon = paymentMethodConfig[selectedMember.paymentMethod]?.icon || CreditCard;
-                      return <Icon className={`w-4 h-4 ${paymentMethodConfig[selectedMember.paymentMethod]?.color || "text-gray-500"}`} />;
+                      return <Icon className={`w-4 h-4 ${paymentMethodConfig[selectedMember.paymentMethod]?.color}`} />;
                     })()}
-                    <p className="text-gray-800 font-medium">
-                      {paymentMethodConfig[selectedMember.paymentMethod]?.name || selectedMember.paymentMethod}
-                    </p>
+                    <span className="text-sm text-gray-850 dark:text-gray-300 font-bold">
+                      {paymentMethodConfig[selectedMember.paymentMethod]?.name}
+                    </span>
                   </div>
                 </div>
-                <div className="bg-gray-50 rounded-xl p-4">
-                  <p className="text-xs text-gray-500 mb-1">Transaction ID</p>
-                  <p className="text-gray-800 font-mono text-sm">{selectedMember.transactionId}</p>
+                <div className="bg-gray-50 dark:bg-gray-900/40 rounded-2xl p-4">
+                  <span className="text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase tracking-wider block mb-1">Transaction ID</span>
+                  <span className="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30 px-2 py-0.5 rounded-md w-fit block mt-0.5">
+                    {selectedMember.transactionId}
+                  </span>
                 </div>
-                <div className="bg-gray-50 rounded-xl p-4">
-                  <p className="text-xs text-gray-500 mb-1">Payment Date</p>
-                  <p className="text-gray-800 font-medium">{formatDate(selectedMember.date)}</p>
+                <div className="bg-gray-50 dark:bg-gray-900/40 rounded-2xl p-4">
+                  <span className="text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase tracking-wider block mb-1">Payment Date</span>
+                  <span className="text-sm text-gray-850 dark:text-gray-300 font-medium">{formatDate(selectedMember.date)}</span>
                 </div>
-                <div className="bg-gray-50 rounded-xl p-4">
-                  <p className="text-xs text-gray-500 mb-1">Fee Year</p>
-                  <p className="text-gray-800 font-medium">{selectedMember.year}</p>
+                <div className="bg-gray-50 dark:bg-gray-900/40 rounded-2xl p-4">
+                  <span className="text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase tracking-wider block mb-1">Fee Year</span>
+                  <span className="text-sm text-gray-850 dark:text-gray-300 font-bold">{selectedMember.year}</span>
                 </div>
-                <div className="bg-gray-50 rounded-xl p-4">
-                  <p className="text-xs text-gray-500 mb-1">Quarter</p>
-                  <p className="text-gray-800 font-medium">{selectedMember.quarter}</p>
+                <div className="bg-gray-50 dark:bg-gray-900/40 rounded-2xl p-4">
+                  <span className="text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase tracking-wider block mb-1">Quarter</span>
+                  <span className="text-sm text-gray-850 dark:text-gray-300 font-bold">{selectedMember.quarter}</span>
                 </div>
-                <div className="bg-gray-50 rounded-xl p-4 md:col-span-2">
-                  <p className="text-xs text-gray-500 mb-1">Address</p>
-                  <p className="text-gray-800 font-medium">{selectedMember.address}</p>
+                <div className="bg-gray-50 dark:bg-gray-900/40 rounded-2xl p-4 sm:col-span-2">
+                  <span className="text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase tracking-wider block mb-1">Address</span>
+                  <span className="text-sm text-gray-850 dark:text-gray-300 font-medium leading-relaxed">{selectedMember.address}</span>
                 </div>
               </div>
 
               {/* Status Badge */}
-              <div className="flex justify-center pt-4 border-t border-gray-100">
-                <div className={`flex items-center gap-2 px-4 py-2 rounded-full ${statusConfig[selectedMember.status]?.bgColor || "bg-gray-100"}`}>
+              <div className="flex justify-center pt-4 border-t border-gray-100 dark:border-gray-750">
+                <div className={`flex items-center gap-2 px-5 py-2.5 rounded-full ${statusConfig[selectedMember.status]?.bgColor || "bg-gray-100"}`}>
                   {(() => {
                     const StatusIcon = statusConfig[selectedMember.status]?.icon || Clock;
-                    return <StatusIcon className={`w-4 h-4 ${statusConfig[selectedMember.status]?.color || "text-gray-500"}`} />;
+                    return <StatusIcon className={`w-4 h-4 ${statusConfig[selectedMember.status]?.color}`} />;
                   })()}
-                  <span className={`font-medium ${statusConfig[selectedMember.status]?.color || "text-gray-500"}`}>
+                  <span className={`text-xs font-extrabold uppercase tracking-wider ${statusConfig[selectedMember.status]?.color}`}>
                     {statusConfig[selectedMember.status]?.label || selectedMember.status}
                   </span>
                 </div>
@@ -700,6 +816,24 @@ const MemberFeePage = () => {
           </div>
         </div>
       )}
+      
+      {/* Dynamic animations helper styles */}
+      <style jsx global>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes scaleUp {
+          from { transform: scale(0.95); opacity: 0; }
+          to { transform: scale(1); opacity: 1; }
+        }
+        .animate-fade-in {
+          animation: fadeIn 0.2s ease-out forwards;
+        }
+        .animate-scale-up {
+          animation: scaleUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+      `}</style>
     </div>
   );
 };

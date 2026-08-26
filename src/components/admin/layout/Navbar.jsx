@@ -45,14 +45,14 @@ const AdminNavbar = ({ onMenuClick, sidebarOpen }) => {
           </div>
         </div>
 
-        {/* Search Bar */}
-        <div className="flex-1 max-w-md mx-4 lg:mx-0">
+        {/* Search Bar (Hidden on extra small screens, visible on sm and up) */}
+        <div className="hidden sm:block flex-1 max-w-md mx-3 lg:mx-0">
           <div className="relative">
-            <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
               type="text"
               placeholder="Search events, members, projects..."
-              className="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition text-sm"
+              className="w-full pl-9 pr-3 py-1.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition text-xs sm:text-sm"
             />
           </div>
         </div>

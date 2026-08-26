@@ -1,10 +1,10 @@
 // app/layout.js
-
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import Providers from "@/provider/QueryProvider";
 import AuthProvider from "@/context/AuthContext";
+import FloatingCTA from "@/components/FloatingCTA"; // Import the widget
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +16,6 @@ export const metadata = {
   description:
     "Join the Raipurian Club community platform for members, events, donations, and projects. Lifetime premium membership with exclusive benefits, networking opportunities, and community events.",
 
-  // Keywords for SEO
   keywords: [
     "Raipurian Club",
     "Community Club",
@@ -30,12 +29,10 @@ export const metadata = {
     "Professional Networking",
   ],
 
-  // Author and creator
   authors: [{ name: "Raipurian Club", url: "https://raipurianclub.com" }],
   creator: "Raipurian Club",
   publisher: "Raipurian Club",
 
-  // Open Graph (Facebook, LinkedIn, etc.)
   openGraph: {
     title: "Raipurian Club - Premium Community Platform",
     description:
@@ -54,7 +51,6 @@ export const metadata = {
     type: "website",
   },
 
-  // Twitter Card
   twitter: {
     card: "summary_large_image",
     title: "Raipurian Club - Premium Community Platform",
@@ -65,7 +61,6 @@ export const metadata = {
     site: "@raipurianclub",
   },
 
-  // Additional SEO
   robots: {
     index: true,
     follow: true,
@@ -78,12 +73,10 @@ export const metadata = {
     },
   },
 
-  // Canonical URL
   alternates: {
     canonical: "https://raipurianclub.com",
   },
 
-  // Icons
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
@@ -93,22 +86,16 @@ export const metadata = {
     shortcut: ["/favicon.ico"],
   },
 
-  // App manifest
   manifest: "/manifest.json",
 
-  // Viewport settings (moved to separate export as per Next.js 14+)
-  // Verification codes for search consoles
   verification: {
     google: "your-google-verification-code",
     yandex: "your-yandex-verification-code",
-    // bing: "your-bing-verification-code",
   },
 
-  // Category and classification
   category: "Community",
   classification: "Social Networking",
 
-  // Other metadata
   applicationName: "Raipurian Club",
   appleWebApp: {
     capable: true,
@@ -123,34 +110,30 @@ export const metadata = {
     url: true,
   },
   referrer: "origin-when-cross-origin",
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#000000" },
-  ],
-  colorScheme: "light dark",
 };
 
-// Separate viewport export for Next.js 14+
 export const viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
   userScalable: true,
   viewportFit: "cover",
+  colorScheme: "light dark",
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#000000" },
+    { media: "(prefers-color-scheme: dark)", color: "#0b0f19" },
   ],
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" className="scroll-smooth">
+      <body className={`${inter.className} antialiased bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100 overflow-x-hidden min-h-screen selection:bg-emerald-500 selection:text-white`}>
         <AuthProvider>
           <Providers>
             {children}
-            <Toaster />
+            <Toaster position="top-center" toastOptions={{ duration: 4000 }} />
+            <FloatingCTA />
           </Providers>
         </AuthProvider>
       </body>

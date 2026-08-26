@@ -42,6 +42,24 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
   const [activeTooltip, setActiveTooltip] = useState(null);
   const tooltipTimeoutRef = useRef(null);
 
+  const [mobileExpandedSections, setMobileExpandedSections] = useState({
+    events: true,
+    members: true,
+    projects: true,
+    gallery: true,
+    donation: true,
+    member_fee: true,
+    permissions: true,
+    tickets: true,
+  });
+
+  const toggleMobileSection = (sectionId) => {
+    setMobileExpandedSections((prev) => ({
+      ...prev,
+      [sectionId]: !prev[sectionId],
+    }));
+  };
+
   const toggleSection = (section) => {
     if (!isOpen) return;
     setExpandedSections((prev) => ({
@@ -548,27 +566,7 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
         <nav className="p-4 space-y-3">
           {menuSections.map((section) => {
             const Icon = section.icon;
-            // Use a state per section for mobile - defined inside map with useState hook properly
-            // To avoid hooks inside map, we'll use a different approach with an object state
-            const [mobileExpandedState, setMobileExpandedState] = useState(
-              () => {
-                // Initialize all sections as expanded
-                const initialState = {};
-                menuSections.forEach((s) => {
-                  if (!s.isSingle) initialState[s.id] = true;
-                });
-                return initialState;
-              },
-            );
-
-            // Use the specific state for this section
-            const isExpandedMobile = mobileExpandedState[section.id] !== false;
-            const toggleMobileSection = () => {
-              setMobileExpandedState((prev) => ({
-                ...prev,
-                [section.id]: !prev[section.id],
-              }));
-            };
+            const isExpandedMobile = mobileExpandedSections[section.id] !== false;
 
             if (section.isSingle) {
               const isActive = pathname === section.href;
@@ -599,7 +597,7 @@ const AdminSidebar = ({ isOpen, onToggle, isMobileOpen, onMobileClose }) => {
             return (
               <div key={section.id} className="space-y-1">
                 <div
-                  onClick={toggleMobileSection}
+                  onClick={() => toggleMobileSection(section.id)}
                   className="flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-200 cursor-pointer hover:bg-white/10"
                 >
                   <Icon size={20} className={`${section.color} shrink-0`} />

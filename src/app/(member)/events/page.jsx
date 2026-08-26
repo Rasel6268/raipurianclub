@@ -24,9 +24,14 @@ import {
   Palette,
   Loader,
   AlertCircle,
+  X,
+  CheckCircle,
+  Send,
+  UserPlus,
 } from "lucide-react";
 import HeroProp from "@/components/HeroProp";
 import api from "@/config/api";
+import { toast } from "react-hot-toast";
 
 const EventsPage = () => {
   const [events, setEvents] = useState([]);
@@ -35,6 +40,25 @@ const EventsPage = () => {
   const [visibleEvents, setVisibleEvents] = useState(6);
   const [email, setEmail] = useState("");
   const [subscribing, setSubscribing] = useState(false);
+
+  // Join request modal state
+  const [showJoinModal, setShowJoinModal] = useState(false);
+  const [joiningEvent, setJoiningEvent] = useState(null);
+  const [joinSubmitting, setJoinSubmitting] = useState(false);
+  const [joinSuccess, setJoinSuccess] = useState(false);
+  const [joinForm, setJoinForm] = useState({
+    applicantName: '',
+    email: '',
+    phone: '',
+    age: '',
+    gender: '',
+    city: '',
+    occupation: '',
+    reasonForApplying: '',
+    numberOfTickets: 1,
+    ticketType: 'Standard',
+    specialRequests: '',
+  });
 
   // Event type configurations
   const eventTypeConfig = {
@@ -58,16 +82,14 @@ const EventsPage = () => {
  const fetchEvents = async () => {
     try {
       setLoading(true);
+      setError(null);
       const response = await api.get('/events');
-      
-      if (response.data.events) {
-        setEvents(response.data.events.data);
-      } else {
-        setEvents([]);
-      }
-    } catch (error) {
-      console.error('Error fetching events:', error);
-      toast.error('Failed to load events');
+      // Support both response shapes
+      const eventsData = response.data?.events?.data ?? response.data?.data ?? [];
+      setEvents(eventsData);
+    } catch (err) {
+      console.error('Error fetching events:', err);
+      setError('Failed to load events. Please try again.');
       setEvents([]);
     } finally {
       setLoading(false);
@@ -119,17 +141,64 @@ const EventsPage = () => {
   const handleSubscribe = async (e) => {
     e.preventDefault();
     if (!email) return;
-    
     setSubscribing(true);
     try {
-      // Add your subscription API endpoint here
-      // await api.post('/newsletter/subscribe', { email });
       toast.success('Subscribed successfully!');
       setEmail('');
-    } catch (error) {
+    } catch (err) {
       toast.error('Subscription failed. Please try again.');
     } finally {
       setSubscribing(false);
+    }
+  };
+
+  // Open join modal for an event
+  const handleOpenJoinModal = (event) => {
+    setJoiningEvent(event);
+    setJoinSuccess(false);
+    setJoinForm({
+      applicantName: '',
+      email: '',
+      phone: '',
+      age: '',
+      gender: '',
+      city: '',
+      occupation: '',
+      reasonForApplying: '',
+      numberOfTickets: 1,
+      ticketType: event.ticketPrice > 0 ? 'Standard' : 'Free',
+      specialRequests: '',
+    });
+    setShowJoinModal(true);
+  };
+
+  // Submit join request to backend
+  const handleJoinSubmit = async (e) => {
+    e.preventDefault();
+    if (!joinForm.applicantName || !joinForm.email || !joinForm.phone) {
+      toast.error('Please fill in your name, email, and phone number.');
+      return;
+    }
+    setJoinSubmitting(true);
+    try {
+      const payload = {
+        ...joinForm,
+        eventId: joiningEvent._id || joiningEvent.id,
+        numberOfTickets: parseInt(joinForm.numberOfTickets) || 1,
+        age: joinForm.age ? parseInt(joinForm.age) : undefined,
+        amount: (joiningEvent.ticketPrice || 0) * (parseInt(joinForm.numberOfTickets) || 1),
+      };
+      const res = await api.post('/events/requests', payload);
+      if (res.data?.success) {
+        setJoinSuccess(true);
+        toast.success('Join request submitted! You will be notified upon approval.');
+      } else {
+        toast.error(res.data?.message || 'Failed to submit request.');
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to submit join request.');
+    } finally {
+      setJoinSubmitting(false);
     }
   };
 
@@ -311,13 +380,14 @@ const EventsPage = () => {
           )}
 
           <button
+            onClick={() => handleOpenJoinModal(event)}
             className={`w-full bg-linear-to-r ${eventConfig.color} text-white font-semibold py-2.5 rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-[1.02] text-sm flex items-center justify-center gap-2 group/btn ${
               event.ticketAvailability === 'sold_out' ? 'opacity-50 cursor-not-allowed' : ''
             }`}
             disabled={event.ticketAvailability === 'sold_out'}
           >
-            <Ticket className="w-4 h-4" />
-            {event.buttonText || (event.ticketPrice > 0 ? `GET TICKETS - $${event.ticketPrice}` : 'GET FREE TICKETS')}
+            <UserPlus className="w-4 h-4" />
+            {event.ticketAvailability === 'sold_out' ? 'SOLD OUT' : (event.buttonText || (event.ticketPrice > 0 ? `JOIN EVENT - ৳${event.ticketPrice}` : 'JOIN FREE'))}
             <ArrowRight className="w-4 h-4 opacity-0 group-hover/btn:opacity-100 group-hover/btn:translate-x-0.5 transition-all -translate-x-1" />
           </button>
         </div>
@@ -552,6 +622,221 @@ const EventsPage = () => {
           overflow: hidden;
         }
       `}</style>
+
+      {/* ── Join Request Modal ──────────────────────────────────────────── */}
+      {showJoinModal && joiningEvent && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+          onClick={() => setShowJoinModal(false)}
+        >
+          <div
+            className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="sticky top-0 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 px-6 py-4 flex items-center justify-between z-10">
+              <div>
+                <h2 className="text-lg font-bold text-gray-900 dark:text-white">Request to Join</h2>
+                <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium mt-0.5">{joiningEvent.title}</p>
+              </div>
+              <button
+                onClick={() => setShowJoinModal(false)}
+                className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+              >
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+
+            {/* Success State */}
+            {joinSuccess ? (
+              <div className="px-6 py-12 text-center">
+                <div className="w-20 h-20 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <CheckCircle className="w-10 h-10 text-emerald-500" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Request Submitted!</h3>
+                <p className="text-gray-500 dark:text-gray-400 text-sm mb-6">
+                  Your join request for <strong>{joiningEvent.title}</strong> has been received. 
+                  You will be notified once it is reviewed.
+                </p>
+                <button
+                  onClick={() => setShowJoinModal(false)}
+                  className="px-6 py-2.5 bg-emerald-500 text-white rounded-xl font-semibold hover:bg-emerald-600 transition"
+                >
+                  Close
+                </button>
+              </div>
+            ) : (
+              /* Join Form */
+              <form onSubmit={handleJoinSubmit} className="px-6 py-5 space-y-4">
+                {/* Event summary */}
+                <div className="bg-emerald-50 dark:bg-emerald-900/20 rounded-xl p-3 flex items-center gap-3">
+                  <Calendar className="w-5 h-5 text-emerald-500 shrink-0" />
+                  <div className="text-sm">
+                    <p className="font-semibold text-gray-800 dark:text-white">{joiningEvent.title}</p>
+                    <p className="text-gray-500 dark:text-gray-400">{joiningEvent.date} · {joiningEvent.location}</p>
+                  </div>
+                  {joiningEvent.ticketPrice > 0 && (
+                    <span className="ml-auto text-emerald-600 font-bold text-sm shrink-0">৳{joiningEvent.ticketPrice}/ticket</span>
+                  )}
+                </div>
+
+                {/* Name & Email */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Full Name <span className="text-red-500">*</span></label>
+                    <input
+                      type="text"
+                      required
+                      value={joinForm.applicantName}
+                      onChange={(e) => setJoinForm(p => ({...p, applicantName: e.target.value}))}
+                      placeholder="Your full name"
+                      className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Email <span className="text-red-500">*</span></label>
+                    <input
+                      type="email"
+                      required
+                      value={joinForm.email}
+                      onChange={(e) => setJoinForm(p => ({...p, email: e.target.value}))}
+                      placeholder="your@email.com"
+                      className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    />
+                  </div>
+                </div>
+
+                {/* Phone & Age */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Phone <span className="text-red-500">*</span></label>
+                    <input
+                      type="tel"
+                      required
+                      value={joinForm.phone}
+                      onChange={(e) => setJoinForm(p => ({...p, phone: e.target.value}))}
+                      placeholder="+880..."
+                      className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Age</label>
+                    <input
+                      type="number"
+                      value={joinForm.age}
+                      onChange={(e) => setJoinForm(p => ({...p, age: e.target.value}))}
+                      placeholder="Age"
+                      min={1}
+                      className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    />
+                  </div>
+                </div>
+
+                {/* Gender & City */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Gender</label>
+                    <select
+                      value={joinForm.gender}
+                      onChange={(e) => setJoinForm(p => ({...p, gender: e.target.value}))}
+                      className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    >
+                      <option value="">Select</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">City</label>
+                    <input
+                      type="text"
+                      value={joinForm.city}
+                      onChange={(e) => setJoinForm(p => ({...p, city: e.target.value}))}
+                      placeholder="Your city"
+                      className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    />
+                  </div>
+                </div>
+
+                {/* Number of Tickets & Ticket Type */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">No. of Tickets</label>
+                    <input
+                      type="number"
+                      min={1}
+                      max={10}
+                      value={joinForm.numberOfTickets}
+                      onChange={(e) => setJoinForm(p => ({...p, numberOfTickets: e.target.value}))}
+                      className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Ticket Type</label>
+                    <select
+                      value={joinForm.ticketType}
+                      onChange={(e) => setJoinForm(p => ({...p, ticketType: e.target.value}))}
+                      className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    >
+                      <option value="Free">Free</option>
+                      <option value="Standard">Standard</option>
+                      <option value="VIP">VIP</option>
+                      <option value="Premium">Premium</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Reason */}
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Reason for Joining</label>
+                  <textarea
+                    rows={2}
+                    value={joinForm.reasonForApplying}
+                    onChange={(e) => setJoinForm(p => ({...p, reasonForApplying: e.target.value}))}
+                    placeholder="Why do you want to attend this event?"
+                    className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
+                  />
+                </div>
+
+                {/* Special Requests */}
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Special Requests</label>
+                  <textarea
+                    rows={2}
+                    value={joinForm.specialRequests}
+                    onChange={(e) => setJoinForm(p => ({...p, specialRequests: e.target.value}))}
+                    placeholder="Any special requirements or requests?"
+                    className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
+                  />
+                </div>
+
+                {/* Amount Preview */}
+                {joiningEvent.ticketPrice > 0 && (
+                  <div className="flex items-center justify-between bg-gray-50 dark:bg-gray-800/60 rounded-xl px-4 py-3">
+                    <span className="text-sm text-gray-600 dark:text-gray-400">Total ({joinForm.numberOfTickets} ticket{joinForm.numberOfTickets > 1 ? 's' : ''})</span>
+                    <span className="text-lg font-bold text-emerald-600">৳{(joiningEvent.ticketPrice * (parseInt(joinForm.numberOfTickets) || 1)).toLocaleString()}</span>
+                  </div>
+                )}
+
+                {/* Submit */}
+                <button
+                  type="submit"
+                  disabled={joinSubmitting}
+                  className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-[1.01] disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {joinSubmitting ? (
+                    <Loader className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Send className="w-4 h-4" />
+                  )}
+                  {joinSubmitting ? 'Submitting...' : 'Submit Join Request'}
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

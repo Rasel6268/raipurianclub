@@ -668,7 +668,7 @@ const MemberDirectory = () => {
       profession: "Professional",
       joinedDate: "2020",
       image:
-        "https://res.cloudinary.com/doumlnejx/image/upload/v1777615406/27_gvnfcm.jpg",
+        "https://res.cloudinary.com/lb6go8ca/image/upload/v1785833090/WhatsApp_Image_2026-08-03_at_9.29.08_PM_vfmxju.jpg",
       bio: "Founding member passionate about community building.",
     },
     {
@@ -1629,7 +1629,7 @@ const MemberDirectory = () => {
       profession: "Professional",
       joinedDate: "2020",
       image:
-        "https://res.cloudinary.com/doumlnejx/image/upload/v1782844960/Kamruzzaman_-_PP_y1656e.png",
+        "https://res.cloudinary.com/lb6go8ca/image/upload/v1785833090/WhatsApp_Image_2026-08-03_at_9.04.43_PM_emg2ei.jpg",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1835,7 +1835,7 @@ const MemberDirectory = () => {
                     </div>
                     <div className="space-y-4">
                       {filteredPatronMembers.map((member) => (
-                        <FundingMemberCard
+                        <MemberCard
                           key={member.id}
                           member={member}
                           isManaging={true}
@@ -1866,7 +1866,7 @@ const MemberDirectory = () => {
                     </div>
                     <div className="space-y-4">
                       {filteredDonorMembers.map((member) => (
-                        <FundingMemberCard
+                        <MemberCard
                           key={member.id}
                           member={member}
                           isManaging={false}
@@ -1930,7 +1930,7 @@ const MemberDirectory = () => {
                 </div>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   {filteredManagingMembers.map((member) => (
-                    <FundingMemberCard
+                    <MemberCard
                       key={member.id}
                       member={member}
                       isManaging={true}

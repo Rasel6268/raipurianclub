@@ -1,6 +1,7 @@
 // components/MemberLogin.js
 "use client";
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import toast from "react-hot-toast";
 import {
@@ -240,11 +241,11 @@ const MemberLogin = () => {
               </form>
 
               {/* Sign Up Link */}
-              <p className="text-center text-gray-600 dark:text-gray-400 mt-6">
+              <p className="text-center text-gray-600 dark:text-gray-400 mt-6 text-sm">
                 Not a member yet?{" "}
-                <a href="/register" className="text-emerald-600 dark:text-emerald-400 font-semibold hover:underline">
+                <Link href="/register" className="text-emerald-600 dark:text-emerald-400 font-semibold hover:underline">
                   Join the community
-                </a>
+                </Link>
               </p>
             </div>
 

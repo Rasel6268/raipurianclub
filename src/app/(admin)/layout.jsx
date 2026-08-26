@@ -59,7 +59,7 @@ const AdminLayout = ({ children }) => {
         <AdminNavbar onMenuClick={toggleMobileMenu} sidebarOpen={sidebarOpen} />
 
         {/* Page Content */}
-        <main className="p-4 lg:p-8">
+        <main className="p-3 sm:p-5 lg:p-6 max-w-7xl mx-auto">
           {children}
         </main>
       </div>

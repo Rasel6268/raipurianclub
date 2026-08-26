@@ -36,7 +36,22 @@ import {
   Printer
 } from 'lucide-react';
 
+import api from '@/config/api';
+import { toast } from 'react-hot-toast';
+
 const EventRequestsPage = () => {
+  const [requests, setRequests] = useState([]);
+  const [eventsList, setEventsList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [statsData, setStatsData] = useState({
+    total: 0,
+    pending: 0,
+    approved: 0,
+    rejected: 0,
+    totalRevenue: 0,
+    totalTicketsSold: 0,
+  });
+
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [eventFilter, setEventFilter] = useState('all');
@@ -48,301 +63,130 @@ const EventRequestsPage = () => {
   const [rejectReason, setRejectReason] = useState('');
   const itemsPerPage = 10;
 
-  // Sample events list for filter
-  const eventsList = [
-    { id: 1, name: "Summer Music Festival" },
-    { id: 2, name: "Tech Conference 2025" },
-    { id: 3, name: "Wellness Retreat" },
-    { id: 4, name: "Food & Wine Expo" },
-    { id: 5, name: "Charity Gala Night" }
-  ];
+  // Fetch event requests and events list from backend
+  useEffect(() => {
+    fetchRequests();
+    fetchEventsList();
+  }, [statusFilter, eventFilter]);
 
-  // Sample event requests data
-  const [requests, setRequests] = useState([
-    {
-      id: 1,
-      eventId: 1,
-      eventName: "Summer Music Festival",
-      eventDate: "July 15, 2025",
-      eventLocation: "Central Park, New York",
-      applicantName: "Rajesh Kumar Sharma",
-      email: "rajesh.sharma@example.com",
-      phone: "+91 98765 43210",
-      age: 28,
-      gender: "Male",
-      city: "New York",
-      occupation: "Software Engineer",
-      experience: "Attended 5+ music festivals",
-      reasonForApplying: "Passionate about music and want to experience live performances",
-      appliedDate: "2025-01-15",
-      status: "pending",
-      ticketType: "VIP",
-      numberOfTickets: 2,
-      additionalGuests: [
-        { name: "Priya Sharma", age: 26, relationship: "Spouse" }
-      ],
-      specialRequests: "Need wheelchair access",
-      paymentStatus: "pending",
-      amount: 199.98,
-      transactionId: null
-    },
-    {
-      id: 2,
-      eventId: 2,
-      eventName: "Tech Conference 2025",
-      eventDate: "August 5, 2025",
-      eventLocation: "Convention Center, San Francisco",
-      applicantName: "Priya Patel",
-      email: "priya.patel@example.com",
-      phone: "+91 98765 43211",
-      age: 32,
-      gender: "Female",
-      city: "San Francisco",
-      occupation: "Product Manager",
-      experience: "Attended 3 tech conferences",
-      reasonForApplying: "Network with industry leaders and learn about latest technologies",
-      appliedDate: "2025-01-20",
-      status: "approved",
-      ticketType: "Standard",
-      numberOfTickets: 1,
-      additionalGuests: [],
-      specialRequests: "",
-      paymentStatus: "completed",
-      amount: 199.99,
-      transactionId: "TXN-123456789"
-    },
-    {
-      id: 3,
-      eventId: 3,
-      eventName: "Wellness Retreat",
-      eventDate: "September 20, 2025",
-      eventLocation: "Mountain Resort, Colorado",
-      applicantName: "Amit Verma",
-      email: "amit.verma@example.com",
-      phone: "+91 98765 43212",
-      age: 35,
-      gender: "Male",
-      city: "Denver",
-      occupation: "Yoga Instructor",
-      experience: "Certified yoga teacher with 5 years experience",
-      reasonForApplying: "Looking to deepen my practice and learn new techniques",
-      appliedDate: "2025-01-25",
-      status: "pending",
-      ticketType: "Premium",
-      numberOfTickets: 2,
-      additionalGuests: [
-        { name: "Neha Verma", age: 32, relationship: "Spouse" }
-      ],
-      specialRequests: "Vegetarian meal options",
-      paymentStatus: "pending",
-      amount: 599.98,
-      transactionId: null
-    },
-    {
-      id: 4,
-      eventId: 4,
-      eventName: "Food & Wine Expo",
-      eventDate: "October 10, 2025",
-      eventLocation: "Grand Plaza, Chicago",
-      applicantName: "Sunita Yadav",
-      email: "sunita.yadav@example.com",
-      phone: "+91 98765 43213",
-      age: 29,
-      gender: "Female",
-      city: "Chicago",
-      occupation: "Chef",
-      experience: "Professional chef with 6 years experience in Italian cuisine",
-      reasonForApplying: "Discover new culinary trends and network with chefs",
-      appliedDate: "2025-02-01",
-      status: "rejected",
-      ticketType: "Standard",
-      numberOfTickets: 1,
-      additionalGuests: [],
-      specialRequests: "",
-      paymentStatus: "refunded",
-      amount: 89.99,
-      transactionId: "TXN-987654321",
-      rejectionReason: "Event capacity reached"
-    },
-    {
-      id: 5,
-      eventId: 5,
-      eventName: "Charity Gala Night",
-      eventDate: "November 25, 2025",
-      eventLocation: "Royal Ballroom, Boston",
-      applicantName: "Vikram Singh",
-      email: "vikram.singh@example.com",
-      phone: "+91 98765 43214",
-      age: 45,
-      gender: "Male",
-      city: "Boston",
-      occupation: "Business Owner",
-      experience: "Regular donor to charitable causes",
-      reasonForApplying: "Support children's education and contribute to society",
-      appliedDate: "2025-02-05",
-      status: "approved",
-      ticketType: "VIP",
-      numberOfTickets: 4,
-      additionalGuests: [
-        { name: "Meera Singh", age: 42, relationship: "Spouse" },
-        { name: "Rohan Singh", age: 18, relationship: "Son" },
-        { name: "Kavya Singh", age: 15, relationship: "Daughter" }
-      ],
-      specialRequests: "Dinner table near stage",
-      paymentStatus: "completed",
-      amount: 599.96,
-      transactionId: "TXN-456123789"
-    },
-    {
-      id: 6,
-      eventId: 1,
-      eventName: "Summer Music Festival",
-      eventDate: "July 15, 2025",
-      eventLocation: "Central Park, New York",
-      applicantName: "Neha Gupta",
-      email: "neha.gupta@example.com",
-      phone: "+91 98765 43215",
-      age: 24,
-      gender: "Female",
-      city: "New York",
-      occupation: "Student",
-      experience: "First time attending music festival",
-      reasonForApplying: "Love music and want to have fun with friends",
-      appliedDate: "2025-02-10",
-      status: "pending",
-      ticketType: "Standard",
-      numberOfTickets: 3,
-      additionalGuests: [
-        { name: "Rahul Mehta", age: 25, relationship: "Friend" },
-        { name: "Anjali Sahu", age: 24, relationship: "Friend" }
-      ],
-      specialRequests: "",
-      paymentStatus: "pending",
-      amount: 149.97,
-      transactionId: null
-    },
-    {
-      id: 7,
-      eventId: 2,
-      eventName: "Tech Conference 2025",
-      eventDate: "August 5, 2025",
-      eventLocation: "Convention Center, San Francisco",
-      applicantName: "Rahul Mehta",
-      email: "rahul.mehta@example.com",
-      phone: "+91 98765 43216",
-      age: 30,
-      gender: "Male",
-      city: "San Jose",
-      occupation: "Data Scientist",
-      experience: "Presented at 2 tech conferences",
-      reasonForApplying: "Share knowledge and learn from industry experts",
-      appliedDate: "2025-02-12",
-      status: "approved",
-      ticketType: "Standard",
-      numberOfTickets: 1,
-      additionalGuests: [],
-      specialRequests: "",
-      paymentStatus: "completed",
-      amount: 199.99,
-      transactionId: "TXN-789123456"
-    },
-    {
-      id: 8,
-      eventId: 3,
-      eventName: "Wellness Retreat",
-      eventDate: "September 20, 2025",
-      eventLocation: "Mountain Resort, Colorado",
-      applicantName: "Kavita Agrawal",
-      email: "kavita.agrawal@example.com",
-      phone: "+91 98765 43217",
-      age: 38,
-      gender: "Female",
-      city: "Boulder",
-      occupation: "Therapist",
-      experience: "Certified meditation instructor",
-      reasonForApplying: "Want to learn advanced meditation techniques",
-      appliedDate: "2025-02-15",
-      status: "pending",
-      ticketType: "Premium",
-      numberOfTickets: 1,
-      additionalGuests: [],
-      specialRequests: "Early check-in requested",
-      paymentStatus: "pending",
-      amount: 299.99,
-      transactionId: null
+  const fetchRequests = async () => {
+    try {
+      setLoading(true);
+      const params = {};
+      if (statusFilter !== 'all') params.status = statusFilter;
+      if (eventFilter !== 'all') params.eventId = eventFilter;
+
+      const res = await api.get('/events/requests/all', { params });
+      if (res.data?.success) {
+        setRequests(res.data.data || []);
+        if (res.data.stats) {
+          setStatsData(res.data.stats);
+        }
+      }
+    } catch (err) {
+      console.error('Error fetching event requests:', err);
+      toast.error('Failed to load event requests');
+    } finally {
+      setLoading(false);
     }
-  ]);
-
-  // Statistics
-  const stats = {
-    total: requests.length,
-    pending: requests.filter(r => r.status === 'pending').length,
-    approved: requests.filter(r => r.status === 'approved').length,
-    rejected: requests.filter(r => r.status === 'rejected').length,
-    totalRevenue: requests
-      .filter(r => r.status === 'approved' && r.paymentStatus === 'completed')
-      .reduce((sum, r) => sum + r.amount, 0),
-    totalTicketsSold: requests
-      .filter(r => r.status === 'approved')
-      .reduce((sum, r) => sum + r.numberOfTickets, 0)
   };
 
-  // Status configuration
+  const fetchEventsList = async () => {
+    try {
+      const res = await api.get('/events');
+      if (res.data?.events?.data) {
+        setEventsList(res.data.events.data);
+      } else if (Array.isArray(res.data?.data)) {
+        setEventsList(res.data.data);
+      }
+    } catch (err) {
+      console.error('Error fetching events list:', err);
+    }
+  };
+
+  const handleApprove = async () => {
+    if (!selectedRequest) return;
+    try {
+      const res = await api.put(`/events/requests/${selectedRequest._id || selectedRequest.id}`, {
+        status: 'approved',
+        paymentStatus: 'completed',
+      });
+      if (res.data?.success) {
+        toast.success('Request approved successfully');
+        setShowApproveModal(false);
+        setSelectedRequest(null);
+        fetchRequests();
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Error approving request');
+    }
+  };
+
+  const handleReject = async () => {
+    if (!selectedRequest) return;
+    try {
+      const res = await api.put(`/events/requests/${selectedRequest._id || selectedRequest.id}`, {
+        status: 'rejected',
+        rejectionReason: rejectReason || 'Request rejected by admin',
+      });
+      if (res.data?.success) {
+        toast.success('Request rejected');
+        setShowRejectModal(false);
+        setSelectedRequest(null);
+        setRejectReason('');
+        fetchRequests();
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Error rejecting request');
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!confirm('Are you sure you want to delete this event request?')) return;
+    try {
+      const res = await api.delete(`/events/requests/${id}`);
+      if (res.data?.success) {
+        toast.success('Request deleted');
+        fetchRequests();
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Error deleting request');
+    }
+  };
+
+  // Derived: Status configuration
   const statusConfig = {
-    pending: { icon: Clock, label: 'Pending', color: 'text-yellow-600', bgColor: 'bg-yellow-100 dark:bg-yellow-900/20', borderColor: 'border-yellow-200' },
-    approved: { icon: CheckCircle, label: 'Approved', color: 'text-green-600', bgColor: 'bg-green-100 dark:bg-green-900/20', borderColor: 'border-green-200' },
-    rejected: { icon: XCircle, label: 'Rejected', color: 'text-red-600', bgColor: 'bg-red-100 dark:bg-red-900/20', borderColor: 'border-red-200' }
+    pending:  { icon: Clock,        label: 'Pending',  color: 'text-yellow-600', bgColor: 'bg-yellow-100 dark:bg-yellow-900/20', borderColor: 'border-yellow-200' },
+    approved: { icon: CheckCircle,  label: 'Approved', color: 'text-green-600',  bgColor: 'bg-green-100 dark:bg-green-900/20',  borderColor: 'border-green-200'  },
+    rejected: { icon: XCircle,      label: 'Rejected', color: 'text-red-600',    bgColor: 'bg-red-100 dark:bg-red-900/20',      borderColor: 'border-red-200'    },
   };
 
-  // Filter requests
-  const filteredRequests = requests.filter(request => {
-    const matchesSearch = request.applicantName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         request.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         request.eventName.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || request.status === statusFilter;
-    const matchesEvent = eventFilter === 'all' || request.eventId.toString() === eventFilter;
-    return matchesSearch && matchesStatus && matchesEvent;
+  // Derived: Client-side search filter (server already filters by status/eventId)
+  const filteredRequests = requests.filter((r) => {
+    if (!searchTerm) return true;
+    const q = searchTerm.toLowerCase();
+    return (
+      (r.applicantName || '').toLowerCase().includes(q) ||
+      (r.email || '').toLowerCase().includes(q) ||
+      (r.eventName || '').toLowerCase().includes(q)
+    );
   });
 
-  // Pagination
+  // Derived: Pagination
   const totalPages = Math.ceil(filteredRequests.length / itemsPerPage);
   const paginatedRequests = filteredRequests.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
-  const handleApprove = () => {
-    if (selectedRequest) {
-      setRequests(prevRequests =>
-        prevRequests.map(request =>
-          request.id === selectedRequest.id
-            ? { 
-                ...request, 
-                status: 'approved', 
-                paymentStatus: 'completed',
-                transactionId: `TXN-${Math.random().toString(36).substr(2, 9).toUpperCase()}`
-              }
-            : request
-        )
-      );
-      setShowApproveModal(false);
-      setSelectedRequest(null);
-    }
-  };
-
-  const handleReject = () => {
-    if (selectedRequest) {
-      setRequests(prevRequests =>
-        prevRequests.map(request =>
-          request.id === selectedRequest.id
-            ? { ...request, status: 'rejected', rejectionReason: rejectReason || 'Request rejected by admin' }
-            : request
-        )
-      );
-      setShowRejectModal(false);
-      setSelectedRequest(null);
-      setRejectReason('');
-    }
+  // Live stats from backend (fallback to client-side count)
+  const stats = statsData.total > 0 ? statsData : {
+    total:           requests.length,
+    pending:         requests.filter(r => r.status === 'pending').length,
+    approved:        requests.filter(r => r.status === 'approved').length,
+    rejected:        requests.filter(r => r.status === 'rejected').length,
+    totalRevenue:    requests.filter(r => r.status === 'approved' && r.paymentStatus === 'completed').reduce((s, r) => s + (r.amount || 0), 0),
+    totalTicketsSold:requests.filter(r => r.status === 'approved').reduce((s, r) => s + (r.numberOfTickets || 0), 0),
   };
 
   const formatDate = (dateString) => {
@@ -492,7 +336,9 @@ const EventRequestsPage = () => {
             >
               <option value="all">All Events</option>
               {eventsList.map(event => (
-                <option key={event.id} value={event.id}>{event.name}</option>
+                <option key={event._id || event.id} value={event._id || event.id}>
+                  {event.title || event.name}
+                </option>
               ))}
             </select>
 
@@ -531,12 +377,17 @@ const EventRequestsPage = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
-                {paginatedRequests.map((request) => {
-                  const StatusIcon = statusConfig[request.status].icon;
-                  const statusConf = statusConfig[request.status];
+                {loading ? (
+                  <tr><td colSpan={8} className="px-6 py-16 text-center text-gray-400">Loading requests...</td></tr>
+                ) : paginatedRequests.length === 0 ? (
+                  <tr><td colSpan={8} className="px-6 py-16 text-center text-gray-400">No event requests found.</td></tr>
+                ) : paginatedRequests.map((request) => {
+                  const safeStatus = statusConfig[request.status] ? request.status : 'pending';
+                  const StatusIcon = statusConfig[safeStatus].icon;
+                  const statusConf = statusConfig[safeStatus];
                   
                   return (
-                    <tr key={request.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
+                    <tr key={request._id || request.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-full flex items-center justify-center">
@@ -589,7 +440,7 @@ const EventRequestsPage = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <p className="text-sm text-gray-600 dark:text-gray-300">{formatDate(request.appliedDate)}</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-300">{formatDate(request.createdAt || request.appliedDate)}</p>
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center justify-center gap-2">
@@ -627,6 +478,13 @@ const EventRequestsPage = () => {
                               </button>
                             </>
                           )}
+                          <button
+                            onClick={() => handleDelete(request._id || request.id)}
+                            className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition"
+                            title="Delete"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
                         </div>
                       </td>
                     </tr>

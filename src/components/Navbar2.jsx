@@ -1,6 +1,6 @@
-// components/Navbar.js - Updated with Membership Dropdown
+// components/Navbar2.js
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -8,20 +8,19 @@ import {
   X,
   Users,
   Calendar,
-  Heart,
   Home,
-  Image,
+  Image as ImageIcon,
   User,
   LogOut,
   Settings,
-  Shield,
   LayoutDashboard,
   ChevronDown,
   Sparkles,
   Award,
   Crown,
   GitBranch,
-  Layers,
+  ShieldCheck,
+  ChevronRight,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
@@ -31,53 +30,70 @@ const Navbar2 = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isMembershipDropdownOpen, setIsMembershipDropdownOpen] = useState(false);
+  const [isMobileMembershipOpen, setIsMobileMembershipOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+  const dropdownRef = useRef(null);
+  const userMenuRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 30);
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu when route changes
+  // Close mobile menu & dropdowns on route change
   useEffect(() => {
     setIsMobileMenuOpen(false);
     setIsUserMenuOpen(false);
     setIsMembershipDropdownOpen(false);
   }, [pathname]);
 
-  // Show loading state while checking authentication
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isMobileMenuOpen]);
+
+  // Handle outside click for desktop dropdowns
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setIsMembershipDropdownOpen(false);
+      }
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target)) {
+        setIsUserMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   if (loading) {
     return (
-      <header className="fixed top-0 left-0 w-full z-50 bg-white/90 backdrop-blur-xl shadow-lg py-3 border-b border-emerald-100/50">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <header className="fixed top-0 left-0 w-full z-50 bg-white/90 backdrop-blur-xl shadow-xs py-3.5 border-b border-emerald-100/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
-            {/* Logo */}
-            <div className="flex items-center space-x-2">
-              <div className="relative">
-                <div className="relative bg-linear-to-br from-emerald-600 to-cyan-600 rounded-full p-1.5">
-                  <span className="text-white font-bold text-xl">RC</span>
-                </div>
-              </div>
-              <span className="font-bold text-xl tracking-tight text-slate-800">
-                Raipur <span className="text-emerald-500">Club</span>
-              </span>
+            <div className="flex items-center space-x-2.5">
+              <div className="h-10 w-10 bg-emerald-100 rounded-full animate-pulse"></div>
+              <div className="h-6 w-32 bg-gray-200 rounded-md animate-pulse"></div>
             </div>
-            
-            <div className="hidden md:flex items-center space-x-1">
-              <div className="h-10 w-20 bg-gray-200 rounded-full animate-pulse"></div>
-              <div className="h-10 w-24 bg-gray-200 rounded-full animate-pulse"></div>
-              <div className="h-10 w-24 bg-gray-200 rounded-full animate-pulse"></div>
-              <div className="h-10 w-20 bg-gray-200 rounded-full animate-pulse"></div>
-              <div className="h-10 w-16 bg-gray-200 rounded-full animate-pulse ml-4"></div>
-              <div className="h-10 w-24 bg-gray-200 rounded-full animate-pulse ml-2"></div>
+            <div className="hidden lg:flex items-center space-x-2">
+              <div className="h-9 w-20 bg-gray-200 rounded-full animate-pulse"></div>
+              <div className="h-9 w-24 bg-gray-200 rounded-full animate-pulse"></div>
+              <div className="h-9 w-24 bg-gray-200 rounded-full animate-pulse"></div>
+              <div className="h-9 w-24 bg-gray-200 rounded-full animate-pulse ml-3"></div>
             </div>
-            
-            <div className="md:hidden">
-              <div className="h-10 w-10 bg-gray-200 rounded-full animate-pulse"></div>
+            <div className="lg:hidden">
+              <div className="h-10 w-10 bg-gray-200 rounded-xl animate-pulse"></div>
             </div>
           </div>
         </div>
@@ -85,40 +101,39 @@ const Navbar2 = () => {
     );
   }
 
-  // Navigation links for all users
   const navLinks = [
-    { name: "Home", href: "/", icon: Home, showAlways: true },
-    { name: "Members", href: "/members", icon: Users, showAlways: true },
-    { name: "Amenities", href: "/amenities", icon: Sparkles, showAlways: true },
-    { name: "Events", href: "/events", icon: Calendar, showAlways: true },
-    { name: "Gallery", href: "/gallery", icon: Image, showAlways: true },
-    { name: "Beauty of Raipur", href: "/beauty", icon: Image, showAlways: true }
+    { name: "Home", href: "/", icon: Home },
+    { name: "Members", href: "/members", icon: Users },
+    { name: "Amenities", href: "/amenities", icon: Sparkles },
+    { name: "Events", href: "/events", icon: Calendar },
+    { name: "Gallery", href: "/gallery", icon: ImageIcon },
+    { name: "Beauty of Raipur", href: "/beauty", icon: ImageIcon },
   ];
 
-  // Membership dropdown items
   const membershipDropdownItems = [
     { 
       name: "View Plans", 
-      href: "/", 
+      href: "/membership", 
       icon: Crown,
-      description: "Explore all membership plans"
+      description: "Explore all club membership categories"
     },
     { 
       name: "Compare Plans", 
       href: "/membership/compare", 
       icon: GitBranch,
-      description: "Compare membership benefits"
+      description: "Side-by-side features & benefits matrix"
     },
     { 
-      name: "Terms & Condition", 
+      name: "Terms & Conditions", 
       href: "/terms", 
       icon: Award,
-      description: "Become a member today"
+      description: "Membership policies & eligibility rules"
     },
   ];
 
   const handleLogout = async () => {
     setIsUserMenuOpen(false);
+    setIsMobileMenuOpen(false);
     await logout();
     router.push("/");
   };
@@ -132,13 +147,13 @@ const Navbar2 = () => {
 
   const getStatusBadge = () => {
     if (isSuperAdmin)
-      return { text: "Super Admin", color: "bg-red-100 text-red-700" };
+      return { text: "Super Admin", color: "bg-red-500/10 text-red-600 border border-red-200" };
     if (isAdmin)
-      return { text: "Admin", color: "bg-purple-100 text-purple-700" };
+      return { text: "Admin", color: "bg-purple-500/10 text-purple-600 border border-purple-200" };
     if (isReviewPending)
-      return { text: "Pending Review", color: "bg-yellow-100 text-yellow-700" };
+      return { text: "Pending Review", color: "bg-amber-500/10 text-amber-600 border border-amber-200" };
     if (isMember && user?.status === "approved")
-      return { text: "Member", color: "bg-green-100 text-green-700" };
+      return { text: "Member", color: "bg-emerald-500/10 text-emerald-600 border border-emerald-200" };
     return null;
   };
 
@@ -147,254 +162,267 @@ const Navbar2 = () => {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
+        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
           isScrolled
-            ? "bg-white/90 backdrop-blur-xl shadow-lg py-3 border-b border-emerald-100/50"
-            : "bg-transparent py-5"
+            ? "bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl shadow-md py-3 border-b border-gray-100 dark:border-slate-800"
+            : "bg-gradient-to-b from-black/60 via-black/20 to-transparent py-4 sm:py-5"
         }`}
       >
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <Link href="/" className="group flex items-center space-x-2">
+            <Link href="/" className="group flex items-center space-x-2.5 focus:outline-hidden">
               <div className="relative">
-                <div className="absolute -inset-1 bg-linear-to-r from-emerald-500 to-cyan-500 rounded-full blur opacity-40 group-hover:opacity-70 transition duration-300"></div>
-                <div className="relative bg-linear-to-br from-emerald-600 to-cyan-600 rounded-full p-1.5">
-                  <span className="text-white font-bold text-xl">RC</span>
+                <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-full blur-xs opacity-50 group-hover:opacity-90 transition duration-300"></div>
+                <div className="relative bg-gradient-to-br from-emerald-600 to-teal-600 rounded-full p-2 text-white shadow-md">
+                  <span className="font-extrabold text-sm tracking-wider">RC</span>
                 </div>
               </div>
-              <span
-                className={`font-bold text-xl tracking-tight transition-colors duration-300 ${
-                  isScrolled ? "text-slate-800" : "text-white"
-                }`}
-              >
-                Raipur <span className="text-emerald-500">Club</span>
-              </span>
+              <div className="flex flex-col">
+                <span
+                  className={`font-bold text-lg sm:text-xl tracking-tight transition-colors duration-300 ${
+                    isScrolled ? "text-slate-900 dark:text-white" : "text-white"
+                  }`}
+                >
+                  Raipur <span className="text-emerald-500">Club</span>
+                </span>
+                <span className="text-[10px] tracking-widest uppercase font-semibold text-emerald-400 -mt-1 hidden sm:block">
+                  Community Hub
+                </span>
+              </div>
             </Link>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center space-x-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className={`px-4 py-2 rounded-full font-medium transition-all duration-300 hover:scale-105 ${
-                    pathname === link.href
-                      ? isScrolled
-                        ? "text-emerald-600 bg-emerald-50"
-                        : "text-white bg-white/20"
-                      : isScrolled
-                      ? "text-slate-600 hover:text-emerald-600 hover:bg-emerald-50"
-                      : "text-white/90 hover:text-white hover:bg-white/10"
-                  }`}
-                >
-                  <span className="flex items-center gap-1">
-                    {link.icon && <link.icon className="w-4 h-4" />}
-                    {link.name}
-                  </span>
-                </Link>
-              ))}
+            {/* Desktop & Tablet Navigation */}
+            <nav className="hidden lg:flex items-center space-x-1">
+              {navLinks.map((link) => {
+                const isActive = pathname === link.href;
+                return (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    className={`px-3.5 py-2 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-1.5 ${
+                      isActive
+                        ? isScrolled
+                          ? "text-emerald-600 bg-emerald-50 dark:bg-emerald-950/40 dark:text-emerald-400 font-semibold"
+                          : "text-white bg-white/20 backdrop-blur-md font-semibold"
+                        : isScrolled
+                        ? "text-slate-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-50 dark:hover:bg-slate-800/60"
+                        : "text-white/90 hover:text-white hover:bg-white/10"
+                    }`}
+                  >
+                    <link.icon className="w-3.5 h-3.5" />
+                    <span>{link.name}</span>
+                  </Link>
+                );
+              })}
 
               {/* Membership Dropdown */}
-              <div 
-                className="relative"
-                onMouseEnter={() => setIsMembershipDropdownOpen(true)}
-                onMouseLeave={() => setIsMembershipDropdownOpen(false)}
-              >
+              <div ref={dropdownRef} className="relative">
                 <button
-                  className={`px-4 py-2 rounded-full font-medium transition-all duration-300 hover:scale-105 flex items-center gap-1 ${
-                    pathname.includes('/membership')
+                  onClick={() => setIsMembershipDropdownOpen(!isMembershipDropdownOpen)}
+                  onMouseEnter={() => setIsMembershipDropdownOpen(true)}
+                  className={`px-3.5 py-2 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-1.5 cursor-pointer ${
+                    pathname.startsWith("/membership") || pathname === "/terms"
                       ? isScrolled
-                        ? "text-emerald-600 bg-emerald-50"
-                        : "text-white bg-white/20"
+                        ? "text-emerald-600 bg-emerald-50 dark:bg-emerald-950/40 dark:text-emerald-400 font-semibold"
+                        : "text-white bg-white/20 backdrop-blur-md font-semibold"
                       : isScrolled
-                      ? "text-slate-600 hover:text-emerald-600 hover:bg-emerald-50"
+                      ? "text-slate-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-50 dark:hover:bg-slate-800/60"
                       : "text-white/90 hover:text-white hover:bg-white/10"
                   }`}
+                  aria-expanded={isMembershipDropdownOpen}
                 >
-                  <Crown className="w-4 h-4" />
-                  Membership
-                  <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isMembershipDropdownOpen ? 'rotate-180' : ''}`} />
+                  <Crown className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Membership</span>
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                      isMembershipDropdownOpen ? "rotate-180" : ""
+                    }`}
+                  />
                 </button>
 
-                {/* Dropdown Menu */}
                 {isMembershipDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden z-50 animate-fade-down">
-                    <div className="p-2">
-                      {membershipDropdownItems.map((item) => (
-                        <Link
-                          key={item.name}
-                          href={item.href}
-                          className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-emerald-50 transition-colors group"
-                          onClick={() => setIsMembershipDropdownOpen(false)}
-                        >
-                          <div className={`p-2 rounded-lg bg-emerald-100 text-emerald-600 group-hover:bg-emerald-200 transition-colors`}>
-                            <item.icon className="w-4 h-4" />
-                          </div>
-                          <div>
-                            <p className="text-sm font-medium text-gray-800">{item.name}</p>
-                            <p className="text-xs text-gray-500">{item.description}</p>
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
+                  <div
+                    onMouseLeave={() => setIsMembershipDropdownOpen(false)}
+                    className="absolute right-0 mt-2 w-72 bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-800 p-2 z-50 animate-fade-down"
+                  >
+                    {membershipDropdownItems.map((item) => (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        onClick={() => setIsMembershipDropdownOpen(false)}
+                        className="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/30 transition-colors group"
+                      >
+                        <div className="p-2 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 group-hover:scale-105 transition-transform">
+                          <item.icon className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-gray-800 dark:text-gray-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400">
+                            {item.name}
+                          </p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                            {item.description}
+                          </p>
+                        </div>
+                      </Link>
+                    ))}
                   </div>
                 )}
               </div>
 
-              {/* Conditional Navigation based on auth status */}
+              {/* Authentication Buttons / Profile */}
               {isAuthenticated ? (
-                <>
-                  {/* User Menu Dropdown */}
-                  <div className="relative ml-4">
-                    <button
-                      onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                      className={`flex items-center gap-2 px-3 py-2 rounded-full transition-all duration-300 hover:scale-105 ${
-                        isScrolled
-                          ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
-                          : "bg-white/20 text-white hover:bg-white/30"
-                      }`}
-                    >
-                      <img
-                        src={getProfileImage()}
-                        alt={user?.name}
-                        className="w-6 h-6 rounded-full object-cover"
-                      />
-                      <span className="font-medium text-sm hidden lg:inline">
-                        {user?.name?.split(" ")[0]}
-                      </span>
-                      <ChevronDown className="w-4 h-4" />
-                    </button>
+                <div ref={userMenuRef} className="relative ml-2">
+                  <button
+                    onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded-full transition-all duration-200 cursor-pointer ${
+                      isScrolled
+                        ? "bg-emerald-50 dark:bg-slate-800 text-slate-800 dark:text-slate-100 hover:bg-emerald-100 dark:hover:bg-slate-700 border border-emerald-200/50"
+                        : "bg-white/20 text-white hover:bg-white/30 backdrop-blur-md border border-white/30"
+                    }`}
+                  >
+                    <img
+                      src={getProfileImage()}
+                      alt={user?.name || "User"}
+                      className="w-7 h-7 rounded-full object-cover border border-white/50"
+                    />
+                    <span className="font-semibold text-xs max-w-[100px] truncate">
+                      {user?.name?.split(" ")[0]}
+                    </span>
+                    <ChevronDown className="w-3.5 h-3.5 opacity-80" />
+                  </button>
 
-                    {/* Dropdown Menu */}
-                    {isUserMenuOpen && (
-                      <>
-                        <div
-                          className="fixed inset-0 z-40"
-                          onClick={() => setIsUserMenuOpen(false)}
-                        />
-                        <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden z-50 animate-fade-down">
-                          <div className="p-3 border-b border-gray-100 bg-gray-50">
-                            <div className="flex items-center gap-3">
-                              <img
-                                src={getProfileImage()}
-                                alt={user?.name}
-                                className="w-10 h-10 rounded-full object-cover"
-                              />
-                              <div>
-                                <p className="font-semibold text-gray-800 text-sm">
-                                  {user?.name}
-                                </p>
-                                <p className="text-xs text-gray-500 truncate max-w-[180px]">
-                                  {user?.email}
-                                </p>
-                                {statusBadge && (
-                                  <span className={`inline-block text-xs px-2 py-0.5 rounded-full mt-1 ${statusBadge.color}`}>
-                                    {statusBadge.text}
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="py-1">
-                            <Link
-                              href={isAdmin || isSuperAdmin ? "/dashboard" : "/member/dashboard"}
-                              onClick={() => setIsUserMenuOpen(false)}
-                              className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                            >
-                              <LayoutDashboard className="w-4 h-4" />
-                              Dashboard
-                            </Link>
-                            <Link
-                              href="/profile"
-                              onClick={() => setIsUserMenuOpen(false)}
-                              className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                            >
-                              <User className="w-4 h-4" />
-                              My Profile
-                            </Link>
-                            <hr className="my-1 border-gray-100" />
-                            <button
-                              onClick={handleLogout}
-                              className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
-                            >
-                              <LogOut className="w-4 h-4" />
-                              Logout
-                            </button>
+                  {isUserMenuOpen && (
+                    <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-800 overflow-hidden z-50 animate-fade-down">
+                      <div className="p-3.5 border-b border-gray-100 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/50">
+                        <div className="flex items-center gap-3">
+                          <img
+                            src={getProfileImage()}
+                            alt={user?.name}
+                            className="w-10 h-10 rounded-full object-cover border border-gray-200"
+                          />
+                          <div className="min-w-0 flex-1">
+                            <p className="font-bold text-gray-900 dark:text-white text-sm truncate">
+                              {user?.name}
+                            </p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                              {user?.email}
+                            </p>
+                            {statusBadge && (
+                              <span className={`inline-block text-[10px] font-semibold px-2 py-0.5 rounded-full mt-1.5 ${statusBadge.color}`}>
+                                {statusBadge.text}
+                              </span>
+                            )}
                           </div>
                         </div>
-                      </>
-                    )}
-                  </div>
-                </>
+                      </div>
+
+                      <div className="p-1.5">
+                        <Link
+                          href={isAdmin || isSuperAdmin ? "/dashboard" : "/member/dashboard"}
+                          onClick={() => setIsUserMenuOpen(false)}
+                          className="flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
+                        >
+                          <LayoutDashboard className="w-4 h-4 text-emerald-500" />
+                          Dashboard
+                        </Link>
+                        <Link
+                          href="/profile"
+                          onClick={() => setIsUserMenuOpen(false)}
+                          className="flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
+                        >
+                          <User className="w-4 h-4 text-emerald-500" />
+                          My Profile
+                        </Link>
+                        <div className="my-1 border-t border-gray-100 dark:border-slate-800" />
+                        <button
+                          onClick={handleLogout}
+                          className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg transition-colors cursor-pointer"
+                        >
+                          <LogOut className="w-4 h-4" />
+                          Sign Out
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
               ) : (
-                <>
-                  {/* Login Button */}
+                <div className="flex items-center gap-2 ml-3">
                   <Link
                     href="/login"
-                    className={`ml-2 px-5 py-2 rounded-full font-semibold transition-all duration-300 shadow-md hover:shadow-xl hover:scale-105 ${
+                    className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
                       isScrolled
-                        ? "bg-emerald-50 text-emerald-600 hover:bg-emerald-100"
-                        : "bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm"
+                        ? "text-slate-700 dark:text-slate-200 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-slate-800"
+                        : "text-white hover:bg-white/10"
                     }`}
                   >
                     Login
                   </Link>
-
-                  {/* Join Now Button */}
                   <Link
                     href="/register"
-                    className={`ml-2 px-5 py-2 rounded-full font-semibold transition-all duration-300 shadow-md hover:shadow-xl hover:scale-105 ${
-                      isScrolled
-                        ? "bg-linear-to-r from-emerald-600 to-cyan-600 text-white"
-                        : "bg-white text-emerald-600"
-                    }`}
+                    className="px-4 py-2 rounded-full text-sm font-semibold bg-gradient-to-r from-emerald-600 to-teal-600 text-white hover:from-emerald-500 hover:to-teal-500 shadow-md hover:shadow-emerald-500/25 transition-all duration-200 hover:scale-105 active:scale-95"
                   >
-                    Join Now
+                    Join Club
                   </Link>
-                </>
+                </div>
               )}
             </nav>
 
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className={`md:hidden p-2 rounded-full transition-colors ${
-                isScrolled ? "text-slate-700" : "text-white"
-              }`}
-            >
-              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+            {/* Mobile / Tablet Menu Button */}
+            <div className="flex items-center gap-2 lg:hidden">
+              {!isAuthenticated && (
+                <Link
+                  href="/register"
+                  className="px-3 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-sm"
+                >
+                  Join
+                </Link>
+              )}
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className={`p-2.5 rounded-xl transition-colors cursor-pointer focus:outline-hidden ${
+                  isScrolled
+                    ? "text-slate-800 dark:text-slate-100 bg-gray-100 dark:bg-slate-800"
+                    : "text-white bg-white/20 backdrop-blur-md"
+                }`}
+                aria-label={isMobileMenuOpen ? "Close Menu" : "Open Menu"}
+              >
+                {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+              </button>
+            </div>
           </div>
         </div>
       </header>
 
-      {/* Mobile Menu Overlay */}
-      {!loading && (
-        <div
-          className={`fixed inset-0 z-40 bg-white/95 backdrop-blur-lg transition-all duration-500 md:hidden ${
-            isMobileMenuOpen
-              ? "opacity-100 visible"
-              : "opacity-0 invisible pointer-events-none"
-          }`}
-          style={{ top: "70px" }}
-        >
-          <div className="flex flex-col h-full overflow-y-auto">
-            {/* User Info Section (if logged in) */}
+      {/* Mobile Drawer Navigation */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-40 lg:hidden">
+          {/* Backdrop overlay */}
+          <div
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity animate-fade-down"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+
+          {/* Drawer Content */}
+          <div className="fixed top-[65px] bottom-0 right-0 left-0 bg-white dark:bg-slate-950 flex flex-col overflow-y-auto animate-fade-up">
+            {/* User Profile Bar in Mobile Menu */}
             {isAuthenticated && (
-              <div className="p-6 border-b border-gray-100 bg-gradient-to-r from-emerald-50 to-cyan-50">
+              <div className="p-4 bg-gradient-to-r from-emerald-50 via-teal-50 to-cyan-50 dark:from-slate-900 dark:to-slate-800 border-b border-emerald-100 dark:border-slate-800">
                 <div className="flex items-center gap-3">
                   <img
                     src={getProfileImage()}
                     alt={user?.name}
-                    className="w-14 h-14 rounded-full object-cover border-2 border-white shadow-md"
+                    className="w-12 h-12 rounded-full object-cover border-2 border-white dark:border-slate-700 shadow-sm"
                   />
-                  <div>
-                    <p className="font-bold text-gray-800">{user?.name}</p>
-                    <p className="text-sm text-gray-600">{user?.email}</p>
+                  <div className="min-w-0 flex-1">
+                    <p className="font-bold text-gray-900 dark:text-white truncate">
+                      {user?.name}
+                    </p>
+                    <p className="text-xs text-gray-600 dark:text-gray-300 truncate">
+                      {user?.email}
+                    </p>
                     {statusBadge && (
-                      <span className={`inline-block text-xs px-2 py-0.5 rounded-full mt-1 ${statusBadge.color}`}>
+                      <span className={`inline-block text-[10px] font-semibold px-2 py-0.5 rounded-full mt-1 ${statusBadge.color}`}>
                         {statusBadge.text}
                       </span>
                     )}
@@ -403,112 +431,121 @@ const Navbar2 = () => {
               </div>
             )}
 
-            <div className="flex-1 py-6 px-4">
-              {/* Main Navigation Links */}
-              <div className="space-y-2">
-                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
+            <div className="flex-1 p-4 space-y-6">
+              {/* Navigation Links */}
+              <div>
+                <p className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2 px-2">
                   Navigation
                 </p>
-                {navLinks.map((link, idx) => (
-                  <Link
-                    key={link.name}
-                    href={link.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${
-                      pathname === link.href
-                        ? "bg-emerald-50 text-emerald-600"
-                        : "text-gray-700 hover:bg-gray-50"
-                    }`}
-                    style={{ animationDelay: `${idx * 50}ms` }}
-                  >
-                    <link.icon className="w-5 h-5" />
-                    <span className="font-medium">{link.name}</span>
-                  </Link>
-                ))}
+                <div className="space-y-1">
+                  {navLinks.map((link) => {
+                    const isActive = pathname === link.href;
+                    return (
+                      <Link
+                        key={link.name}
+                        href={link.href}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className={`flex items-center justify-between px-3.5 py-3 rounded-xl transition-all ${
+                          isActive
+                            ? "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 font-semibold"
+                            : "text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-900"
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <link.icon className="w-5 h-5" />
+                          <span className="text-base">{link.name}</span>
+                        </div>
+                        <ChevronRight className="w-4 h-4 opacity-40" />
+                      </Link>
+                    );
+                  })}
+                </div>
               </div>
 
-              {/* Membership Section in Mobile */}
-              <div className="mt-6 pt-6 border-t border-gray-100">
-                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
-                  Membership
-                </p>
-                {membershipDropdownItems.map((item) => (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 transition-colors"
-                  >
-                    <item.icon className="w-5 h-5" />
-                    <div>
-                      <span className="font-medium">{item.name}</span>
-                      <p className="text-xs text-gray-400">{item.description}</p>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-
-              {/* Authenticated User Links */}
-              {isAuthenticated && (
-                <div className="mt-6 pt-6 border-t border-gray-100">
-                  <div className="space-y-2">
-                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
-                      Account
-                    </p>
-                    <Link
-                      href={isAdmin ? "/dashboard/admin" : "/dashboard/member"}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 transition-colors"
-                    >
-                      <LayoutDashboard className="w-5 h-5" />
-                      <span className="font-medium">Dashboard</span>
-                    </Link>
-                    <Link
-                      href="/profile"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 transition-colors"
-                    >
-                      <User className="w-5 h-5" />
-                      <span className="font-medium">My Profile</span>
-                    </Link>
-                    <Link
-                      href="/settings"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 transition-colors"
-                    >
-                      <Settings className="w-5 h-5" />
-                      <span className="font-medium">Settings</span>
-                    </Link>
+              {/* Membership Accordion Section */}
+              <div className="pt-2 border-t border-gray-100 dark:border-slate-800">
+                <button
+                  onClick={() => setIsMobileMembershipOpen(!isMobileMembershipOpen)}
+                  className="w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-900 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <Crown className="w-5 h-5 text-amber-500" />
+                    <span className="font-semibold text-base">Membership Options</span>
                   </div>
+                  <ChevronDown
+                    className={`w-4 h-4 transition-transform duration-200 ${
+                      isMobileMembershipOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+
+                {isMobileMembershipOpen && (
+                  <div className="pl-6 pr-2 py-2 space-y-1 bg-gray-50/60 dark:bg-slate-900/60 rounded-xl mt-1">
+                    {membershipDropdownItems.map((item) => (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="flex items-center gap-2.5 py-2.5 px-3 rounded-lg text-sm text-gray-700 dark:text-gray-300 hover:text-emerald-600 hover:bg-emerald-50/50 dark:hover:bg-slate-800"
+                      >
+                        <item.icon className="w-4 h-4 text-emerald-500" />
+                        <span>{item.name}</span>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Account Quick Links (Logged In) */}
+              {isAuthenticated && (
+                <div className="pt-2 border-t border-gray-100 dark:border-slate-800 space-y-1">
+                  <p className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2 px-2">
+                    My Account
+                  </p>
+                  <Link
+                    href={isAdmin || isSuperAdmin ? "/dashboard" : "/member/dashboard"}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center gap-3 px-3.5 py-3 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-900"
+                  >
+                    <LayoutDashboard className="w-5 h-5 text-emerald-500" />
+                    <span>Dashboard</span>
+                  </Link>
+                  <Link
+                    href="/profile"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center gap-3 px-3.5 py-3 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-900"
+                  >
+                    <User className="w-5 h-5 text-emerald-500" />
+                    <span>My Profile</span>
+                  </Link>
                 </div>
               )}
 
-              {/* Action Buttons */}
-              <div className="mt-8 pt-6 border-t border-gray-100">
+              {/* Action Buttons at Bottom of Drawer */}
+              <div className="pt-4 border-t border-gray-100 dark:border-slate-800">
                 {isAuthenticated ? (
                   <button
                     onClick={handleLogout}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-red-50 text-red-600 rounded-xl font-semibold hover:bg-red-100 transition-colors"
+                    className="w-full flex items-center justify-center gap-2 py-3.5 bg-red-50 dark:bg-red-950/40 text-red-600 rounded-xl font-bold hover:bg-red-100 transition-colors"
                   >
                     <LogOut className="w-5 h-5" />
-                    Logout
+                    Sign Out
                   </button>
                 ) : (
-                  <div className="space-y-3">
+                  <div className="grid grid-cols-2 gap-3">
                     <Link
                       href="/login"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors"
+                      className="flex items-center justify-center py-3 bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-gray-200 rounded-xl font-semibold hover:bg-gray-200 transition-colors text-sm"
                     >
                       Login
                     </Link>
                     <Link
                       href="/register"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-linear-to-r from-emerald-600 to-cyan-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all"
+                      className="flex items-center justify-center py-3 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-xl font-semibold shadow-md text-sm"
                     >
-                      <Award className="w-5 h-5" />
-                      Join the Community
+                      Join Club
                     </Link>
                   </div>
                 )}
@@ -517,25 +554,8 @@ const Navbar2 = () => {
           </div>
         </div>
       )}
-
-      {/* Animation Styles */}
-      <style jsx>{`
-        @keyframes fadeDown {
-          from {
-            opacity: 0;
-            transform: translateY(-10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fade-down {
-          animation: fadeDown 0.2s ease-out forwards;
-        }
-      `}</style>
     </>
   );
 };
 
-export default Navbar2;
+export default Navbar2;
