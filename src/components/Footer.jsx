@@ -111,7 +111,7 @@ export default function Footer() {
               <div className="space-y-2.5">
                 <div className="flex items-center gap-2.5 text-sm text-slate-400">
                   <MdEmail size={16} className="text-emerald-400 shrink-0" />
-                  <span>contact@raipurianclub.com</span>
+                  <span>raipurclub35@gmail.com</span>
                 </div>
                 <div className="flex items-center gap-2.5 text-sm text-slate-400">
                   <FaPhone size={14} className="text-emerald-400 shrink-0" />
@@ -119,7 +119,7 @@ export default function Footer() {
                 </div>
                 <div className="flex items-center gap-2.5 text-sm text-slate-400">
                   <MdLocationOn size={16} className="text-emerald-400 shrink-0" />
-                  <span>Raipur, Lakshmipur, Bangladesh</span>
+                  <span>Raipur Club,17/1 Monipuripara,(2nd floor) Songshad Avenue,Tejgaon,Dhaka-1215</span>
                 </div>
               </div>
             </div>
@@ -172,4 +172,4 @@ export default function Footer() {
       </div>
     </footer>
   );
-}
+}
