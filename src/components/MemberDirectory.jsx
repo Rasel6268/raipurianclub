@@ -191,7 +191,7 @@ const MemberDirectory = () => {
       contributions: ["Support Team"],
       achievements: ["Active Contributor"],
       bio: "Supports various managing committee operations.",
-      image: "https://via.placeholder.com/300",
+      image: "https://res.cloudinary.com/doumlnejx/image/upload/v1782915053/WhatsApp_Image_2026-07-01_at_8.04.27_PM_y2dppx.jpg",
       social: { linkedin: "#", facebook: "#" },
     },
     {
@@ -1302,12 +1302,12 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image: "",
+      image: "https://res.cloudinary.com/lb6go8ca/image/upload/v1787755765/ui1ac9ainx7ju2m79ehh.jpg",
       bio: "Founding member passionate about community service.",
     },
     {
       id: 175,
-      name: "Habibur Rahman Babul",
+      name: "MD.Sha Alam",
       memberType: "Founding Member",
       memberId: "RPM-FND-075",
       email: "example@raipurian.com",
@@ -1315,7 +1315,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image: "",
+      image: "https://res.cloudinary.com/lb6go8ca/image/upload/v1787927890/WhatsApp_Image_2026-08-27_at_01.23.02_i6yrk4.jpg",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1380,7 +1380,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image: "",
+      image: "https://res.cloudinary.com/lb6go8ca/image/upload/v1787928009/WhatsApp_Image_2026-08-26_at_21.08.52_wbotaj.jpg",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1393,7 +1393,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image: "",
+      image: "https://res.cloudinary.com/lb6go8ca/image/upload/v1787928009/WhatsApp_Image_2026-08-26_at_21.06.47_vdzolh.jpg",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1451,7 +1451,7 @@ const MemberDirectory = () => {
     },
     {
       id: 186,
-      name: "Akram Billah",
+      name: "S. H. Tipu",
       memberType: "Founding Member",
       memberId: "RPM-FND-086",
       email: "example@raipurian.com",
@@ -1459,7 +1459,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image: "",
+      image: "https://res.cloudinary.com/lb6go8ca/image/upload/v1787928008/WhatsApp_Image_2026-08-26_at_21.06.36_lpe3gu.jpg",
       bio: "Founding member passionate about community service.",
     },
     {
