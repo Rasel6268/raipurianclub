@@ -258,7 +258,7 @@ const MemberDirectory = () => {
       ],
       bio: "Respected community leader and chief patron of Raipurian Club, supporting social development and youth initiatives.",
       image:
-        "https://res.cloudinary.com/doumlnejx/image/upload/v1777624345/WhatsApp_Image_2026-05-01_at_12.51.33_PM_feykab.jpg",
+        "https://ik.imagekit.io/4j8cdjgsk/WhatsApp%20Image%202026-10-22%20at%2023.51.51.jpeg",
       social: { linkedin: "#", facebook: "#", website: "#" },
     },
   ];
@@ -286,7 +286,7 @@ const MemberDirectory = () => {
       ],
       bio: "Industrialist committed to community development through strategic donations.",
       image:
-        "https://res.cloudinary.com/doumlnejx/image/upload/v1777613449/WhatsApp_Image_2026-05-01_at_11.11.25_AM_elv7ef.jpg",
+        "https://ik.imagekit.io/4j8cdjgsk/WhatsApp%20Image%202026-10-22%20at%2023.51.47.jpeg",
       social: { linkedin: "#", website: "#" },
     },
   ];
