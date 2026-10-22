@@ -125,17 +125,42 @@ export const viewport = {
   ],
 };
 
+import ThemeProvider from "@/context/ThemeContext";
+
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <body className={`${inter.className} antialiased bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100 overflow-x-hidden min-h-screen selection:bg-emerald-500 selection:text-white`}>
-        <AuthProvider>
-          <Providers>
-            {children}
-            <Toaster position="top-center" toastOptions={{ duration: 4000 }} />
-            <FloatingCTA />
-          </Providers>
-        </AuthProvider>
+    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                var stored = localStorage.getItem('rc_theme');
+                var systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (stored === 'dark' || (!stored && systemDark) || (stored === 'system' && systemDark)) {
+                  document.documentElement.classList.add('dark');
+                  document.documentElement.setAttribute('data-theme', 'dark');
+                  document.documentElement.style.colorScheme = 'dark';
+                } else {
+                  document.documentElement.classList.remove('dark');
+                  document.documentElement.setAttribute('data-theme', 'light');
+                  document.documentElement.style.colorScheme = 'light';
+                }
+              } catch (e) {}
+            `,
+          }}
+        />
+      </head>
+      <body className={`${inter.className} antialiased bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100 overflow-x-hidden min-h-screen selection:bg-emerald-500 selection:text-white transition-colors duration-200`}>
+        <ThemeProvider>
+          <AuthProvider>
+            <Providers>
+              {children}
+              <Toaster position="top-center" toastOptions={{ duration: 4000 }} />
+              <FloatingCTA />
+            </Providers>
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

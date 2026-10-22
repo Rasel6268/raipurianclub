@@ -1,6 +1,8 @@
 /* app/globals.css */
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
   * {
     -webkit-tap-highlight-color: transparent;
@@ -187,4 +189,44 @@
 
 .safe-padding-bottom {
   padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* 3D Card Flip Perspective */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+/* Print Rules for Digital ID Card */
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+  #printable-digital-id-card,
+  #printable-digital-id-card * {
+    visibility: visible !important;
+  }
+  #printable-digital-id-card {
+    position: fixed !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) scale(1.1) !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+  }
+  .no-print {
+    display: none !important;
+  }
 }

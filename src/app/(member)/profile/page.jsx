@@ -30,6 +30,7 @@ import {
   Star,
 } from "lucide-react";
 import useImageUpload from "@/app/hooks/useImageUpload";
+import DigitalIdCardSection from "@/components/DigitalIdCardSection";
 
 const ProfilePage = () => {
   const { user, setUser, loading: authLoading } = useAuth();
@@ -433,13 +434,13 @@ const ProfilePage = () => {
       </div>
 
       {/* Main Content */}
-      <div className="bg-gray-50 min-h-screen py-8 px-4 sm:px-6 lg:px-8">
+      <div className="bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen py-8 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
         <div className="max-w-6xl mx-auto">
           {/* Success Banner */}
           {saveSuccess && (
-            <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 flex items-center gap-3 animate-fade-in">
-              <CheckCircle className="w-5 h-5 text-green-600" />
-              <p className="text-green-700 font-medium">Profile updated successfully!</p>
+            <div className="mb-6 bg-green-50 dark:bg-green-950/40 border border-green-200 dark:border-green-800 rounded-lg p-4 flex items-center gap-3 animate-fade-in">
+              <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
+              <p className="text-green-700 dark:text-green-300 font-medium">Profile updated successfully!</p>
             </div>
           )}
 
@@ -460,11 +461,11 @@ const ProfilePage = () => {
           )}
 
           {/* Profile Header Card */}
-          <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-6 -mt-1 relative z-10">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl overflow-hidden mb-6 -mt-1 relative z-10 border border-slate-200/80 dark:border-slate-800">
             <div className="relative h-24 bg-linear-to-r from-emerald-500 to-cyan-500">
               <div className="absolute -bottom-12 left-8">
                 <div className="relative">
-                  <div className="w-24 h-24 rounded-full bg-white p-1 shadow-xl">
+                  <div className="w-24 h-24 rounded-full bg-white dark:bg-slate-800 p-1 shadow-xl">
                     {imagePreview ? (
                       <img
                         src={imagePreview}
@@ -533,21 +534,21 @@ const ProfilePage = () => {
             <div className="pt-14 pb-6 px-8">
               <div className="flex items-start justify-between">
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900">{formData.name || "Member"}</h2>
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{formData.name || "Member"}</h2>
                   <div className="flex items-center gap-2 mt-1">
                     <Mail className="w-4 h-4 text-gray-400" />
-                    <span className="text-gray-600">{formData.email}</span>
+                    <span className="text-gray-600 dark:text-gray-300">{formData.email}</span>
                   </div>
                   {formData.phone && (
                     <div className="flex items-center gap-2 mt-1">
                       <Phone className="w-4 h-4 text-gray-400" />
-                      <span className="text-gray-600">{formData.phone}</span>
+                      <span className="text-gray-600 dark:text-gray-300">{formData.phone}</span>
                     </div>
                   )}
                 </div>
                 <button
                   onClick={copyMemberId}
-                  className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 rounded-lg text-gray-600 text-sm font-medium hover:bg-gray-200 transition-all"
+                  className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 dark:bg-slate-800 rounded-lg text-gray-600 dark:text-gray-300 text-sm font-medium hover:bg-gray-200 dark:hover:bg-slate-700 transition-all cursor-pointer"
                 >
                   <Award className="w-4 h-4" />
                   {user?.memberId}
@@ -569,31 +570,47 @@ const ProfilePage = () => {
               </div>
             </div>
             
-            <div className="bg-white rounded-xl shadow-lg p-4 transform hover:scale-105 transition-transform duration-300">
+            <div className="bg-white dark:bg-slate-900 rounded-xl shadow-lg p-4 border border-transparent dark:border-slate-800 transform hover:scale-105 transition-transform duration-300">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-purple-100 rounded-lg">
-                  <Calendar className="w-5 h-5 text-purple-600" />
+                <div className="p-2 bg-purple-100 dark:bg-purple-950/60 rounded-lg">
+                  <Calendar className="w-5 h-5 text-purple-600 dark:text-purple-400" />
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">Member Since</p>
-                  <p className="font-semibold text-gray-900">
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Member Since</p>
+                  <p className="font-semibold text-gray-900 dark:text-white">
                     {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : "2024"}
                   </p>
                 </div>
               </div>
             </div>
             
-            <div className="bg-white rounded-xl shadow-lg p-4 transform hover:scale-105 transition-transform duration-300">
+            <div className="bg-white dark:bg-slate-900 rounded-xl shadow-lg p-4 border border-transparent dark:border-slate-800 transform hover:scale-105 transition-transform duration-300">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-blue-100 rounded-lg">
-                  <Heart className="w-5 h-5 text-blue-600" />
+                <div className="p-2 bg-blue-100 dark:bg-blue-950/60 rounded-lg">
+                  <Heart className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">Interests</p>
-                  <p className="font-semibold text-gray-900">{formData.interests?.length || 0}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Interests</p>
+                  <p className="font-semibold text-gray-900 dark:text-white">{formData.interests?.length || 0}</p>
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Digital Identification Card & Announcements Section */}
+          <div className="mb-8">
+            <DigitalIdCardSection
+              memberData={{
+                ...user,
+                name: formData.name || user?.name,
+                phone: formData.phone || user?.phone,
+                profileImage: imagePreview || user?.profileImage,
+                village: formData.permanentAddress?.villageOrArea || user?.permanentAddress?.villageOrArea,
+                district: formData.permanentAddress?.district || user?.permanentAddress?.district,
+                profession: formData.occupationDetails?.position || formData.occupation || user?.occupation,
+                membership: user?.membership?.name || user?.membership || "Life Member",
+              }}
+            />
           </div>
 
           {/* Profile Form */}

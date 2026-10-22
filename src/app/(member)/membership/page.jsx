@@ -11,30 +11,11 @@ import {
   CheckCircle,
   XCircle,
   ArrowRight,
-  Heart,
-  Calendar,
   Users,
-  Award,
   Gift,
-  Shield,
-  Coffee,
-  Car,
-  Home,
   Infinity,
   Medal,
-  PiggyBank,
-  GitBranch,
-  Layers,
-  DollarSign,
-  Clock,
   BadgeCheck,
-  Wallet,
-  Zap,
-  Rocket,
-  TrendingUp,
-  Gem,
-  Diamond,
-  Trophy,
   ChevronDown,
   ChevronUp,
   HelpCircle,
@@ -44,7 +25,6 @@ import HeroProp from "@/components/HeroProp";
 gsap.registerPlugin(ScrollTrigger);
 
 const MembershipPlans = () => {
-  const [selectedCategory, setSelectedCategory] = useState(null);
   const [hoveredCard, setHoveredCard] = useState(null);
   const [openFaqs, setOpenFaqs] = useState({});
   const headerRef = useRef(null);
@@ -450,9 +430,8 @@ const MembershipPlans = () => {
                 <div
                   key={category.id}
                   ref={(el) => (cardsRef.current[index] = el)}
-                  className={`group relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 ${
-                    isPopular ? "ring-2 ring-emerald-500 ring-offset-2" : ""
-                  }`}
+                  className={`group relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 ${isPopular ? "ring-2 ring-emerald-500 ring-offset-2" : ""
+                    }`}
                   onMouseEnter={() => setHoveredCard(category.id)}
                   onMouseLeave={() => setHoveredCard(null)}
                 >
@@ -623,11 +602,10 @@ const MembershipPlans = () => {
                         )}
                       </div>
                     </button>
-                    
+
                     <div
-                      className={`px-6 overflow-hidden transition-all duration-300 ease-in-out ${
-                        isOpen ? "max-h-96 py-4" : "max-h-0"
-                      }`}
+                      className={`px-6 overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? "max-h-96 py-4" : "max-h-0"
+                        }`}
                     >
                       <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
                         <p className="text-gray-600 dark:text-gray-400 leading-relaxed">

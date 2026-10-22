@@ -21,8 +21,11 @@ import {
   GitBranch,
   ShieldCheck,
   ChevronRight,
+  IdCard,
+  QrCode
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const Navbar2 = () => {
   const { user, loading, isAuthenticated, isAdmin, isMember, isReviewPending, logout, isSuperAdmin } = useAuth();
@@ -111,21 +114,21 @@ const Navbar2 = () => {
   ];
 
   const membershipDropdownItems = [
-    { 
-      name: "View Plans", 
-      href: "/membership", 
+    {
+      name: "View Plans",
+      href: "/membership",
       icon: Crown,
       description: "Explore all club membership categories"
     },
-    { 
-      name: "Compare Plans", 
-      href: "/membership/compare", 
+    {
+      name: "Compare Plans",
+      href: "/membership/compare",
       icon: GitBranch,
       description: "Side-by-side features & benefits matrix"
     },
-    { 
-      name: "Terms & Conditions", 
-      href: "/terms", 
+    {
+      name: "Terms & Conditions",
+      href: "/terms",
       icon: Award,
       description: "Membership policies & eligibility rules"
     },
@@ -162,11 +165,10 @@ const Navbar2 = () => {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-          isScrolled
+        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled
             ? "bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl shadow-md py-3 border-b border-gray-100 dark:border-slate-800"
             : "bg-gradient-to-b from-black/60 via-black/20 to-transparent py-4 sm:py-5"
-        }`}
+          }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
@@ -180,9 +182,8 @@ const Navbar2 = () => {
               </div>
               <div className="flex flex-col">
                 <span
-                  className={`font-bold text-lg sm:text-xl tracking-tight transition-colors duration-300 ${
-                    isScrolled ? "text-slate-900 dark:text-white" : "text-white"
-                  }`}
+                  className={`font-bold text-lg sm:text-xl tracking-tight transition-colors duration-300 ${isScrolled ? "text-slate-900 dark:text-white" : "text-white"
+                    }`}
                 >
                   Raipur <span className="text-emerald-500">Club</span>
                 </span>
@@ -200,15 +201,14 @@ const Navbar2 = () => {
                   <Link
                     key={link.name}
                     href={link.href}
-                    className={`px-3.5 py-2 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-1.5 ${
-                      isActive
+                    className={`px-3.5 py-2 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-1.5 ${isActive
                         ? isScrolled
                           ? "text-emerald-600 bg-emerald-50 dark:bg-emerald-950/40 dark:text-emerald-400 font-semibold"
                           : "text-white bg-white/20 backdrop-blur-md font-semibold"
                         : isScrolled
-                        ? "text-slate-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-50 dark:hover:bg-slate-800/60"
-                        : "text-white/90 hover:text-white hover:bg-white/10"
-                    }`}
+                          ? "text-slate-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-50 dark:hover:bg-slate-800/60"
+                          : "text-white/90 hover:text-white hover:bg-white/10"
+                      }`}
                   >
                     <link.icon className="w-3.5 h-3.5" />
                     <span>{link.name}</span>
@@ -221,23 +221,21 @@ const Navbar2 = () => {
                 <button
                   onClick={() => setIsMembershipDropdownOpen(!isMembershipDropdownOpen)}
                   onMouseEnter={() => setIsMembershipDropdownOpen(true)}
-                  className={`px-3.5 py-2 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-1.5 cursor-pointer ${
-                    pathname.startsWith("/membership") || pathname === "/terms"
+                  className={`px-3.5 py-2 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-1.5 cursor-pointer ${pathname.startsWith("/membership") || pathname === "/terms"
                       ? isScrolled
                         ? "text-emerald-600 bg-emerald-50 dark:bg-emerald-950/40 dark:text-emerald-400 font-semibold"
                         : "text-white bg-white/20 backdrop-blur-md font-semibold"
                       : isScrolled
-                      ? "text-slate-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-50 dark:hover:bg-slate-800/60"
-                      : "text-white/90 hover:text-white hover:bg-white/10"
-                  }`}
+                        ? "text-slate-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-50 dark:hover:bg-slate-800/60"
+                        : "text-white/90 hover:text-white hover:bg-white/10"
+                    }`}
                   aria-expanded={isMembershipDropdownOpen}
                 >
                   <Crown className="w-3.5 h-3.5 text-amber-400" />
                   <span>Membership</span>
                   <ChevronDown
-                    className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                      isMembershipDropdownOpen ? "rotate-180" : ""
-                    }`}
+                    className={`w-3.5 h-3.5 transition-transform duration-200 ${isMembershipDropdownOpen ? "rotate-180" : ""
+                      }`}
                   />
                 </button>
 
@@ -275,11 +273,10 @@ const Navbar2 = () => {
                 <div ref={userMenuRef} className="relative ml-2">
                   <button
                     onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                    className={`flex items-center gap-2 px-3 py-1.5 rounded-full transition-all duration-200 cursor-pointer ${
-                      isScrolled
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded-full transition-all duration-200 cursor-pointer ${isScrolled
                         ? "bg-emerald-50 dark:bg-slate-800 text-slate-800 dark:text-slate-100 hover:bg-emerald-100 dark:hover:bg-slate-700 border border-emerald-200/50"
                         : "bg-white/20 text-white hover:bg-white/30 backdrop-blur-md border border-white/30"
-                    }`}
+                      }`}
                   >
                     <img
                       src={getProfileImage()}
@@ -334,6 +331,14 @@ const Navbar2 = () => {
                           <User className="w-4 h-4 text-emerald-500" />
                           My Profile
                         </Link>
+                        <Link
+                          href="/profile"
+                          onClick={() => setIsUserMenuOpen(false)}
+                          className="flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
+                        >
+                          <IdCard className="w-4 h-4 text-emerald-500" />
+                          Digital ID Card
+                        </Link>
                         <div className="my-1 border-t border-gray-100 dark:border-slate-800" />
                         <button
                           onClick={handleLogout}
@@ -350,11 +355,10 @@ const Navbar2 = () => {
                 <div className="flex items-center gap-2 ml-3">
                   <Link
                     href="/login"
-                    className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
-                      isScrolled
+                    className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${isScrolled
                         ? "text-slate-700 dark:text-slate-200 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-slate-800"
                         : "text-white hover:bg-white/10"
-                    }`}
+                      }`}
                   >
                     Login
                   </Link>
@@ -366,10 +370,16 @@ const Navbar2 = () => {
                   </Link>
                 </div>
               )}
+
+              {/* Theme Toggle (Device / Dark / Light) */}
+              <div className="ml-2">
+                <ThemeToggle />
+              </div>
             </nav>
 
             {/* Mobile / Tablet Menu Button */}
             <div className="flex items-center gap-2 lg:hidden">
+              <ThemeToggle />
               {!isAuthenticated && (
                 <Link
                   href="/register"
@@ -380,11 +390,10 @@ const Navbar2 = () => {
               )}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className={`p-2.5 rounded-xl transition-colors cursor-pointer focus:outline-hidden ${
-                  isScrolled
+                className={`p-2.5 rounded-xl transition-colors cursor-pointer focus:outline-hidden ${isScrolled
                     ? "text-slate-800 dark:text-slate-100 bg-gray-100 dark:bg-slate-800"
                     : "text-white bg-white/20 backdrop-blur-md"
-                }`}
+                  }`}
                 aria-label={isMobileMenuOpen ? "Close Menu" : "Open Menu"}
               >
                 {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
@@ -445,11 +454,10 @@ const Navbar2 = () => {
                         key={link.name}
                         href={link.href}
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className={`flex items-center justify-between px-3.5 py-3 rounded-xl transition-all ${
-                          isActive
+                        className={`flex items-center justify-between px-3.5 py-3 rounded-xl transition-all ${isActive
                             ? "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 font-semibold"
                             : "text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-900"
-                        }`}
+                          }`}
                       >
                         <div className="flex items-center gap-3">
                           <link.icon className="w-5 h-5" />
@@ -473,9 +481,8 @@ const Navbar2 = () => {
                     <span className="font-semibold text-base">Membership Options</span>
                   </div>
                   <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-200 ${
-                      isMobileMembershipOpen ? "rotate-180" : ""
-                    }`}
+                    className={`w-4 h-4 transition-transform duration-200 ${isMobileMembershipOpen ? "rotate-180" : ""
+                      }`}
                   />
                 </button>
 
@@ -518,8 +525,22 @@ const Navbar2 = () => {
                     <User className="w-5 h-5 text-emerald-500" />
                     <span>My Profile</span>
                   </Link>
+                  <Link
+                    href="/profile"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center gap-3 px-3.5 py-3 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-900"
+                  >
+                    <QrCode className="w-5 h-5 text-emerald-500" />
+                    <span>Digital ID Card</span>
+                  </Link>
                 </div>
               )}
+
+              {/* Theme Settings for Mobile */}
+              <div className="pt-2 border-t border-gray-100 dark:border-slate-800 flex items-center justify-between px-3.5 py-3 rounded-xl bg-slate-50 dark:bg-slate-900/60">
+                <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">Theme Appearance</span>
+                <ThemeToggle showLabel />
+              </div>
 
               {/* Action Buttons at Bottom of Drawer */}
               <div className="pt-4 border-t border-gray-100 dark:border-slate-800">
@@ -558,4 +579,4 @@ const Navbar2 = () => {
   );
 };
 
-export default Navbar2;
+export default Navbar2;

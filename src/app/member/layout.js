@@ -7,9 +7,6 @@ import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import {
   FaUser,
-  FaShoppingBag,
-  FaCreditCard,
-  FaMapMarkerAlt,
   FaHome,
   FaCog,
   FaUserFriends,
@@ -28,13 +25,13 @@ import {
   FaTrophy,
   FaGift,
   FaWallet,
-  FaClipboardList,
   FaShieldAlt,
+  FaIdCard,
 } from "react-icons/fa";
-import { GiLeatherBoot } from "react-icons/gi";
 import { BiCrown, BiSupport } from "react-icons/bi";
 import { HiOutlineLogout } from "react-icons/hi";
 import toast from "react-hot-toast";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const MemberLayout = ({ children }) => {
   const { user, logout, loading } = useAuth();
@@ -48,66 +45,66 @@ const MemberLayout = ({ children }) => {
   // Menu items with submenus
   const menuItems = [
     {
-      name: "Home",
+      name: "Club Portal",
       href: "/",
       icon: <FaHome className="text-lg" />,
-      case: "dashboard",
-      description: "Overview of your account",
+      case: "home",
+      description: "Main community homepage",
     },
     {
-      name: "Dashboard",
-      href: "/member",
+      name: "Member Dashboard",
+      href: "/member/dashboard",
       icon: <FaHome className="text-lg" />,
       case: "dashboard",
-      description: "Overview of your account",
+      description: "Overview, ID card & bulletins",
     },
     {
-      name: "Members",
-      href: "/member/members",
+      name: "Digital ID Card",
+      href: "/profile",
+      icon: <FaIdCard className="text-lg" />,
+      case: "id-card",
+      description: "Official credentials & print",
+      badge: "Official",
+      badgeColor: "bg-emerald-500 text-white",
+    },
+    {
+      name: "Member Directory",
+      href: "/members",
       icon: <FaUserFriends className="text-lg" />,
       case: "members",
-      description: "Manage your members",
-      badge: "5",
-      badgeColor: "bg-blue-500",
+      description: "Directory of verified club members",
     },
     {
-      name: "Subscription",
-      href: "/member/subscription",
+      name: "Events & RSVPs",
+      href: "/events",
+      icon: <FaCalendar className="text-lg" />,
+      case: "events",
+      description: "Reunions & club assemblies",
+    },
+    {
+      name: "Membership Plans",
+      href: "/membership",
       icon: <BiCrown className="text-lg" />,
       case: "subscription",
-      description: "Manage your subscription",
-      badge: "Premium",
-      badgeColor: "bg-yellow-500",
+      description: "Tiers, privileges & perks",
+      badge: "Lifetime",
+      badgeColor: "bg-amber-500 text-white",
     },
     {
-      name: "Payments",
-      href: "/member/payments",
-      icon: <FaCreditCard className="text-lg" />,
-      case: "payments",
-      description: "Payment methods & history",
-      badge: "8",
-    },
-
-    {
-      name: "Statistics",
-      href: "/member/statistics",
-      icon: <FaChartLine className="text-lg" />,
-      case: "statistics",
-      description: "View your stats",
+      name: "My Profile",
+      href: "/profile",
+      icon: <FaUser className="text-lg" />,
+      case: "profile",
+      description: "Personal & professional info",
     },
   ];
 
   // Stats cards
   const stats = [
-    { label: "Total Orders", value: "24", icon: FaShoppingBag, color: "amber" },
-    {
-      label: "Active Members",
-      value: "12",
-      icon: FaUserFriends,
-      color: "blue",
-    },
-    { label: "Points", value: "2,450", icon: FaStar, color: "purple" },
-    { label: "Subscription", value: "Premium", icon: BiCrown, color: "yellow" },
+    { label: "Membership Tier", value: user?.membership?.name || user?.membership || "Life Member", icon: BiCrown, color: "amber" },
+    { label: "Member ID", value: user?.memberId || "RC-2026-8842", icon: FaIdCard, color: "blue" },
+    { label: "Blood Group", value: user?.bloodGroup || "O+ (ve)", icon: FaStar, color: "purple" },
+    { label: "Account Status", value: user?.status === "approved" ? "Active" : "Verified", icon: FaShieldAlt, color: "yellow" },
   ];
 
   useEffect(() => {
@@ -182,20 +179,20 @@ const MemberLayout = ({ children }) => {
 
     return (
       <Link
-        key={item.case}
+        key={item.name}
         href={item.href}
-        className={`w-full flex items-center justify-between p-3 rounded-xl transition-all duration-300 group ${
+        className={`w-full flex items-center justify-between p-3 rounded-xl transition-all duration-200 group ${
           isActive
-            ? "bg-white shadow-lg border border-amber-200"
-            : "hover:bg-white hover:shadow-md hover:border hover:border-amber-100"
+            ? "bg-emerald-50 dark:bg-emerald-950/40 shadow-xs border border-emerald-200 dark:border-emerald-800"
+            : "hover:bg-slate-100 dark:hover:bg-slate-800/60"
         }`}
       >
         <div className="flex items-center gap-3 min-w-0">
           <div
             className={`p-2.5 rounded-lg transition-colors flex-shrink-0 ${
               isActive
-                ? "bg-amber-500 text-white"
-                : "bg-amber-100 text-amber-600 group-hover:bg-amber-200 group-hover:text-amber-700"
+                ? "bg-emerald-600 text-white"
+                : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 group-hover:bg-emerald-100 dark:group-hover:bg-slate-700 group-hover:text-emerald-700 dark:group-hover:text-emerald-300"
             }`}
           >
             {item.icon}
@@ -203,20 +200,20 @@ const MemberLayout = ({ children }) => {
           <div className="text-left min-w-0">
             <div
               className={`font-semibold transition-colors text-sm ${
-                isActive ? "text-amber-600" : "text-gray-700"
+                isActive ? "text-emerald-700 dark:text-emerald-300" : "text-slate-700 dark:text-slate-200"
               }`}
             >
               {item.name}
             </div>
-            <div className="text-xs text-gray-500 truncate">
+            <div className="text-xs text-slate-500 dark:text-slate-400 truncate">
               {item.description}
             </div>
           </div>
         </div>
         {item.badge && (
           <span
-            className={`text-xs font-medium px-2 py-0.5 rounded-full flex-shrink-0 ${
-              item.badgeColor || "bg-amber-100 text-amber-600"
+            className={`text-[10px] font-bold px-2 py-0.5 rounded-full flex-shrink-0 ${
+              item.badgeColor || "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300"
             }`}
           >
             {item.badge}
@@ -227,42 +224,35 @@ const MemberLayout = ({ children }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex transition-colors duration-200">
       {/* Sidebar */}
       <aside
-        className={`fixed lg:sticky top-0 left-0 z-40 h-screen bg-white border-r border-gray-200 transition-all duration-300 flex flex-col  ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}
+        className={`fixed lg:sticky top-0 left-0 z-40 h-screen bg-white dark:bg-slate-900 border-r border-gray-200 dark:border-slate-800 transition-all duration-300 flex flex-col w-64 shrink-0 ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}
       >
-       
-
         {/* User Profile */}
-        <div
-          className={`p-4 border-b border-gray-200`}
-        >
+        <div className="p-4 border-b border-gray-200 dark:border-slate-800">
           <div className="flex items-center gap-3">
             <div className="relative shrink-0">
-              <div className="w-10 h-10 rounded-full bg-linear-to-br from-amber-400 to-amber-600 flex items-center justify-center text-white font-bold shadow-md">
+              <div className="w-10 h-10 rounded-full bg-linear-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white font-bold shadow-md">
                 {user?.name?.charAt(0) || "U"}
               </div>
-              <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+              <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-slate-900"></div>
             </div>
         
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-gray-900 truncate">
-                  {user?.name || "User"}
-                </p>
-                <p className="text-xs text-gray-500 truncate">
-                  {user?.email || "user@example.com"}
-                </p>
-                <div className="flex items-center gap-1 mt-0.5">
-                  <div
-                    className={`w-1.5 h-1.5 ${getStatusColor()} rounded-full`}
-                  ></div>
-                  <span className="text-xs capitalize text-gray-500">
-                    {user?.status || "active"}
-                  </span>
-                </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">
+                {user?.name || "User"}
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                {user?.email || "user@example.com"}
+              </p>
+              <div className="flex items-center gap-1 mt-0.5">
+                <div className={`w-1.5 h-1.5 ${getStatusColor()} rounded-full`}></div>
+                <span className="text-xs capitalize text-gray-500 dark:text-gray-400">
+                  {user?.status || "active"}
+                </span>
               </div>
-           
+            </div>
           </div>
         </div>
 
@@ -273,30 +263,30 @@ const MemberLayout = ({ children }) => {
       </aside>
 
       {/* Main Content */}
-      <div className="flex-1 min-w-0">
+      <div className="flex-1 min-w-0 flex flex-col">
         {/* Top Navigation Bar */}
         <header
           className={`sticky top-0 z-30 transition-all duration-300 ${
             isScrolled
-              ? "bg-white/95 backdrop-blur-md shadow-lg"
-              : "bg-white/80 backdrop-blur-sm"
-          } border-b border-gray-100`}
+              ? "bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-sm"
+              : "bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm"
+          } border-b border-gray-200 dark:border-slate-800`}
         >
           <div className="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-3">
               {/* Mobile Menu Toggle */}
               <button
                 onClick={() => setIsMobileMenuOpen(true)}
-                className="lg:hidden p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                className="lg:hidden p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
               >
                 <FaBars className="w-5 h-5" />
               </button>
 
               {/* Breadcrumb */}
               <div className="hidden md:flex items-center gap-2 text-sm">
-                <span className="text-gray-400">Member</span>
+                <span className="text-gray-400 dark:text-gray-500">Member Portal</span>
                 <FaChevronRight className="w-3 h-3 text-gray-400" />
-                <span className="text-gray-600 font-medium">
+                <span className="text-gray-700 dark:text-gray-200 font-semibold">
                   {menuItems.find(
                     (item) =>
                       item.case === activeItem ||
@@ -308,21 +298,18 @@ const MemberLayout = ({ children }) => {
             </div>
 
             {/* Right Side Actions */}
-            <div className="flex items-center gap-2">
-              {/* Search */}
-              <button className="hidden md:flex items-center gap-2 px-3 py-2 bg-gray-100 rounded-lg text-gray-500 hover:bg-gray-200 transition-colors">
-                <FaSearch className="w-4 h-4" />
-                <span className="text-sm">Search...</span>
-              </button>
+            <div className="flex items-center gap-3">
+              {/* Theme Toggle (Device / Dark / Light) */}
+              <ThemeToggle showLabel />
 
               {/* Notifications */}
               <div className="relative">
                 <button
                   onClick={() => setShowNotifications(!showNotifications)}
-                  className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors relative"
+                  className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors relative"
                 >
                   <FaBell className="w-5 h-5" />
-                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full border-2 border-white animate-pulse"></span>
+                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-900 animate-pulse"></span>
                 </button>
 
                 {showNotifications && (
@@ -389,29 +376,29 @@ const MemberLayout = ({ children }) => {
 
         {/* Stats Overview */}
         <div className="px-4 sm:px-6 lg:px-8 py-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {stats.map((stat, idx) => {
               const Icon = stat.icon;
               const colorClasses = {
-                amber: "bg-amber-50 text-amber-600",
-                blue: "bg-blue-50 text-blue-600",
-                purple: "bg-purple-50 text-purple-600",
-                yellow: "bg-yellow-50 text-yellow-600",
+                amber: "bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400",
+                blue: "bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400",
+                purple: "bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400",
+                yellow: "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400",
               };
               return (
                 <div
                   key={idx}
-                  className="bg-white rounded-xl shadow-sm p-4 border border-gray-100 hover:shadow-md transition-all hover:scale-105 duration-300"
+                  className="bg-white dark:bg-slate-900 rounded-2xl shadow-xs p-4 border border-gray-100 dark:border-slate-800 hover:shadow-md transition-all hover:scale-[1.02] duration-300"
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-gray-500">{stat.label}</p>
-                      <p className="text-xl font-bold text-gray-900 mt-1">
+                      <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">{stat.label}</p>
+                      <p className="text-lg font-bold text-gray-900 dark:text-white mt-1 truncate">
                         {stat.value}
                       </p>
                     </div>
                     <div
-                      className={`p-2 rounded-lg ${colorClasses[stat.color]}`}
+                      className={`p-2.5 rounded-xl ${colorClasses[stat.color] || "bg-slate-100 text-slate-700"}`}
                     >
                       <Icon className="w-5 h-5" />
                     </div>
