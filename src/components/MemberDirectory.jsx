@@ -1149,7 +1149,7 @@ const MemberDirectory = () => {
       id: 162,
       name: "Md Murad Hossain",
       memberType: "Founding Member",
-      memberId: "RPM-FND-061",
+      memberId: "RPM-FND-062",
       email: "Murad@raipurian.com",
       phone: "+88 017XXXXXXXX",
       location: "Raipur",
