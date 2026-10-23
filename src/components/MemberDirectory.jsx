@@ -291,6 +291,31 @@ const MemberDirectory = () => {
       social: { linkedin: "#", website: "#" },
     },
   ];
+  // Life Members Data
+  const lifeMembers = [
+    {
+      id: 1,
+      name: "Md Delwar Hossain Bhuiyan",
+      memberType: "Life Member",
+      memberId: "RPM-LM-001",
+      email: "[EMAIL_ADDRESS]",
+      phone: "+88 018xxxxxxxx",
+      location: "Telibandha, Raipur",
+      company: "Khandelwal Industries",
+      profession: "Industrialist",
+      joinedDate: "2021",
+      interests: ["Infrastructure", "Education", "Healthcare"],
+      contributions: ["School Building Donor", "Medical Camp Sponsor"],
+      achievements: [
+        "Life Member Recognition",
+        "Community Champion Award",
+      ],
+      bio: "Industrialist committed to community development through strategic donations.",
+      image:
+        "https://ik.imagekit.io/4j8cdjgsk/WhatsApp%20Image%202026-10-22%20at%2023.49.15.jpeg?updatedAt=1792694821638",
+      social: { linkedin: "#", website: "#" },
+    },
+  ];
 
   // Club Dreamer Data (The hand that keeps building this club)
   const clubDreamer = [
@@ -1729,6 +1754,7 @@ const MemberDirectory = () => {
   const filteredManagingMembers = filterMembers(managingMembers);
   const filteredPatronMembers = filterMembers(patronMembers);
   const filteredDonorMembers = filterMembers(donorMembers);
+  const filteredLifeMembers = filterMembers(lifeMembers);
   const filteredDreamerMembers = filterMembers(clubDreamer);
   const filteredFoundingMembers = filterMembers(foundingMembers);
   const filteredGeneralMembers = filterMembers(generalMembers);
@@ -1825,6 +1851,15 @@ const MemberDirectory = () => {
                       }`}
                   >
                     Donor Members
+                  </button>
+                  <button
+                    onClick={() => setSelectedCategory("life")}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${selectedCategory === "life"
+                      ? "bg-emerald-600 text-white"
+                      : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                      }`}
+                  >
+                    Life Members
                   </button>
                   <button
                     onClick={() => setSelectedCategory("founding")}
@@ -2026,6 +2061,37 @@ const MemberDirectory = () => {
               </div>
             )}
 
+          {/* Life Members Section */}
+          {(selectedCategory === "all" || selectedCategory === "life") &&
+            filteredLifeMembers.length > 0 && (
+              <div className="mb-16">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-12 h-12 bg-linear-to-br from-teal-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <Award className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+                      Life Members
+                    </h2>
+                    <p className="text-gray-500 dark:text-gray-400">
+                      {filteredLifeMembers.length} active life members
+                    </p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredLifeMembers.map((member) => (
+                    <MemberCard
+                      key={member.id}
+                      member={member}
+                      isManaging={false}
+                      expanded={expandedMember === member.id}
+                      onToggle={() => toggleMemberExpand(member.id)}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
           {/* General Members Section */}
           {(selectedCategory === "all" || selectedCategory === "general") &&
             filteredGeneralMembers.length > 0 && (
@@ -2060,6 +2126,7 @@ const MemberDirectory = () => {
           {/* No Results */}
           {filteredPatronMembers.length === 0 &&
             filteredDonorMembers.length === 0 &&
+            filteredLifeMembers.length === 0 &&
             filteredDreamerMembers.length === 0 &&
             filteredManagingMembers.length === 0 &&
             filteredFoundingMembers.length === 0 &&
