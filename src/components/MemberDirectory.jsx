@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import MemberCard from "./Members/MemberCard";
 import FundingMemberCard from "./Members/FundingMemberCard";
+import DreamerCard from "./Members/DreamerCard";
 import HeroProp from "./HeroProp";
 
 const MemberDirectory = () => {
@@ -291,6 +292,33 @@ const MemberDirectory = () => {
     },
   ];
 
+  // Club Dreamer Data (The hand that keeps building this club)
+  const clubDreamer = [
+    {
+      id: 501,
+      name: "Md Zabed Hossain",
+      role: "Chief Convener & Visionary Architect",
+      memberType: "Club Dreamer",
+      memberId: "RPM-DRM-001",
+      email: "[EMAIL_ADDRESS]",
+      phone: "+88 01760208702",
+      location: "Raipur, Lakshmipur",
+      profession: "Brigadier General, Bangladesh Army",
+      joinedDate: "2025",
+      howStarted:
+        "In 2025, inspired by a heartfelt drive to connect and empower the people of Raipur across the globe, Md Zabed Hossain initiated the concept of Raipurian Club. Beginning with grassroots community outreach, rallying forward-thinking leaders and enthusiastic youth, he crafted the institutional vision, digital platform, and enduring mission that continues to elevate Raipurian Club today.",
+      builderNote:
+        "The pioneering hand that conceived Raipurian Club, rallied the community, and architected its institutional and digital foundation.",
+      bio:
+        "A distinguished officer of the Bangladesh Army and founding leader of Raipurian Club, dedicated to leadership, community unity, and the development of Raipur.",
+      image: "https://ik.imagekit.io/4j8cdjgsk/1.jpeg",
+      social: {
+        linkedin: "#",
+        facebook: "#",
+      },
+    },
+  ];
+
   // Founding Members Data
   const foundingMembers = [
     {
@@ -486,7 +514,7 @@ const MemberDirectory = () => {
       profession: "Professional",
       joinedDate: "2020",
       image:
-        "https://res.cloudinary.com/doumlnejx/image/upload/v1777615406/14_k0cwdc.jpg",
+        "https://ik.imagekit.io/4j8cdjgsk/14.jpeg",
       bio: "Founding member from SSC 91 batch.",
     },
     {
@@ -752,7 +780,7 @@ const MemberDirectory = () => {
       profession: "Professional",
       joinedDate: "2020",
       image:
-        "https://res.cloudinary.com/doumlnejx/image/upload/v1777617075/WhatsApp_Image_2026-05-01_at_12.10.47_PM_tsk0gj.jpg",
+        "https://ik.imagekit.io/4j8cdjgsk/33.jpeg",
       bio: "Founding member actively involved in community activities.",
     },
     {
@@ -792,7 +820,7 @@ const MemberDirectory = () => {
       profession: "Professional",
       joinedDate: "2020",
       image:
-        "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=2070&auto=format&fit=crop",
+        "https://ik.imagekit.io/4j8cdjgsk/36.jpeg",
       bio: "Founding member contributing to community initiatives.",
     },
     {
@@ -876,7 +904,7 @@ const MemberDirectory = () => {
       profession: "Barrister",
       joinedDate: "2020",
       image:
-        "https://res.cloudinary.com/doumlnejx/image/upload/v1777615407/42_dkfhvc.jpg",
+        "https://ik.imagekit.io/4j8cdjgsk/42._%20_Barrister%20H.%20M.%20Toriqul%20Islam.jpeg?updatedAt=1792717902987",
       bio: "Founding member and legal professional.",
     },
     {
@@ -1142,7 +1170,7 @@ const MemberDirectory = () => {
       profession: "Professional",
       joinedDate: "2020",
       image:
-        "",   
+        "",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1170,7 +1198,7 @@ const MemberDirectory = () => {
       profession: "Professional",
       joinedDate: "2020",
       image:
-        "https://res.cloudinary.com/doumlnejx/image/upload/v1777653678/WhatsApp_Image_2026-05-01_at_9.11.57_PM_lusp4a.jpg",
+        "https://ik.imagekit.io/4j8cdjgsk/63.jpeg",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1251,7 +1279,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image: "",
+      image: "https://ik.imagekit.io/4j8cdjgsk/69.jpeg",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1290,7 +1318,7 @@ const MemberDirectory = () => {
       location: "Raipur",
       profession: "Professional",
       joinedDate: "2020",
-      image: "",
+      image: "https://ik.imagekit.io/4j8cdjgsk/72.jpeg",
       bio: "Founding member passionate about community service.",
     },
     {
@@ -1657,7 +1685,7 @@ const MemberDirectory = () => {
       profession: "Professional",
       joinedDate: "2020",
       image:
-        "https://res.cloudinary.com/doumlnejx/image/upload/v1777554797/WhatsApp_Image_2026-04-30_at_7.12.38_PM_l7ypn7.jpg",
+        "https://ik.imagekit.io/4j8cdjgsk/100.jpeg",
       bio: "Founding member passionate about community service.",
     },
   ];
@@ -1701,6 +1729,7 @@ const MemberDirectory = () => {
   const filteredManagingMembers = filterMembers(managingMembers);
   const filteredPatronMembers = filterMembers(patronMembers);
   const filteredDonorMembers = filterMembers(donorMembers);
+  const filteredDreamerMembers = filterMembers(clubDreamer);
   const filteredFoundingMembers = filterMembers(foundingMembers);
   const filteredGeneralMembers = filterMembers(generalMembers);
 
@@ -1763,61 +1792,64 @@ const MemberDirectory = () => {
                 <div className="flex flex-wrap gap-3">
                   <button
                     onClick={() => setSelectedCategory("all")}
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                      selectedCategory === "all"
-                        ? "bg-emerald-600 text-white"
-                        : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
-                    }`}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${selectedCategory === "all"
+                      ? "bg-emerald-600 text-white"
+                      : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                      }`}
                   >
                     All Members
                   </button>
                   <button
+                    onClick={() => setSelectedCategory("dreamer")}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${selectedCategory === "dreamer"
+                      ? "bg-emerald-600 text-white"
+                      : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                      }`}
+                  >
+                    Club Dreamer
+                  </button>
+                  <button
                     onClick={() => setSelectedCategory("patron")}
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                      selectedCategory === "patron"
-                        ? "bg-emerald-600 text-white"
-                        : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
-                    }`}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${selectedCategory === "patron"
+                      ? "bg-emerald-600 text-white"
+                      : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                      }`}
                   >
                     Patron Members
                   </button>
                   <button
                     onClick={() => setSelectedCategory("donor")}
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                      selectedCategory === "donor"
-                        ? "bg-emerald-600 text-white"
-                        : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
-                    }`}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${selectedCategory === "donor"
+                      ? "bg-emerald-600 text-white"
+                      : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                      }`}
                   >
                     Donor Members
                   </button>
                   <button
                     onClick={() => setSelectedCategory("founding")}
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                      selectedCategory === "founding"
-                        ? "bg-emerald-600 text-white"
-                        : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
-                    }`}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${selectedCategory === "founding"
+                      ? "bg-emerald-600 text-white"
+                      : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                      }`}
                   >
                     Founding Members
                   </button>
                   <button
                     onClick={() => setSelectedCategory("managing")}
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                      selectedCategory === "managing"
-                        ? "bg-emerald-600 text-white"
-                        : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
-                    }`}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${selectedCategory === "managing"
+                      ? "bg-emerald-600 text-white"
+                      : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                      }`}
                   >
                     Managing Members
                   </button>
                   <button
                     onClick={() => setSelectedCategory("general")}
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                      selectedCategory === "general"
-                        ? "bg-emerald-600 text-white"
-                        : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
-                    }`}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${selectedCategory === "general"
+                      ? "bg-emerald-600 text-white"
+                      : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                      }`}
                   >
                     General Members
                   </button>
@@ -1827,8 +1859,46 @@ const MemberDirectory = () => {
           </div>
 
           {/* Member Sections */}
+
+          {/* Club Dreamer Section (Top & Middle Aligned) */}
+          {(selectedCategory === "all" || selectedCategory === "dreamer") &&
+            filteredDreamerMembers.length > 0 && (
+              <div className="mb-16">
+                <div className="flex flex-col items-center text-center max-w-2xl mx-auto mb-8">
+                  <div className="w-12 h-12 bg-linear-to-br from-amber-500 via-orange-500 to-rose-500 rounded-xl flex items-center justify-center shadow-lg shadow-amber-500/20 text-white mb-3">
+                    <HandHeart className="w-6 h-6" />
+                  </div>
+                  <div className="flex items-center justify-center gap-2.5 flex-wrap">
+                    <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+                      Club Dreamer
+                    </h2>
+                    <span className="px-3 py-0.5 rounded-full text-xs font-semibold bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200/60 dark:border-amber-800/50">
+                      The Hand That Keeps Building This Club
+                    </span>
+                  </div>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                    The visionary mind and dedicated hand that conceived, built, and continues to shape Raipurian Club
+                  </p>
+                </div>
+
+                {/* Middle Aligned Horizontal Card */}
+                <div className="flex justify-center items-center">
+                  <div className="w-full max-w-4xl lg:max-w-5xl">
+                    {filteredDreamerMembers.map((member) => (
+                      <DreamerCard
+                        key={member.id}
+                        member={member}
+                        expanded={expandedMember === member.id}
+                        onToggle={() => toggleMemberExpand(member.id)}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+          {/* Patron & Donor Members - Side by Side */}
           <div className="mb-16">
-            {/* Patron & Donor Members - Side by Side */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {/* Patron Members Section */}
               {(selectedCategory === "all" || selectedCategory === "patron") &&
@@ -1990,6 +2060,7 @@ const MemberDirectory = () => {
           {/* No Results */}
           {filteredPatronMembers.length === 0 &&
             filteredDonorMembers.length === 0 &&
+            filteredDreamerMembers.length === 0 &&
             filteredManagingMembers.length === 0 &&
             filteredFoundingMembers.length === 0 &&
             filteredGeneralMembers.length === 0 && (
